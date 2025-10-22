@@ -4,6 +4,29 @@ import { requireUser } from "../auth";
 
 const router = Router();
 
+router.get("/site-info", async (req, res) => {
+  try {
+    const settings = await storage.getAllSettings();
+    const siteInfo = settings.reduce((acc, setting) => {
+      if (setting.key === 'site_name' || setting.key === 'site_description') {
+        acc[setting.key] = setting.value;
+      }
+      return acc;
+    }, {} as Record<string, string>);
+
+    res.json({
+      siteName: siteInfo.site_name || "CTF Platform",
+      siteDescription: siteInfo.site_description || "Capture The Flag Platform",
+    });
+  } catch (error) {
+    console.error("Error fetching site info:", error);
+    res.json({
+      siteName: "CTF Platform",
+      siteDescription: "Capture The Flag Platform",
+    });
+  }
+});
+
 // Universal logout - destroys entire session (both admin and user)
 router.post("/logout", async (req, res) => {
   req.session.destroy((err) => {

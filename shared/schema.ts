@@ -70,6 +70,48 @@ export const settings = pgTable("settings", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// Challenge access logs table for analytics
+export const challengeAccessLogs = pgTable(
+  "challenge_access_logs",
+  {
+    id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+    challengeId: varchar("challenge_id").notNull(),
+    playerId: varchar("player_id"),
+    visitedAt: timestamp("visited_at").notNull().defaultNow(),
+    userAgent: text("user_agent"),
+    deviceType: text("device_type"),
+    ipAddress: text("ip_address"),
+    geoCountry: text("geo_country"),
+    geoRegion: text("geo_region"),
+    geoCity: text("geo_city"),
+    referrer: text("referrer"),
+  },
+  (table) => [
+    index("IDX_access_logs_challenge_visited").on(table.challengeId, table.visitedAt),
+  ],
+);
+
+// Challenge categories lookup table
+export const challengeCategories = pgTable("challenge_categories", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  slug: text("slug").notNull().unique(),
+  description: text("description"),
+  sortOrder: integer("sort_order").notNull().default(0),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Challenge difficulties lookup table
+export const challengeDifficulties = pgTable("challenge_difficulties", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  slug: text("slug").notNull().unique(),
+  description: text("description"),
+  sortOrder: integer("sort_order").notNull().default(0),
+  pointsMultiplier: integer("points_multiplier").notNull().default(1),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 export const insertChallengeSchema = createInsertSchema(challenges).omit({
   id: true,
 });
@@ -123,6 +165,21 @@ export const insertSettingSchema = createInsertSchema(settings).omit({
   updatedAt: true,
 });
 
+export const insertChallengeAccessLogSchema = createInsertSchema(challengeAccessLogs).omit({
+  id: true,
+  visitedAt: true,
+});
+
+export const insertChallengeCategorySchema = createInsertSchema(challengeCategories).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertChallengeDifficultySchema = createInsertSchema(challengeDifficulties).omit({
+  id: true,
+  createdAt: true,
+});
+
 export type Challenge = typeof challenges.$inferSelect;
 export type InsertChallenge = z.infer<typeof insertChallengeSchema>;
 
@@ -143,3 +200,12 @@ export type InsertAnnouncement = z.infer<typeof insertAnnouncementSchema>;
 
 export type Setting = typeof settings.$inferSelect;
 export type InsertSetting = z.infer<typeof insertSettingSchema>;
+
+export type ChallengeAccessLog = typeof challengeAccessLogs.$inferSelect;
+export type InsertChallengeAccessLog = z.infer<typeof insertChallengeAccessLogSchema>;
+
+export type ChallengeCategory = typeof challengeCategories.$inferSelect;
+export type InsertChallengeCategory = z.infer<typeof insertChallengeCategorySchema>;
+
+export type ChallengeDifficulty = typeof challengeDifficulties.$inferSelect;
+export type InsertChallengeDifficulty = z.infer<typeof insertChallengeDifficultySchema>;

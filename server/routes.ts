@@ -9,6 +9,9 @@ import challengeRoutes from "./routes/challenge.routes";
 import announcementRoutes from "./routes/announcement.routes";
 import publicRoutes from "./routes/public.routes";
 import installRoutes from "./routes/install.routes";
+import analyticsRoutes from "./routes/analytics.routes";
+import categoriesRoutes from "./routes/categories.routes";
+import difficultiesRoutes from "./routes/difficulties.routes";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   app.use(cookieParser());
@@ -23,6 +26,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.use("/api/admin", adminRoutes);
   app.use("/api/challenges", challengeRoutes);
   app.use("/api/announcements", announcementRoutes);
+  app.use("/api/analytics", analyticsRoutes);
+  app.use("/api/categories", categoriesRoutes);
+  app.use("/api/difficulties", difficultiesRoutes);
   app.use("/api", publicRoutes);
 
   const httpServer = createServer(app);

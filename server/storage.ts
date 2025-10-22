@@ -11,15 +11,24 @@ import {
   type InsertAnnouncement,
   type Setting,
   type InsertSetting,
+  type ChallengeAccessLog,
+  type InsertChallengeAccessLog,
+  type ChallengeCategory,
+  type InsertChallengeCategory,
+  type ChallengeDifficulty,
+  type InsertChallengeDifficulty,
   challenges,
   players,
   submissions,
   adminUsers,
   announcements,
   settings,
+  challengeAccessLogs,
+  challengeCategories,
+  challengeDifficulties,
 } from "@shared/schema";
 import { db } from "./db";
-import { eq } from "drizzle-orm";
+import { eq, desc, and, gte, lte } from "drizzle-orm";
 import { AuthService } from "./services/auth.service";
 
 export interface IStorage {
@@ -63,6 +72,27 @@ export interface IStorage {
   setSetting(key: string, value: string): Promise<Setting>;
   getAllSettings(): Promise<Setting[]>;
   deleteSetting(key: string): Promise<boolean>;
+
+  // Challenge Access Log methods
+  logChallengeAccess(log: InsertChallengeAccessLog): Promise<ChallengeAccessLog>;
+  getChallengeAccessLogs(challengeId?: string, startDate?: Date, endDate?: Date): Promise<ChallengeAccessLog[]>;
+  getAccessLogStats(): Promise<any>;
+
+  // Challenge Category methods
+  getAllCategories(): Promise<ChallengeCategory[]>;
+  getCategoryById(id: string): Promise<ChallengeCategory | undefined>;
+  getCategoryBySlug(slug: string): Promise<ChallengeCategory | undefined>;
+  createCategory(category: InsertChallengeCategory): Promise<ChallengeCategory>;
+  updateCategory(id: string, category: Partial<InsertChallengeCategory>): Promise<ChallengeCategory | undefined>;
+  deleteCategory(id: string): Promise<boolean>;
+
+  // Challenge Difficulty methods
+  getAllDifficulties(): Promise<ChallengeDifficulty[]>;
+  getDifficultyById(id: string): Promise<ChallengeDifficulty | undefined>;
+  getDifficultyBySlug(slug: string): Promise<ChallengeDifficulty | undefined>;
+  createDifficulty(difficulty: InsertChallengeDifficulty): Promise<ChallengeDifficulty>;
+  updateDifficulty(id: string, difficulty: Partial<InsertChallengeDifficulty>): Promise<ChallengeDifficulty | undefined>;
+  deleteDifficulty(id: string): Promise<boolean>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -283,6 +313,177 @@ export class DatabaseStorage implements IStorage {
   async deleteSetting(key: string): Promise<boolean> {
     await db.delete(settings).where(eq(settings.key, key));
     return true;
+  }
+
+  // Challenge Access Log methods
+  async logChallengeAccess(log: InsertChallengeAccessLog): Promise<ChallengeAccessLog> {
+    const [accessLog] = await db
+      .insert(challengeAccessLogs)
+      .values(log)
+      .returning();
+    return accessLog;
+  }
+
+  async getChallengeAccessLogs(
+    challengeId?: string,
+    startDate?: Date,
+    endDate?: Date
+  ): Promise<ChallengeAccessLog[]> {
+    let query = db.select().from(challengeAccessLogs);
+
+    const conditions = [];
+    if (challengeId) {
+      conditions.push(eq(challengeAccessLogs.challengeId, challengeId));
+    }
+    if (startDate) {
+      conditions.push(gte(challengeAccessLogs.visitedAt, startDate));
+    }
+    if (endDate) {
+      conditions.push(lte(challengeAccessLogs.visitedAt, endDate));
+    }
+
+    if (conditions.length > 0) {
+      query = query.where(and(...conditions)) as any;
+    }
+
+    return await query.orderBy(desc(challengeAccessLogs.visitedAt));
+  }
+
+  async getAccessLogStats(): Promise<any> {
+    const logs = await db.select().from(challengeAccessLogs);
+    
+    const totalViews = logs.length;
+    const uniqueVisitors = new Set(logs.map(log => log.ipAddress || 'unknown')).size;
+    
+    const deviceStats = logs.reduce((acc, log) => {
+      const device = log.deviceType || 'unknown';
+      acc[device] = (acc[device] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+
+    const countryStats = logs.reduce((acc, log) => {
+      const country = log.geoCountry || 'unknown';
+      acc[country] = (acc[country] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+
+    const challengeStats = logs.reduce((acc, log) => {
+      const challengeId = log.challengeId;
+      acc[challengeId] = (acc[challengeId] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+
+    return {
+      totalViews,
+      uniqueVisitors,
+      deviceStats,
+      countryStats,
+      challengeStats,
+    };
+  }
+
+  // Challenge Category methods
+  async getAllCategories(): Promise<ChallengeCategory[]> {
+    return await db
+      .select()
+      .from(challengeCategories)
+      .orderBy(challengeCategories.sortOrder);
+  }
+
+  async getCategoryById(id: string): Promise<ChallengeCategory | undefined> {
+    const [category] = await db
+      .select()
+      .from(challengeCategories)
+      .where(eq(challengeCategories.id, id));
+    return category;
+  }
+
+  async getCategoryBySlug(slug: string): Promise<ChallengeCategory | undefined> {
+    const [category] = await db
+      .select()
+      .from(challengeCategories)
+      .where(eq(challengeCategories.slug, slug));
+    return category;
+  }
+
+  async createCategory(category: InsertChallengeCategory): Promise<ChallengeCategory> {
+    const [newCategory] = await db
+      .insert(challengeCategories)
+      .values(category)
+      .returning();
+    return newCategory;
+  }
+
+  async updateCategory(
+    id: string,
+    category: Partial<InsertChallengeCategory>
+  ): Promise<ChallengeCategory | undefined> {
+    const [updated] = await db
+      .update(challengeCategories)
+      .set(category)
+      .where(eq(challengeCategories.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteCategory(id: string): Promise<boolean> {
+    const result = await db
+      .delete(challengeCategories)
+      .where(eq(challengeCategories.id, id))
+      .returning();
+    return result.length > 0;
+  }
+
+  // Challenge Difficulty methods
+  async getAllDifficulties(): Promise<ChallengeDifficulty[]> {
+    return await db
+      .select()
+      .from(challengeDifficulties)
+      .orderBy(challengeDifficulties.sortOrder);
+  }
+
+  async getDifficultyById(id: string): Promise<ChallengeDifficulty | undefined> {
+    const [difficulty] = await db
+      .select()
+      .from(challengeDifficulties)
+      .where(eq(challengeDifficulties.id, id));
+    return difficulty;
+  }
+
+  async getDifficultyBySlug(slug: string): Promise<ChallengeDifficulty | undefined> {
+    const [difficulty] = await db
+      .select()
+      .from(challengeDifficulties)
+      .where(eq(challengeDifficulties.slug, slug));
+    return difficulty;
+  }
+
+  async createDifficulty(difficulty: InsertChallengeDifficulty): Promise<ChallengeDifficulty> {
+    const [newDifficulty] = await db
+      .insert(challengeDifficulties)
+      .values(difficulty)
+      .returning();
+    return newDifficulty;
+  }
+
+  async updateDifficulty(
+    id: string,
+    difficulty: Partial<InsertChallengeDifficulty>
+  ): Promise<ChallengeDifficulty | undefined> {
+    const [updated] = await db
+      .update(challengeDifficulties)
+      .set(difficulty)
+      .where(eq(challengeDifficulties.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteDifficulty(id: string): Promise<boolean> {
+    const result = await db
+      .delete(challengeDifficulties)
+      .where(eq(challengeDifficulties.id, id))
+      .returning();
+    return result.length > 0;
   }
 }
 

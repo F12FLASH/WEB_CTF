@@ -63,14 +63,18 @@ import {
   Menu,
   X,
   Megaphone,
+  FolderTree,
+  BarChart3,
+  Settings as SettingsIcon,
+  TrendingUp,
 } from "lucide-react";
-import type { Challenge, InsertChallenge, Announcement, InsertAnnouncement } from "@shared/schema";
+import type { Challenge, InsertChallenge, Announcement, InsertAnnouncement, ChallengeCategory, InsertChallengeCategory, ChallengeDifficulty, InsertChallengeDifficulty } from "@shared/schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { insertChallengeSchema, insertAnnouncementSchema } from "@shared/schema";
+import { insertChallengeSchema, insertAnnouncementSchema, insertChallengeCategorySchema, insertChallengeDifficultySchema } from "@shared/schema";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 
-type AdminView = "dashboard" | "challenges" | "announcements";
+type AdminView = "dashboard" | "challenges" | "announcements" | "categories" | "difficulties" | "settings" | "analytics";
 
 interface AdminStats {
   totalChallenges: number;
@@ -479,6 +483,54 @@ export function Admin() {
           >
             <Megaphone className="h-5 w-5" />
             <span className="font-semibold">Announcements</span>
+          </button>
+
+          <button
+            onClick={() => setCurrentView("categories")}
+            className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-200 ${
+              currentView === "categories"
+                ? "bg-gradient-to-r from-primary to-primary/90 text-primary-foreground shadow-lg scale-105"
+                : "hover:bg-accent/50 hover:scale-102"
+            }`}
+          >
+            <FolderTree className="h-5 w-5" />
+            <span className="font-semibold">Categories</span>
+          </button>
+
+          <button
+            onClick={() => setCurrentView("difficulties")}
+            className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-200 ${
+              currentView === "difficulties"
+                ? "bg-gradient-to-r from-primary to-primary/90 text-primary-foreground shadow-lg scale-105"
+                : "hover:bg-accent/50 hover:scale-102"
+            }`}
+          >
+            <TrendingUp className="h-5 w-5" />
+            <span className="font-semibold">Difficulties</span>
+          </button>
+
+          <button
+            onClick={() => setCurrentView("settings")}
+            className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-200 ${
+              currentView === "settings"
+                ? "bg-gradient-to-r from-primary to-primary/90 text-primary-foreground shadow-lg scale-105"
+                : "hover:bg-accent/50 hover:scale-102"
+            }`}
+          >
+            <SettingsIcon className="h-5 w-5" />
+            <span className="font-semibold">Settings</span>
+          </button>
+
+          <button
+            onClick={() => setCurrentView("analytics")}
+            className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-200 ${
+              currentView === "analytics"
+                ? "bg-gradient-to-r from-primary to-primary/90 text-primary-foreground shadow-lg scale-105"
+                : "hover:bg-accent/50 hover:scale-102"
+            }`}
+          >
+            <BarChart3 className="h-5 w-5" />
+            <span className="font-semibold">Analytics</span>
           </button>
         </nav>
 

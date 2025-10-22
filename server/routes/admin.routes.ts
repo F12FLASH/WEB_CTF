@@ -161,4 +161,45 @@ router.get("/stats", requireAdmin, async (req, res) => {
   }
 });
 
+router.get("/settings", requireAdmin, async (req, res) => {
+  try {
+    const settings = await storage.getAllSettings();
+    const settingsMap = settings.reduce((acc, setting) => {
+      acc[setting.key] = setting.value;
+      return acc;
+    }, {} as Record<string, string>);
+    res.json(settingsMap);
+  } catch (error) {
+    console.error("Error fetching settings:", error);
+    res.status(500).json({ message: "Failed to fetch settings" });
+  }
+});
+
+router.put("/settings", requireAdmin, async (req, res) => {
+  try {
+    const settingsData = req.body;
+    
+    if (typeof settingsData !== 'object' || settingsData === null) {
+      return res.status(400).json({ message: "Invalid settings data" });
+    }
+
+    const updatePromises = Object.entries(settingsData).map(([key, value]) =>
+      storage.setSetting(key, String(value))
+    );
+
+    await Promise.all(updatePromises);
+    
+    const updatedSettings = await storage.getAllSettings();
+    const settingsMap = updatedSettings.reduce((acc, setting) => {
+      acc[setting.key] = setting.value;
+      return acc;
+    }, {} as Record<string, string>);
+
+    res.json(settingsMap);
+  } catch (error) {
+    console.error("Error updating settings:", error);
+    res.status(500).json({ message: "Failed to update settings" });
+  }
+});
+
 export default router;

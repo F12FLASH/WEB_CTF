@@ -47,12 +47,42 @@ export default function Install() {
     }
   }, [systemCheck, step]);
 
+  useEffect(() => {
+    if (step === "complete") {
+      fetch("/api/site-info")
+        .then(res => res.json())
+        .then(data => {
+          if (data.siteName) setSiteName(data.siteName);
+          if (data.siteDescription) setSiteDescription(data.siteDescription);
+        })
+        .catch(err => console.error("Failed to fetch site info:", err));
+    }
+  }, [step]);
+
   const performSystemCheck = async () => {
     try {
       setLoading(true);
       const res = await fetch("/api/install/system-check");
-      const data = await res.json();
       
+      if (res.status === 403) {
+        setSystemCheck({
+          hasDatabase: true,
+          databaseConnected: true,
+          hasSessionSecret: true,
+          hasDatabaseUrl: true,
+          isInstalled: true,
+          schemaReady: true,
+          adminCount: 1,
+          challengeCount: 0,
+          playerCount: 0,
+          errors: [],
+          warnings: [],
+        });
+        setStep("complete");
+        return;
+      }
+      
+      const data = await res.json();
       setSystemCheck(data);
 
       if (data.isInstalled) {
@@ -454,44 +484,54 @@ export default function Install() {
           <div className="flex justify-center mb-4">
             <CheckCircle className="h-16 w-16 text-green-500" />
           </div>
-          <CardTitle className="text-3xl text-white">Cài Đặt Hoàn Tất!</CardTitle>
+          <CardTitle className="text-3xl text-white">
+            {siteName || "CTF Platform"}
+          </CardTitle>
           <CardDescription className="text-gray-300">
-            Hệ thống CTF Platform đã sẵn sàng sử dụng
+            {siteDescription || "Hệ thống CTF Platform đã sẵn sàng sử dụng"}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="p-4 bg-green-900/20 border border-green-800 rounded-lg space-y-2">
-            <p className="text-green-400 font-semibold">✓ Cài đặt thành công!</p>
+            <p className="text-green-400 font-semibold">✓ Hệ thống đã được cài đặt!</p>
             <p className="text-gray-300 text-sm">
-              Hệ thống đã được cấu hình với dữ liệu demo bao gồm:
+              {systemCheck?.isInstalled && systemCheck.adminCount > 0 ? (
+                <>
+                  Trang web đã được cài đặt và sẵn sàng sử dụng. Hệ thống bao gồm:
+                  <ul className="mt-2 space-y-1 ml-4">
+                    <li>• {systemCheck.challengeCount} thử thách CTF</li>
+                    <li>• {systemCheck.playerCount} người chơi đã đăng ký</li>
+                    <li>• Dữ liệu demo và thông báo</li>
+                  </ul>
+                </>
+              ) : (
+                "Hệ thống đã được cài đặt thành công với dữ liệu demo."
+              )}
             </p>
-            <ul className="text-sm text-gray-400 space-y-1 ml-4">
-              <li>• 12 thử thách CTF đa dạng (Web, Crypto, Forensics, Binary, Reverse)</li>
-              <li>• 3 thông báo hệ thống</li>
-              <li>• 1 tài khoản quản trị (đã đăng nhập)</li>
-            </ul>
           </div>
 
-          <Alert className="bg-blue-900/20 border-blue-800">
-            <Shield className="h-4 w-4 text-blue-400" />
-            <AlertDescription className="text-gray-300 text-sm">
-              <strong className="text-blue-400">Bạn đã đăng nhập vào hệ thống với tư cách Admin!</strong> Click vào "Trang Quản Trị" để bắt đầu quản lý CTF Platform của bạn.
-            </AlertDescription>
-          </Alert>
+          {systemCheck?.adminCount && systemCheck.adminCount > 0 ? (
+            <Alert className="bg-blue-900/20 border-blue-800">
+              <Shield className="h-4 w-4 text-blue-400" />
+              <AlertDescription className="text-gray-300 text-sm">
+                Bạn có thể đăng nhập với tài khoản admin để quản lý hệ thống, hoặc đăng ký tài khoản người dùng để tham gia các thử thách CTF.
+              </AlertDescription>
+            </Alert>
+          ) : null}
 
           <div className="flex gap-3">
             <Button
-              onClick={() => setLocation("/admin")}
-              className="flex-1 bg-green-600 hover:bg-green-700"
+              onClick={() => setLocation("/")}
+              className="flex-1 bg-blue-600 hover:bg-blue-700"
             >
-              Trang Quản Trị
+              Về trang chủ
             </Button>
             <Button
-              onClick={() => setLocation("/")}
+              onClick={() => setLocation("/admin/login")}
               variant="outline"
               className="flex-1"
             >
-              Về trang chủ
+              Đăng nhập Admin
             </Button>
           </div>
         </CardContent>
