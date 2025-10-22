@@ -3,10 +3,10 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, Circle, Lock, Terminal } from "lucide-react";
-import type { Challenge } from "@shared/schema";
+import type { ChallengeWithRelations } from "@shared/schema";
 
 interface ChallengeCardProps {
-  challenge: Challenge;
+  challenge: ChallengeWithRelations;
   isSolved?: boolean;
   index?: number;
 }
@@ -26,7 +26,7 @@ const categoryIcons: Record<string, React.ReactNode> = {
 };
 
 export function ChallengeCard({ challenge, isSolved = false, index = 0 }: ChallengeCardProps) {
-  const difficulty = challenge.difficulty.toLowerCase() as keyof typeof difficultyConfig;
+  const difficulty = challenge.difficulty.slug as keyof typeof difficultyConfig;
   const diffConfig = difficultyConfig[difficulty] || difficultyConfig.medium;
 
   return (
@@ -39,11 +39,11 @@ export function ChallengeCard({ challenge, isSolved = false, index = 0 }: Challe
         <div className="flex flex-col gap-2 flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
             <Badge variant="outline" className="gap-1 text-xs transition-all duration-300 group-hover:opacity-90">
-              {categoryIcons[challenge.category.toLowerCase()]}
-              {challenge.category}
+              {categoryIcons[challenge.category.slug]}
+              {challenge.category.name}
             </Badge>
             <Badge className={`${diffConfig.color} text-xs transition-all duration-300 group-hover:opacity-90`}>
-              {diffConfig.label}
+              {challenge.difficulty.name}
             </Badge>
           </div>
           <h3 className="font-serif font-semibold text-lg leading-tight transition-colors duration-300 group-hover:text-primary" data-testid={`text-title-${challenge.id}`}>

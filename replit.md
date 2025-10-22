@@ -16,11 +16,15 @@ Preferred communication style: Simple, everyday language.
 - **CRITICAL**: Fixed CSRF bypass vulnerability - now enforces strict double-submit cookie pattern in all environments
 - **CRITICAL**: Fixed session fixation vulnerability - sessions regenerated on login/logout
 - **CRITICAL**: Fixed admin password hashing inconsistency - all admin creation paths now consistently hash passwords at storage layer
+- **CRITICAL**: Fixed install page access control - users blocked after setup, admins can still access
+- **CRITICAL**: Fixed information disclosure on install page - no sensitive system info exposed to non-admin users
 - **NEW**: Strong password validation (8+ chars, uppercase, lowercase, numbers) enforced in registration schema
 - **NEW**: Admin login now uses Zod validation schema with strict input sanitization
+- **NEW**: Separate admin-system-check endpoint for full system information (admin-only)
 - **IMPROVED**: Error handling no longer leaks stack traces in production
 - **IMPROVED**: Sample data initialization race condition fixed with proper async/await
 - **IMPROVED**: Install page with guided setup for first-time deployment
+- **IMPROVED**: Install page now shows only safe, minimal system information
 
 ### New Features
 - **Installation Wizard**: `/install` route provides guided setup with database checks and admin account creation
