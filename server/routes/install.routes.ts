@@ -24,9 +24,34 @@ const maintenanceLimiter = rateLimit({
 router.get("/system-check", requireAdminOnlyAfterInstall, installLimiter, async (req, res) => {
   try {
     const systemCheck = await InstallService.checkSystem();
-    res.json(systemCheck);
+    
+    // Return minimal safe info for non-admin users
+    const safeInfo = {
+      hasDatabase: systemCheck.hasDatabase,
+      databaseConnected: systemCheck.databaseConnected,
+      isInstalled: systemCheck.isInstalled,
+      schemaReady: systemCheck.schemaReady,
+      adminCount: systemCheck.adminCount,
+      challengeCount: systemCheck.challengeCount,
+      playerCount: systemCheck.playerCount,
+    };
+    
+    res.json(safeInfo);
   } catch (error: any) {
     console.error("System check error:", error);
+    res.status(500).json({ 
+      message: "Failed to check system status"
+    });
+  }
+});
+
+// Admin-only endpoint with full system information
+router.get("/admin-system-check", requireAdmin, installLimiter, async (req, res) => {
+  try {
+    const systemCheck = await InstallService.checkSystem();
+    res.json(systemCheck);
+  } catch (error: any) {
+    console.error("Admin system check error:", error);
     res.status(500).json({ 
       message: "Failed to check system status",
       error: error.message 

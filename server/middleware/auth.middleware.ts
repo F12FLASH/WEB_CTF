@@ -9,10 +9,15 @@ export async function requireAdminOnlyAfterInstall(
   try {
     const systemCheck = await InstallService.checkSystem();
     
-    if (systemCheck.isInstalled && !req.session?.adminId) {
-      return res.status(403).json({
-        message: "Access denied. System is installed. Admin authentication required."
-      });
+    if (systemCheck.isInstalled) {
+      // After installation, only allow admin access
+      if (req.session?.userId && !req.session?.adminId) {
+        // Regular users cannot access install page after setup
+        return res.status(403).json({
+          message: "Trang cài đặt chỉ dành cho quản trị viên. Hệ thống đã được cài đặt."
+        });
+      }
+      // Admin can still access, or if not logged in, continue (will show completion)
     }
     
     next();
