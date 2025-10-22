@@ -1,4 +1,5 @@
 import { storage } from "../storage";
+import { AuthService } from "../services/auth.service";
 
 /**
  * Quick script to create admin user with default credentials
@@ -20,10 +21,10 @@ async function quickInitAdmin() {
       process.exit(0);
     }
 
-    // Create admin
+    // Create admin with hashed password
     await storage.createAdmin({
       username,
-      passwordHash: password, // Will be hashed in storage layer
+      passwordHash: await AuthService.hashPassword(password),
     });
 
     console.log("✅ Admin user created successfully!");

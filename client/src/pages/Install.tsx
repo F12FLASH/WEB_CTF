@@ -1,37 +1,72 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Label } from "@/components/ui/label";
-import { Shield, Database, CheckCircle, AlertCircle } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
+import { Shield, Database, CheckCircle, AlertCircle, Server, Settings, Loader2 } from "lucide-react";
+
+interface SystemCheck {
+  hasDatabase: boolean;
+  databaseConnected: boolean;
+  hasSessionSecret: boolean;
+  hasDatabaseUrl: boolean;
+  isInstalled: boolean;
+  adminCount: number;
+  challengeCount: number;
+  playerCount: number;
+  errors: string[];
+}
 
 export default function Install() {
   const [, setLocation] = useLocation();
-  const [step, setStep] = useState<"check" | "setup" | "complete">("check");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [step, setStep] = useState<"check" | "config" | "installing" | "complete">("check");
+  const [adminUsername, setAdminUsername] = useState("");
+  const [adminPassword, setAdminPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [siteName, setSiteName] = useState("CTF Platform");
+  const [siteDescription, setSiteDescription] = useState("Capture The Flag Competition");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [dbStatus, setDbStatus] = useState<"checking" | "ok" | "error">("checking");
+  const [systemCheck, setSystemCheck] = useState<SystemCheck | null>(null);
+  const [installProgress, setInstallProgress] = useState(0);
 
-  const checkDatabase = async () => {
+  useEffect(() => {
+    if (step === "check") {
+      performSystemCheck();
+    }
+  }, [step]);
+
+  const performSystemCheck = async () => {
     try {
-      const res = await fetch("/api/install/check");
+      setLoading(true);
+      const res = await fetch("/api/install/system-check");
       const data = await res.json();
       
-      if (data.needsSetup) {
-        setDbStatus("ok");
-        setStep("setup");
-      } else {
-        setDbStatus("ok");
+      setSystemCheck(data);
+
+      if (data.isInstalled) {
         setStep("complete");
+      } else if (data.databaseConnected && data.errors.length === 0) {
+        setStep("config");
       }
-    } catch (err) {
-      setDbStatus("error");
-      setError("Không thể kết nối database. Vui lòng kiểm tra cấu hình DATABASE_URL.");
+    } catch (err: any) {
+      setError("Không thể kết nối đến hệ thống. Vui lòng kiểm tra cấu hình.");
+      setSystemCheck({
+        hasDatabase: false,
+        databaseConnected: false,
+        hasSessionSecret: false,
+        hasDatabaseUrl: false,
+        isInstalled: false,
+        adminCount: 0,
+        challengeCount: 0,
+        playerCount: 0,
+        errors: [err.message],
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -39,34 +74,72 @@ export default function Install() {
     e.preventDefault();
     setError("");
 
-    if (password !== confirmPassword) {
+    if (adminPassword !== confirmPassword) {
       setError("Mật khẩu không khớp");
       return;
     }
 
-    if (password.length < 8) {
+    if (adminPassword.length < 8) {
       setError("Mật khẩu phải có ít nhất 8 ký tự");
       return;
     }
 
+    if (!/[A-Z]/.test(adminPassword)) {
+      setError("Mật khẩu phải chứa ít nhất 1 chữ HOA");
+      return;
+    }
+
+    if (!/[a-z]/.test(adminPassword)) {
+      setError("Mật khẩu phải chứa ít nhất 1 chữ thường");
+      return;
+    }
+
+    if (!/[0-9]/.test(adminPassword)) {
+      setError("Mật khẩu phải chứa ít nhất 1 số");
+      return;
+    }
+
+    setStep("installing");
     setLoading(true);
+    setInstallProgress(0);
 
     try {
+      const progressInterval = setInterval(() => {
+        setInstallProgress(prev => {
+          if (prev >= 90) {
+            clearInterval(progressInterval);
+            return 90;
+          }
+          return prev + 10;
+        });
+      }, 300);
+
       const res = await fetch("/api/install/setup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({
+          adminUsername,
+          adminPassword,
+          siteName,
+          siteDescription,
+        }),
       });
 
       const data = await res.json();
 
-      if (!res.ok) {
+      clearInterval(progressInterval);
+      setInstallProgress(100);
+
+      if (!res.ok || !data.success) {
         throw new Error(data.message || "Cài đặt thất bại");
       }
 
-      setStep("complete");
+      setTimeout(() => {
+        setStep("complete");
+      }, 500);
     } catch (err: any) {
       setError(err.message || "Đã xảy ra lỗi khi cài đặt");
+      setStep("config");
     } finally {
       setLoading(false);
     }
@@ -75,106 +148,278 @@ export default function Install() {
   if (step === "check") {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-4">
-        <Card className="w-full max-w-md">
+        <Card className="w-full max-w-2xl bg-gray-800/50 border-gray-700 backdrop-blur">
           <CardHeader className="text-center">
-            <Database className="w-12 h-12 mx-auto mb-4 text-blue-500" />
-            <CardTitle className="text-2xl">Cài đặt CTF Platform</CardTitle>
-            <CardDescription>
-              Hệ thống cần được cấu hình lần đầu
+            <div className="flex justify-center mb-4">
+              <Server className="h-16 w-16 text-blue-500" />
+            </div>
+            <CardTitle className="text-3xl text-white">Kiểm Tra Hệ Thống</CardTitle>
+            <CardDescription className="text-gray-300">
+              Đang kiểm tra cài đặt và kết nối hệ thống...
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="text-center">
-              {dbStatus === "checking" && (
-                <div className="animate-pulse text-gray-500">
-                  Đang kiểm tra database...
+            {loading ? (
+              <div className="flex items-center justify-center py-8">
+                <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+              </div>
+            ) : systemCheck ? (
+              <div className="space-y-3">
+                <div className="flex items-center gap-3 p-3 bg-gray-700/50 rounded-lg">
+                  {systemCheck.hasDatabaseUrl ? (
+                    <CheckCircle className="h-5 w-5 text-green-500" />
+                  ) : (
+                    <AlertCircle className="h-5 w-5 text-red-500" />
+                  )}
+                  <span className="text-gray-200">DATABASE_URL: {systemCheck.hasDatabaseUrl ? "Có" : "Không có"}</span>
                 </div>
-              )}
-              {dbStatus === "error" && (
-                <Alert variant="destructive">
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertDescription>{error}</AlertDescription>
-                </Alert>
-              )}
-            </div>
-            <Button
-              onClick={checkDatabase}
-              disabled={dbStatus === "checking"}
-              className="w-full"
-            >
-              {dbStatus === "checking" ? "Đang kiểm tra..." : "Bắt đầu cài đặt"}
-            </Button>
+                
+                <div className="flex items-center gap-3 p-3 bg-gray-700/50 rounded-lg">
+                  {systemCheck.hasSessionSecret ? (
+                    <CheckCircle className="h-5 w-5 text-green-500" />
+                  ) : (
+                    <AlertCircle className="h-5 w-5 text-red-500" />
+                  )}
+                  <span className="text-gray-200">SESSION_SECRET: {systemCheck.hasSessionSecret ? "Có" : "Không có"}</span>
+                </div>
+
+                <div className="flex items-center gap-3 p-3 bg-gray-700/50 rounded-lg">
+                  {systemCheck.databaseConnected ? (
+                    <CheckCircle className="h-5 w-5 text-green-500" />
+                  ) : (
+                    <AlertCircle className="h-5 w-5 text-red-500" />
+                  )}
+                  <span className="text-gray-200">Kết nối Database: {systemCheck.databaseConnected ? "Thành công" : "Thất bại"}</span>
+                </div>
+
+                {systemCheck.errors.length > 0 && (
+                  <Alert variant="destructive" className="bg-red-900/20 border-red-800">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertDescription className="text-sm">
+                      {systemCheck.errors.map((err, i) => (
+                        <div key={i}>• {err}</div>
+                      ))}
+                    </AlertDescription>
+                  </Alert>
+                )}
+
+                {systemCheck.databaseConnected && !systemCheck.isInstalled && (
+                  <div className="mt-6">
+                    <Button 
+                      onClick={() => setStep("config")}
+                      className="w-full bg-blue-600 hover:bg-blue-700"
+                    >
+                      Tiếp tục cài đặt
+                    </Button>
+                  </div>
+                )}
+
+                {systemCheck.errors.length > 0 && (
+                  <div className="mt-4">
+                    <Button 
+                      onClick={performSystemCheck}
+                      variant="outline"
+                      className="w-full"
+                    >
+                      Kiểm tra lại
+                    </Button>
+                  </div>
+                )}
+              </div>
+            ) : null}
+
+            {error && (
+              <Alert variant="destructive" className="bg-red-900/20 border-red-800">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
           </CardContent>
         </Card>
       </div>
     );
   }
 
-  if (step === "setup") {
+  if (step === "config") {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-4">
-        <Card className="w-full max-w-md">
+        <Card className="w-full max-w-2xl bg-gray-800/50 border-gray-700 backdrop-blur">
           <CardHeader className="text-center">
-            <Shield className="w-12 h-12 mx-auto mb-4 text-green-500" />
-            <CardTitle className="text-2xl">Tạo tài khoản Admin</CardTitle>
-            <CardDescription>
-              Tạo tài khoản admin đầu tiên để quản lý hệ thống
+            <div className="flex justify-center mb-4">
+              <Settings className="h-16 w-16 text-blue-500" />
+            </div>
+            <CardTitle className="text-3xl text-white">Cấu Hình Hệ Thống</CardTitle>
+            <CardDescription className="text-gray-300">
+              Thiết lập thông tin website và tài khoản quản trị
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleInstall} className="space-y-4">
+            <form onSubmit={handleInstall} className="space-y-6">
+              <div className="space-y-4">
+                <div className="p-4 bg-gray-700/50 rounded-lg space-y-4">
+                  <h3 className="font-semibold text-white flex items-center gap-2">
+                    <Database className="h-5 w-5 text-blue-500" />
+                    Thông Tin Website
+                  </h3>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="siteName" className="text-gray-200">Tên Website</Label>
+                    <Input
+                      id="siteName"
+                      type="text"
+                      value={siteName}
+                      onChange={(e) => setSiteName(e.target.value)}
+                      className="bg-gray-700 border-gray-600 text-white"
+                      placeholder="CTF Platform"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="siteDescription" className="text-gray-200">Mô Tả Website</Label>
+                    <Input
+                      id="siteDescription"
+                      type="text"
+                      value={siteDescription}
+                      onChange={(e) => setSiteDescription(e.target.value)}
+                      className="bg-gray-700 border-gray-600 text-white"
+                      placeholder="Capture The Flag Competition"
+                    />
+                  </div>
+                </div>
+
+                <div className="p-4 bg-gray-700/50 rounded-lg space-y-4">
+                  <h3 className="font-semibold text-white flex items-center gap-2">
+                    <Shield className="h-5 w-5 text-green-500" />
+                    Tài Khoản Quản Trị
+                  </h3>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="adminUsername" className="text-gray-200">Tên đăng nhập Admin</Label>
+                    <Input
+                      id="adminUsername"
+                      type="text"
+                      value={adminUsername}
+                      onChange={(e) => setAdminUsername(e.target.value)}
+                      className="bg-gray-700 border-gray-600 text-white"
+                      placeholder="admin"
+                      required
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="adminPassword" className="text-gray-200">Mật khẩu Admin</Label>
+                    <Input
+                      id="adminPassword"
+                      type="password"
+                      value={adminPassword}
+                      onChange={(e) => setAdminPassword(e.target.value)}
+                      className="bg-gray-700 border-gray-600 text-white"
+                      placeholder="Tối thiểu 8 ký tự, bao gồm chữ hoa, chữ thường và số"
+                      required
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="confirmPassword" className="text-gray-200">Xác nhận mật khẩu</Label>
+                    <Input
+                      id="confirmPassword"
+                      type="password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      className="bg-gray-700 border-gray-600 text-white"
+                      placeholder="Nhập lại mật khẩu"
+                      required
+                    />
+                  </div>
+
+                  <div className="text-sm text-gray-400 space-y-1">
+                    <p>Yêu cầu mật khẩu:</p>
+                    <ul className="list-disc list-inside space-y-1 ml-2">
+                      <li className={adminPassword.length >= 8 ? "text-green-400" : ""}>
+                        Tối thiểu 8 ký tự
+                      </li>
+                      <li className={/[A-Z]/.test(adminPassword) ? "text-green-400" : ""}>
+                        Ít nhất 1 chữ HOA
+                      </li>
+                      <li className={/[a-z]/.test(adminPassword) ? "text-green-400" : ""}>
+                        Ít nhất 1 chữ thường
+                      </li>
+                      <li className={/[0-9]/.test(adminPassword) ? "text-green-400" : ""}>
+                        Ít nhất 1 số
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
               {error && (
-                <Alert variant="destructive">
+                <Alert variant="destructive" className="bg-red-900/20 border-red-800">
                   <AlertCircle className="h-4 w-4" />
                   <AlertDescription>{error}</AlertDescription>
                 </Alert>
               )}
 
-              <div className="space-y-2">
-                <Label htmlFor="username">Tên đăng nhập</Label>
-                <Input
-                  id="username"
-                  type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  required
-                  minLength={3}
-                  placeholder="admin"
-                />
+              <div className="flex gap-3">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setStep("check")}
+                  disabled={loading}
+                  className="flex-1"
+                >
+                  Quay lại
+                </Button>
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  className="flex-1 bg-blue-600 hover:bg-blue-700"
+                >
+                  {loading ? "Đang cài đặt..." : "Bắt đầu cài đặt"}
+                </Button>
               </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="password">Mật khẩu</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  minLength={8}
-                  placeholder="••••••••"
-                />
-                <p className="text-xs text-gray-500">
-                  Tối thiểu 8 ký tự, có chữ hoa, chữ thường và số
-                </p>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Xác nhận mật khẩu</Label>
-                <Input
-                  id="confirmPassword"
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  required
-                  placeholder="••••••••"
-                />
-              </div>
-
-              <Button type="submit" disabled={loading} className="w-full">
-                {loading ? "Đang cài đặt..." : "Cài đặt hệ thống"}
-              </Button>
             </form>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  if (step === "installing") {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-4">
+        <Card className="w-full max-w-2xl bg-gray-800/50 border-gray-700 backdrop-blur">
+          <CardHeader className="text-center">
+            <div className="flex justify-center mb-4">
+              <Loader2 className="h-16 w-16 text-blue-500 animate-spin" />
+            </div>
+            <CardTitle className="text-3xl text-white">Đang Cài Đặt...</CardTitle>
+            <CardDescription className="text-gray-300">
+              Hệ thống đang được cấu hình và khởi tạo dữ liệu
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="space-y-3">
+              <div className="flex justify-between text-sm text-gray-300">
+                <span>Tiến độ cài đặt</span>
+                <span>{installProgress}%</span>
+              </div>
+              <Progress value={installProgress} className="h-3" />
+            </div>
+
+            <div className="space-y-2 text-sm text-gray-400">
+              <div className={installProgress >= 20 ? "text-green-400" : ""}>
+                ✓ Tạo tài khoản quản trị
+              </div>
+              <div className={installProgress >= 40 ? "text-green-400" : ""}>
+                ✓ Cấu hình thông tin website
+              </div>
+              <div className={installProgress >= 60 ? "text-green-400" : ""}>
+                ✓ Khởi tạo dữ liệu demo
+              </div>
+              <div className={installProgress >= 80 ? "text-green-400" : ""}>
+                ✓ Hoàn tất cài đặt
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -183,32 +428,48 @@ export default function Install() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-4">
-      <Card className="w-full max-w-md">
+      <Card className="w-full max-w-2xl bg-gray-800/50 border-gray-700 backdrop-blur">
         <CardHeader className="text-center">
-          <CheckCircle className="w-12 h-12 mx-auto mb-4 text-green-500" />
-          <CardTitle className="text-2xl">Cài đặt thành công!</CardTitle>
-          <CardDescription>
+          <div className="flex justify-center mb-4">
+            <CheckCircle className="h-16 w-16 text-green-500" />
+          </div>
+          <CardTitle className="text-3xl text-white">Cài Đặt Hoàn Tất!</CardTitle>
+          <CardDescription className="text-gray-300">
             Hệ thống CTF Platform đã sẵn sàng sử dụng
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4 space-y-2">
-            <p className="text-sm text-green-400">✓ Database đã được khởi tạo</p>
-            <p className="text-sm text-green-400">✓ Tài khoản admin đã được tạo</p>
-            <p className="text-sm text-green-400">✓ Dữ liệu mẫu đã được thêm</p>
+        <CardContent className="space-y-6">
+          <div className="p-4 bg-green-900/20 border border-green-800 rounded-lg space-y-2">
+            <p className="text-green-400 font-semibold">✓ Cài đặt thành công!</p>
+            <p className="text-gray-300 text-sm">
+              Hệ thống đã được cấu hình với dữ liệu demo bao gồm:
+            </p>
+            <ul className="text-sm text-gray-400 space-y-1 ml-4">
+              <li>• 12 thử thách CTF đa dạng (Web, Crypto, Forensics, Binary, Reverse)</li>
+              <li>• 3 thông báo hệ thống</li>
+              <li>• 3 tài khoản người dùng mẫu</li>
+              <li>• 1 tài khoản quản trị</li>
+            </ul>
           </div>
 
-          <div className="space-y-2">
+          <Alert className="bg-blue-900/20 border-blue-800">
+            <Shield className="h-4 w-4 text-blue-400" />
+            <AlertDescription className="text-gray-300 text-sm">
+              <strong className="text-blue-400">Lưu ý bảo mật:</strong> Vui lòng đổi mật khẩu admin sau lần đăng nhập đầu tiên!
+            </AlertDescription>
+          </Alert>
+
+          <div className="flex gap-3">
             <Button
               onClick={() => setLocation("/admin/login")}
-              className="w-full"
+              className="flex-1 bg-green-600 hover:bg-green-700"
             >
               Đăng nhập Admin
             </Button>
             <Button
               onClick={() => setLocation("/")}
               variant="outline"
-              className="w-full"
+              className="flex-1"
             >
               Về trang chủ
             </Button>

@@ -11,8 +11,6 @@ import publicRoutes from "./routes/public.routes";
 import installRoutes from "./routes/install.routes";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  await storage.ensureInitialized();
-  
   app.use(cookieParser());
   app.use(getSessionMiddleware());
   

@@ -1,4 +1,5 @@
 import { storage } from "../storage";
+import { AuthService } from "../services/auth.service";
 import readline from "readline";
 
 /**
@@ -44,7 +45,7 @@ async function initAdmin() {
     } else {
       await storage.createAdmin({
         username,
-        passwordHash: password, // Will be hashed in storage layer
+        passwordHash: await AuthService.hashPassword(password),
       });
       console.log(`✅ Admin user '${username}' created successfully!`);
     }

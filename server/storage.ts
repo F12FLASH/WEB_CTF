@@ -9,11 +9,14 @@ import {
   type InsertAdminUser,
   type Announcement,
   type InsertAnnouncement,
+  type Setting,
+  type InsertSetting,
   challenges,
   players,
   submissions,
   adminUsers,
   announcements,
+  settings,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
@@ -54,88 +57,15 @@ export interface IStorage {
   createAnnouncement(announcement: InsertAnnouncement): Promise<Announcement>;
   updateAnnouncement(id: string, announcement: Partial<InsertAnnouncement>): Promise<Announcement | undefined>;
   deleteAnnouncement(id: string): Promise<boolean>;
+
+  // Settings methods
+  getSetting(key: string): Promise<Setting | undefined>;
+  setSetting(key: string, value: string): Promise<Setting>;
+  getAllSettings(): Promise<Setting[]>;
+  deleteSetting(key: string): Promise<boolean>;
 }
 
 export class DatabaseStorage implements IStorage {
-  private isInitialized = false;
-
-  async ensureInitialized(): Promise<void> {
-    if (this.isInitialized) return;
-    await this.initializeSampleData();
-    this.isInitialized = true;
-  }
-
-  private async initializeSampleData(): Promise<void> {
-    try {
-      // Check if we already have data
-      const existingChallenges = await db.select().from(challenges).limit(1);
-      if (existingChallenges.length > 0) {
-        return; // Data already exists
-      }
-
-      // Create sample challenges
-      const sampleChallenges: InsertChallenge[] = [
-        {
-          title: "SQL Injection Basics",
-          description: "Find the hidden flag in this vulnerable login page. The application doesn't properly sanitize user input. Try using common SQL injection techniques to bypass authentication.\n\nURL: http://vulnerable-app.ctf/login\nHint: Think about how you can manipulate the SQL query.",
-          category: "web",
-          difficulty: "easy",
-          points: 100,
-          flag: "flag{sql_1nj3ct10n_1s_d4ng3r0us}",
-        },
-        {
-          title: "Caesar's Secret",
-          description: "An ancient encryption method was used to hide this message:\n\nGSVH R ORPV XIBKGLTIZKSR\n\nThe key is somewhere between 1 and 25. Can you decode it?",
-          category: "crypto",
-          difficulty: "easy",
-          points: 150,
-          flag: "flag{i_like_cryptography}",
-        },
-        {
-          title: "Hidden in Plain Sight",
-          description: "We intercepted this image file. Our analysts believe there's hidden data embedded within it. Can you extract the secret?\n\nDownload: secret_image.png (Simulated - Flag hidden in metadata)\n\nTools you might need: exiftool, strings, binwalk",
-          category: "forensics",
-          difficulty: "medium",
-          points: 250,
-          flag: "flag{st3g4n0gr4phy_m4st3r}",
-        },
-        {
-          title: "Buffer Overflow 101",
-          description: "This program has a classic buffer overflow vulnerability. Exploit it to gain control of the execution flow and retrieve the flag.\n\n```c\n#include <stdio.h>\n#include <string.h>\n\nvoid secret() {\n    printf(\"Flag: flag{buff3r_0v3rfl0w_pwn3d}\\n\");\n}\n\nint main() {\n    char buffer[64];\n    gets(buffer);\n    return 0;\n}\n```",
-          category: "binary",
-          difficulty: "hard",
-          points: 400,
-          flag: "flag{buff3r_0v3rfl0w_pwn3d}",
-        },
-        {
-          title: "XSS Playground",
-          description: "This web application reflects user input without proper sanitization. Craft an XSS payload that will execute JavaScript and reveal the flag stored in a cookie.\n\nURL: http://xss-challenge.ctf/search\nCookie name: secret_flag",
-          category: "web",
-          difficulty: "medium",
-          points: 200,
-          flag: "flag{xss_c4n_b3_d4ng3r0us}",
-        },
-        {
-          title: "RSA Weakness",
-          description: "We captured this RSA encrypted message along with the public key. The key size seems suspiciously small...\n\nn = 84823428793\ne = 65537\nc = 27856425893\n\nCan you decrypt it?",
-          category: "crypto",
-          difficulty: "hard",
-          points: 350,
-          flag: "flag{sm4ll_k3y_br0k3n}",
-        },
-      ];
-
-      for (const challenge of sampleChallenges) {
-        await db.insert(challenges).values(challenge);
-      }
-
-      console.log("Sample data initialized successfully");
-      console.log("⚠️  No admin user created. Run 'npx tsx server/scripts/init-admin.ts' to create an admin user.");
-    } catch (error) {
-      console.error("Error initializing sample data:", error);
-    }
-  }
-
   // Challenge methods
   async getAllChallenges(): Promise<Challenge[]> {
     return await db.select().from(challenges);
@@ -253,14 +183,9 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createAdmin(insertAdmin: InsertAdminUser): Promise<AdminUser> {
-    // Hash password using AuthService (12 rounds)
-    const passwordHash = await AuthService.hashPassword(insertAdmin.passwordHash);
     const [admin] = await db
       .insert(adminUsers)
-      .values({
-        ...insertAdmin,
-        passwordHash,
-      })
+      .values(insertAdmin)
       .returning();
     return admin;
   }
@@ -321,6 +246,42 @@ export class DatabaseStorage implements IStorage {
     const result = await db
       .delete(announcements)
       .where(eq(announcements.id, id));
+    return true;
+  }
+
+  // Settings methods
+  async getSetting(key: string): Promise<Setting | undefined> {
+    const [setting] = await db
+      .select()
+      .from(settings)
+      .where(eq(settings.key, key));
+    return setting;
+  }
+
+  async setSetting(key: string, value: string): Promise<Setting> {
+    const existing = await this.getSetting(key);
+    if (existing) {
+      const [updated] = await db
+        .update(settings)
+        .set({ value, updatedAt: new Date() })
+        .where(eq(settings.key, key))
+        .returning();
+      return updated;
+    } else {
+      const [created] = await db
+        .insert(settings)
+        .values({ key, value })
+        .returning();
+      return created;
+    }
+  }
+
+  async getAllSettings(): Promise<Setting[]> {
+    return await db.select().from(settings);
+  }
+
+  async deleteSetting(key: string): Promise<boolean> {
+    await db.delete(settings).where(eq(settings.key, key));
     return true;
   }
 }
