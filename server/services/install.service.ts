@@ -1,7 +1,7 @@
 import { storage } from "../storage";
 import { AuthService } from "./auth.service";
 import { db, pool } from "../db";
-import { challenges, submissions, announcements, players, adminUsers, sessions, settings } from "@shared/schema";
+import { challenges, submissions, announcements, players, adminUsers, sessions, settings, challengeCategories, challengeDifficulties } from "@shared/schema";
 import type { InsertChallenge, InsertAnnouncement } from "@shared/schema";
 import { exec } from "child_process";
 import { promisify } from "util";
@@ -192,100 +192,128 @@ export class InstallService {
   }
 
   static async seedDemoData(): Promise<void> {
+    // First, create default categories
+    const categories = await Promise.all([
+      storage.createCategory({ name: "Web Exploitation", slug: "web", description: "Web application security challenges", sortOrder: 1 }),
+      storage.createCategory({ name: "Cryptography", slug: "crypto", description: "Encryption and decryption challenges", sortOrder: 2 }),
+      storage.createCategory({ name: "Binary Exploitation", slug: "binary", description: "Memory corruption and exploitation", sortOrder: 3 }),
+      storage.createCategory({ name: "Forensics", slug: "forensics", description: "Digital forensics and data recovery", sortOrder: 4 }),
+      storage.createCategory({ name: "Reverse Engineering", slug: "reverse", description: "Code analysis and reverse engineering", sortOrder: 5 }),
+    ]);
+
+    // Create category lookup map
+    const categoryMap = categories.reduce((acc, cat) => {
+      acc[cat.slug] = cat.id;
+      return acc;
+    }, {} as Record<string, string>);
+
+    // Create default difficulties
+    const difficulties = await Promise.all([
+      storage.createDifficulty({ name: "Easy", slug: "easy", description: "Beginner friendly", sortOrder: 1, pointsMultiplier: 1 }),
+      storage.createDifficulty({ name: "Medium", slug: "medium", description: "Intermediate level", sortOrder: 2, pointsMultiplier: 2 }),
+      storage.createDifficulty({ name: "Hard", slug: "hard", description: "Advanced challenges", sortOrder: 3, pointsMultiplier: 3 }),
+    ]);
+
+    // Create difficulty lookup map
+    const difficultyMap = difficulties.reduce((acc, diff) => {
+      acc[diff.slug] = diff.id;
+      return acc;
+    }, {} as Record<string, string>);
+
     const sampleChallenges: InsertChallenge[] = [
       {
         title: "SQL Injection Basics",
         description: "Find the hidden flag in this vulnerable login page. The application doesn't properly sanitize user input. Try using common SQL injection techniques to bypass authentication.\n\nURL: http://vulnerable-app.ctf/login\nHint: Think about how you can manipulate the SQL query.",
-        category: "web",
-        difficulty: "easy",
+        categoryId: categoryMap.web,
+        difficultyId: difficultyMap.easy,
         points: 100,
         flag: "flag{sql_1nj3ct10n_1s_d4ng3r0us}",
       },
       {
         title: "Caesar's Secret",
         description: "An ancient encryption method was used to hide this message:\n\nGSVH R ORPV XIBKGLTIZKSR\n\nThe key is somewhere between 1 and 25. Can you decode it?",
-        category: "crypto",
-        difficulty: "easy",
+        categoryId: categoryMap.crypto,
+        difficultyId: difficultyMap.easy,
         points: 150,
         flag: "flag{i_like_cryptography}",
       },
       {
         title: "Hidden in Plain Sight",
         description: "We intercepted this image file. Our analysts believe there's hidden data embedded within it. Can you extract the secret?\n\nDownload: secret_image.png (Simulated - Flag hidden in metadata)\n\nTools you might need: exiftool, strings, binwalk",
-        category: "forensics",
-        difficulty: "medium",
+        categoryId: categoryMap.forensics,
+        difficultyId: difficultyMap.medium,
         points: 250,
         flag: "flag{st3g4n0gr4phy_m4st3r}",
       },
       {
         title: "Buffer Overflow 101",
         description: "This program has a classic buffer overflow vulnerability. Exploit it to gain control of the execution flow and retrieve the flag.\n\n```c\n#include <stdio.h>\n#include <string.h>\n\nvoid secret() {\n    printf(\"Flag: flag{buff3r_0v3rfl0w_pwn3d}\\n\");\n}\n\nint main() {\n    char buffer[64];\n    gets(buffer);\n    return 0;\n}\n```",
-        category: "binary",
-        difficulty: "hard",
+        categoryId: categoryMap.binary,
+        difficultyId: difficultyMap.hard,
         points: 400,
         flag: "flag{buff3r_0v3rfl0w_pwn3d}",
       },
       {
         title: "XSS Playground",
         description: "This web application reflects user input without proper sanitization. Craft an XSS payload that will execute JavaScript and reveal the flag stored in a cookie.\n\nURL: http://xss-challenge.ctf/search\nCookie name: secret_flag",
-        category: "web",
-        difficulty: "medium",
+        categoryId: categoryMap.web,
+        difficultyId: difficultyMap.medium,
         points: 200,
         flag: "flag{xss_c4n_b3_d4ng3r0us}",
       },
       {
         title: "RSA Weakness",
         description: "We captured this RSA encrypted message along with the public key. The key size seems suspiciously small...\n\nn = 84823428793\ne = 65537\nc = 27856425893\n\nCan you decrypt it?",
-        category: "crypto",
-        difficulty: "hard",
+        categoryId: categoryMap.crypto,
+        difficultyId: difficultyMap.hard,
         points: 350,
         flag: "flag{sm4ll_k3y_br0k3n}",
       },
       {
         title: "Memory Corruption",
         description: "This binary has a use-after-free vulnerability. Can you exploit it to read the flag from memory?\n\nDownload: vulnerable_binary (Simulated)\n\nThe flag is stored at address 0x08048000",
-        category: "binary",
-        difficulty: "hard",
+        categoryId: categoryMap.binary,
+        difficultyId: difficultyMap.hard,
         points: 450,
         flag: "flag{m3m0ry_l34k_pwn}",
       },
       {
         title: "Directory Traversal",
         description: "This web server allows file downloads but doesn't validate the filename properly. Can you read the flag file?\n\nURL: http://fileserver.ctf/download?file=document.pdf\nFlag location: /etc/ctf_flag.txt",
-        category: "web",
-        difficulty: "medium",
+        categoryId: categoryMap.web,
+        difficultyId: difficultyMap.medium,
         points: 300,
         flag: "flag{p4th_tr4v3rs4l_vuln}",
       },
       {
         title: "JWT Confusion",
         description: "This application uses JWT for authentication. The implementation has a critical flaw in how it validates tokens. Can you forge an admin token?\n\nURL: http://jwt-app.ctf/api\nHint: Check the algorithm field",
-        category: "web",
-        difficulty: "hard",
+        categoryId: categoryMap.web,
+        difficultyId: difficultyMap.hard,
         points: 400,
         flag: "flag{jwt_4lg_c0nfus10n}",
       },
       {
         title: "Weak Hashing",
         description: "We found a password hash in a database dump:\n\n5f4dcc3b5aa765d61d8327deb882cf99\n\nCan you crack it and submit the flag?\nFlag format: flag{cracked_password}",
-        category: "crypto",
-        difficulty: "easy",
+        categoryId: categoryMap.crypto,
+        difficultyId: difficultyMap.easy,
         points: 100,
         flag: "flag{password}",
       },
       {
         title: "Command Injection",
         description: "This ping utility doesn't sanitize user input properly. Can you inject commands to read the flag?\n\nURL: http://ping.ctf/check?host=google.com\nFlag location: /home/ctf/flag.txt",
-        category: "web",
-        difficulty: "medium",
+        categoryId: categoryMap.web,
+        difficultyId: difficultyMap.medium,
         points: 250,
         flag: "flag{c0mm4nd_1nj3ct10n}",
       },
       {
         title: "Reverse Engineering Challenge",
         description: "This program checks if your input is correct and reveals the flag. Can you reverse engineer the algorithm?\n\nDownload: crackme (Simulated)\nHint: The flag is XORed with a key",
-        category: "reverse",
-        difficulty: "hard",
+        categoryId: categoryMap.reverse,
+        difficultyId: difficultyMap.hard,
         points: 400,
         flag: "flag{r3v3rs3_m3_1f_y0u_c4n}",
       },
@@ -328,8 +356,11 @@ export class InstallService {
   }
 
   static async resetDemoData(): Promise<void> {
-    await db.delete(challenges);
+    // Delete in order due to foreign key constraints
     await db.delete(submissions);
+    await db.delete(challenges);
+    await db.delete(challengeCategories);
+    await db.delete(challengeDifficulties);
     await db.delete(announcements);
     
     await this.seedDemoData();

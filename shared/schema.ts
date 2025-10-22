@@ -1,14 +1,35 @@
-import { sql } from "drizzle-orm";
+import { sql, relations } from "drizzle-orm";
 import { pgTable, text, varchar, integer, timestamp, jsonb, index } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
+
+// Challenge categories lookup table
+export const challengeCategories = pgTable("challenge_categories", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  slug: text("slug").notNull().unique(),
+  description: text("description"),
+  sortOrder: integer("sort_order").notNull().default(0),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Challenge difficulties lookup table
+export const challengeDifficulties = pgTable("challenge_difficulties", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  slug: text("slug").notNull().unique(),
+  description: text("description"),
+  sortOrder: integer("sort_order").notNull().default(0),
+  pointsMultiplier: integer("points_multiplier").notNull().default(1),
+  createdAt: timestamp("created_at").defaultNow(),
+});
 
 export const challenges = pgTable("challenges", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   title: text("title").notNull(),
   description: text("description").notNull(),
-  category: text("category").notNull(),
-  difficulty: text("difficulty").notNull(),
+  categoryId: varchar("category_id").notNull().references(() => challengeCategories.id),
+  difficultyId: varchar("difficulty_id").notNull().references(() => challengeDifficulties.id),
   points: integer("points").notNull(),
   flag: text("flag").notNull(),
 });
@@ -91,26 +112,25 @@ export const challengeAccessLogs = pgTable(
   ],
 );
 
-// Challenge categories lookup table
-export const challengeCategories = pgTable("challenge_categories", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  name: text("name").notNull(),
-  slug: text("slug").notNull().unique(),
-  description: text("description"),
-  sortOrder: integer("sort_order").notNull().default(0),
-  createdAt: timestamp("created_at").defaultNow(),
-});
+// Relations
+export const challengesRelations = relations(challenges, ({ one }) => ({
+  category: one(challengeCategories, {
+    fields: [challenges.categoryId],
+    references: [challengeCategories.id],
+  }),
+  difficulty: one(challengeDifficulties, {
+    fields: [challenges.difficultyId],
+    references: [challengeDifficulties.id],
+  }),
+}));
 
-// Challenge difficulties lookup table
-export const challengeDifficulties = pgTable("challenge_difficulties", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  name: text("name").notNull(),
-  slug: text("slug").notNull().unique(),
-  description: text("description"),
-  sortOrder: integer("sort_order").notNull().default(0),
-  pointsMultiplier: integer("points_multiplier").notNull().default(1),
-  createdAt: timestamp("created_at").defaultNow(),
-});
+export const challengeCategoriesRelations = relations(challengeCategories, ({ many }) => ({
+  challenges: many(challenges),
+}));
+
+export const challengeDifficultiesRelations = relations(challengeDifficulties, ({ many }) => ({
+  challenges: many(challenges),
+}));
 
 export const insertChallengeSchema = createInsertSchema(challenges).omit({
   id: true,
@@ -182,6 +202,12 @@ export const insertChallengeDifficultySchema = createInsertSchema(challengeDiffi
 
 export type Challenge = typeof challenges.$inferSelect;
 export type InsertChallenge = z.infer<typeof insertChallengeSchema>;
+
+// Extended challenge type with full category and difficulty data
+export type ChallengeWithRelations = Challenge & {
+  category: ChallengeCategory;
+  difficulty: ChallengeDifficulty;
+};
 
 export type Player = typeof players.$inferSelect;
 export type InsertPlayer = z.infer<typeof insertPlayerSchema>;

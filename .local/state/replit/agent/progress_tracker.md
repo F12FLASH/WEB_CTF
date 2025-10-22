@@ -6,6 +6,14 @@
 - [x] 3. Verify the project is working using the feedback tool
 - [x] 4. Inform user the import is completed and they can start building
 
+## User Requirements - IN PROGRESS
+- [x] 1. Fix install page access control (users cannot access)
+- [x] 2. Database schema unified with foreign keys
+- [x] 3. Storage layer updated to work with unified schema
+- [ ] 4. Complete admin panel UI (Categories, Difficulties, Settings, Analytics)
+- [ ] 5. Update frontend to work with new database structure
+- [ ] 6. Bug fixes and testing
+
 ## Previous Development Tasks (Completed)
 - [x] 1. Database schema for analytics, categories, difficulties added
 - [x] 2. Storage layer methods implemented

@@ -1,5 +1,6 @@
 import {
   type Challenge,
+  type ChallengeWithRelations,
   type InsertChallenge,
   type Player,
   type InsertPlayer,
@@ -33,8 +34,8 @@ import { AuthService } from "./services/auth.service";
 
 export interface IStorage {
   // Challenge methods
-  getAllChallenges(): Promise<Challenge[]>;
-  getChallengeById(id: string): Promise<Challenge | undefined>;
+  getAllChallenges(): Promise<ChallengeWithRelations[]>;
+  getChallengeById(id: string): Promise<ChallengeWithRelations | undefined>;
   createChallenge(challenge: InsertChallenge): Promise<Challenge>;
   updateChallenge(id: string, challenge: InsertChallenge): Promise<Challenge | undefined>;
   deleteChallenge(id: string): Promise<boolean>;
@@ -97,13 +98,25 @@ export interface IStorage {
 
 export class DatabaseStorage implements IStorage {
   // Challenge methods
-  async getAllChallenges(): Promise<Challenge[]> {
-    return await db.select().from(challenges);
+  async getAllChallenges(): Promise<ChallengeWithRelations[]> {
+    const results = await db.query.challenges.findMany({
+      with: {
+        category: true,
+        difficulty: true,
+      },
+    });
+    return results as ChallengeWithRelations[];
   }
 
-  async getChallengeById(id: string): Promise<Challenge | undefined> {
-    const [challenge] = await db.select().from(challenges).where(eq(challenges.id, id));
-    return challenge;
+  async getChallengeById(id: string): Promise<ChallengeWithRelations | undefined> {
+    const result = await db.query.challenges.findFirst({
+      where: eq(challenges.id, id),
+      with: {
+        category: true,
+        difficulty: true,
+      },
+    });
+    return result as ChallengeWithRelations | undefined;
   }
 
   async createChallenge(insertChallenge: InsertChallenge): Promise<Challenge> {

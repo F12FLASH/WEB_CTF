@@ -28,11 +28,24 @@ function Router() {
     const checkInstallStatus = async () => {
       try {
         const res = await fetch("/api/install/check");
+        
+        if (res.status === 403) {
+          // User doesn't have access to install page (system is installed and user is not admin)
+          if (isInstallRoute) {
+            setLocation("/");
+          }
+          setInstallCheckDone(true);
+          return;
+        }
+        
         const data = await res.json();
         
         if (data.needsSetup && !isInstallRoute) {
           setNeedsInstall(true);
           setLocation("/install");
+        } else if (!data.needsSetup && isInstallRoute) {
+          // System is installed, redirect away from install page
+          setLocation("/");
         }
       } catch (error) {
         console.error("Failed to check install status:", error);
@@ -41,12 +54,8 @@ function Router() {
       }
     };
 
-    if (!isInstallRoute) {
-      checkInstallStatus();
-    } else {
-      setInstallCheckDone(true);
-    }
-  }, []);
+    checkInstallStatus();
+  }, [isInstallRoute]);
 
   if (!installCheckDone && !isInstallRoute) {
     return <PageLoader />;
