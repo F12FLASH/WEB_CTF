@@ -1,10 +1,11 @@
 # Progress Tracker - CTF Platform Import
 
 ## Import Migration Tasks - COMPLETED ✅
-- [x] 1. Install the required packages
+- [x] 1. Install the required packages (including cross-env fix)
 - [x] 2. Restart the workflow to see if the project is working
-- [x] 3. Verify the project is working using the feedback tool
+- [x] 3. Verify the project is working using screenshot tool
 - [x] 4. Inform user the import is completed and they can start building
+- [x] 5. Mark import as complete using complete_project_import tool
 
 ## User Requirements - IN PROGRESS
 - [x] 1. Fix install page access control (users cannot access)
