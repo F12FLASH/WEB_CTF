@@ -73,6 +73,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { insertChallengeSchema, insertAnnouncementSchema, insertChallengeCategorySchema, insertChallengeDifficultySchema } from "@shared/schema";
 import { apiRequest, queryClient } from "@/lib/queryClient";
+import { CategoriesView } from "@/components/admin/CategoriesView";
+import { DifficultiesView } from "@/components/admin/DifficultiesView";
+import { SettingsView } from "@/components/admin/SettingsView";
+import { AnalyticsView } from "@/components/admin/AnalyticsView";
 
 type AdminView = "dashboard" | "challenges" | "announcements" | "categories" | "difficulties" | "settings" | "analytics";
 
@@ -974,6 +978,14 @@ export function Admin() {
               </Card>
             </div>
           )}
+
+          {currentView === "categories" && <CategoriesView />}
+
+          {currentView === "difficulties" && <DifficultiesView />}
+
+          {currentView === "settings" && <SettingsView />}
+
+          {currentView === "analytics" && <AnalyticsView />}
         </div>
       </main>
 
