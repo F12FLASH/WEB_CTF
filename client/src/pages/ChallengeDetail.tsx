@@ -11,7 +11,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
 import { CheckCircle2, XCircle, ArrowLeft, Terminal, Trophy, LogIn, Shield } from "lucide-react";
 import type { Challenge } from "@shared/schema";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 
 const difficultyConfig = {
@@ -37,6 +37,37 @@ export function ChallengeDetail() {
     queryKey: ["/api/solved"],
     enabled: isAuthenticated,
   });
+
+  useEffect(() => {
+    if (challengeId && challenge) {
+      const trackAnalytics = async () => {
+        try {
+          const getDeviceType = () => {
+            const ua = navigator.userAgent;
+            if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
+              return "tablet";
+            }
+            if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(ua)) {
+              return "mobile";
+            }
+            return "desktop";
+          };
+
+          await apiRequest("POST", "/api/analytics/challenge-access", {
+            challengeId,
+            playerId: user?.id || null,
+            userAgent: navigator.userAgent,
+            deviceType: getDeviceType(),
+            referrer: document.referrer || null,
+          });
+        } catch (error) {
+          console.error("Analytics tracking failed:", error);
+        }
+      };
+
+      trackAnalytics();
+    }
+  }, [challengeId, challenge, user]);
 
   const submitMutation = useMutation({
     mutationFn: async (submittedFlag: string) => {
