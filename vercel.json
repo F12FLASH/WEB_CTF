@@ -4,6 +4,10 @@
     {
       "src": "api/index.mjs",
       "use": "@vercel/node"
+    },
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build"
     }
   ],
   "routes": [
@@ -19,10 +23,5 @@
       "src": "/(.*)",
       "dest": "/dist/public/index.html"
     }
-  ],
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist/public",
-  "env": {
-    "NODE_ENV": "production"
-  }
+  ]
 }
