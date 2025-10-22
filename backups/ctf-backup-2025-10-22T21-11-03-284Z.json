@@ -1,0 +1,162 @@
+{
+  "timestamp": "2025-10-22T21:11:03.386Z",
+  "version": "1.0.0",
+  "data": {
+    "challenges": [
+      {
+        "id": "d53be346-8f55-4066-8fd8-ab67ba5be725",
+        "title": "SQL Injection Basics",
+        "description": "Find the hidden flag in this vulnerable login page. The application doesn't properly sanitize user input. Try using common SQL injection techniques to bypass authentication.\n\nURL: http://vulnerable-app.ctf/login\nHint: Think about how you can manipulate the SQL query.",
+        "categoryId": "90a14968-f37b-420d-a919-3d05316639ab",
+        "difficultyId": "33856616-2e27-499d-85d7-9c1a592fa64f",
+        "points": 100,
+        "flag": "flag{sql_1nj3ct10n_1s_d4ng3r0us}"
+      },
+      {
+        "id": "7015df2a-7d61-4773-a557-fc447ffa8e7f",
+        "title": "Caesar's Secret",
+        "description": "An ancient encryption method was used to hide this message:\n\nGSVH R ORPV XIBKGLTIZKSR\n\nThe key is somewhere between 1 and 25. Can you decode it?",
+        "categoryId": "50b6822f-91de-4f11-8cbf-d57f50a91254",
+        "difficultyId": "33856616-2e27-499d-85d7-9c1a592fa64f",
+        "points": 150,
+        "flag": "flag{i_like_cryptography}"
+      },
+      {
+        "id": "a8ab3528-67c0-42c3-b0d2-5a81ffaf9779",
+        "title": "Hidden in Plain Sight",
+        "description": "We intercepted this image file. Our analysts believe there's hidden data embedded within it. Can you extract the secret?\n\nDownload: secret_image.png (Simulated - Flag hidden in metadata)\n\nTools you might need: exiftool, strings, binwalk",
+        "categoryId": "5554b3f0-ab7f-4c91-a599-fb6eb067afff",
+        "difficultyId": "31364f2a-f934-44eb-a6fe-1bdf1b60431d",
+        "points": 250,
+        "flag": "flag{st3g4n0gr4phy_m4st3r}"
+      },
+      {
+        "id": "ca00d62a-01f0-4b82-9aa9-9c303798190f",
+        "title": "Buffer Overflow 101",
+        "description": "This program has a classic buffer overflow vulnerability. Exploit it to gain control of the execution flow and retrieve the flag.\n\n```c\n#include <stdio.h>\n#include <string.h>\n\nvoid secret() {\n    printf(\"Flag: flag{buff3r_0v3rfl0w_pwn3d}\\n\");\n}\n\nint main() {\n    char buffer[64];\n    gets(buffer);\n    return 0;\n}\n```",
+        "categoryId": "4c52c80e-6ac3-47ab-91f4-a50e9b41bd74",
+        "difficultyId": "455b8abc-5285-4449-9acb-4f0b6fa0b11f",
+        "points": 400,
+        "flag": "flag{buff3r_0v3rfl0w_pwn3d}"
+      },
+      {
+        "id": "16db257e-cf8e-440f-8c10-ba3c0914da3e",
+        "title": "XSS Playground",
+        "description": "This web application reflects user input without proper sanitization. Craft an XSS payload that will execute JavaScript and reveal the flag stored in a cookie.\n\nURL: http://xss-challenge.ctf/search\nCookie name: secret_flag",
+        "categoryId": "90a14968-f37b-420d-a919-3d05316639ab",
+        "difficultyId": "31364f2a-f934-44eb-a6fe-1bdf1b60431d",
+        "points": 200,
+        "flag": "flag{xss_c4n_b3_d4ng3r0us}"
+      },
+      {
+        "id": "a97b3dfb-5c93-4c1d-ac3c-58440a44f199",
+        "title": "RSA Weakness",
+        "description": "We captured this RSA encrypted message along with the public key. The key size seems suspiciously small...\n\nn = 84823428793\ne = 65537\nc = 27856425893\n\nCan you decrypt it?",
+        "categoryId": "50b6822f-91de-4f11-8cbf-d57f50a91254",
+        "difficultyId": "455b8abc-5285-4449-9acb-4f0b6fa0b11f",
+        "points": 350,
+        "flag": "flag{sm4ll_k3y_br0k3n}"
+      },
+      {
+        "id": "94b12e01-7a24-4564-b4eb-477e7c4d05dc",
+        "title": "Memory Corruption",
+        "description": "This binary has a use-after-free vulnerability. Can you exploit it to read the flag from memory?\n\nDownload: vulnerable_binary (Simulated)\n\nThe flag is stored at address 0x08048000",
+        "categoryId": "4c52c80e-6ac3-47ab-91f4-a50e9b41bd74",
+        "difficultyId": "455b8abc-5285-4449-9acb-4f0b6fa0b11f",
+        "points": 450,
+        "flag": "flag{m3m0ry_l34k_pwn}"
+      },
+      {
+        "id": "c166b004-9d73-432c-8d2f-b5a1fb9376cc",
+        "title": "Directory Traversal",
+        "description": "This web server allows file downloads but doesn't validate the filename properly. Can you read the flag file?\n\nURL: http://fileserver.ctf/download?file=document.pdf\nFlag location: /etc/ctf_flag.txt",
+        "categoryId": "90a14968-f37b-420d-a919-3d05316639ab",
+        "difficultyId": "31364f2a-f934-44eb-a6fe-1bdf1b60431d",
+        "points": 300,
+        "flag": "flag{p4th_tr4v3rs4l_vuln}"
+      },
+      {
+        "id": "5534f1ce-9dd1-4a27-893f-9ddf9db25764",
+        "title": "JWT Confusion",
+        "description": "This application uses JWT for authentication. The implementation has a critical flaw in how it validates tokens. Can you forge an admin token?\n\nURL: http://jwt-app.ctf/api\nHint: Check the algorithm field",
+        "categoryId": "90a14968-f37b-420d-a919-3d05316639ab",
+        "difficultyId": "455b8abc-5285-4449-9acb-4f0b6fa0b11f",
+        "points": 400,
+        "flag": "flag{jwt_4lg_c0nfus10n}"
+      },
+      {
+        "id": "e69d9b93-1621-49e5-ac01-ebfd45ddc6a1",
+        "title": "Weak Hashing",
+        "description": "We found a password hash in a database dump:\n\n5f4dcc3b5aa765d61d8327deb882cf99\n\nCan you crack it and submit the flag?\nFlag format: flag{cracked_password}",
+        "categoryId": "50b6822f-91de-4f11-8cbf-d57f50a91254",
+        "difficultyId": "33856616-2e27-499d-85d7-9c1a592fa64f",
+        "points": 100,
+        "flag": "flag{password}"
+      },
+      {
+        "id": "809b92a6-bdf9-465b-a742-42b3e1fec7e6",
+        "title": "Command Injection",
+        "description": "This ping utility doesn't sanitize user input properly. Can you inject commands to read the flag?\n\nURL: http://ping.ctf/check?host=google.com\nFlag location: /home/ctf/flag.txt",
+        "categoryId": "90a14968-f37b-420d-a919-3d05316639ab",
+        "difficultyId": "31364f2a-f934-44eb-a6fe-1bdf1b60431d",
+        "points": 250,
+        "flag": "flag{c0mm4nd_1nj3ct10n}"
+      },
+      {
+        "id": "a4cc63bd-0ba3-4e3b-8c6f-b09f6adcb7d3",
+        "title": "Reverse Engineering Challenge",
+        "description": "This program checks if your input is correct and reveals the flag. Can you reverse engineer the algorithm?\n\nDownload: crackme (Simulated)\nHint: The flag is XORed with a key",
+        "categoryId": "deb1f9e9-fec2-4228-b49b-260c92f62617",
+        "difficultyId": "455b8abc-5285-4449-9acb-4f0b6fa0b11f",
+        "points": 400,
+        "flag": "flag{r3v3rs3_m3_1f_y0u_c4n}"
+      }
+    ],
+    "players": [],
+    "submissions": [],
+    "adminUsers": [
+      {
+        "id": "b0439632-af3b-4a8b-aae7-0ee1e19e9f59",
+        "username": "admin",
+        "passwordHash": "[REDACTED]",
+        "createdAt": "2025-10-22T21:09:37.433Z"
+      }
+    ],
+    "announcements": [
+      {
+        "id": "6c1294a0-2dd6-413e-9224-974af3f06f2b",
+        "title": "Welcome to CTF Platform!",
+        "message": "Thank you for joining our CTF competition. Read the rules carefully and have fun hacking!",
+        "type": "info",
+        "isActive": 1,
+        "createdAt": "2025-10-22T21:09:37.541Z",
+        "createdBy": "system"
+      },
+      {
+        "id": "b84ab749-220e-4ae0-b6fa-7c4ea60cecf5",
+        "title": "Competition Rules",
+        "message": "1. No DDoS attacks\n2. No sharing flags\n3. No automated tools without permission\n4. Report bugs responsibly",
+        "type": "warning",
+        "isActive": 1,
+        "createdAt": "2025-10-22T21:09:37.543Z",
+        "createdBy": "system"
+      },
+      {
+        "id": "c473661e-f5cb-49e4-8762-6df4d75e916d",
+        "title": "New Challenges Added!",
+        "message": "We've added 3 new challenges in the Reverse Engineering category. Check them out!",
+        "type": "success",
+        "isActive": 1,
+        "createdAt": "2025-10-22T21:09:37.546Z",
+        "createdBy": "system"
+      }
+    ]
+  },
+  "stats": {
+    "totalChallenges": 12,
+    "totalPlayers": 0,
+    "totalSubmissions": 0,
+    "totalAdmins": 1,
+    "totalAnnouncements": 3
+  }
+}

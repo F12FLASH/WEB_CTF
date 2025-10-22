@@ -67,6 +67,7 @@ import {
   BarChart3,
   Settings as SettingsIcon,
   TrendingUp,
+  Server,
 } from "lucide-react";
 import type { Challenge, ChallengeWithRelations, InsertChallenge, Announcement, InsertAnnouncement, ChallengeCategory, InsertChallengeCategory, ChallengeDifficulty, InsertChallengeDifficulty } from "@shared/schema";
 import { useForm } from "react-hook-form";
@@ -77,8 +78,9 @@ import { CategoriesView } from "@/components/admin/CategoriesView";
 import { DifficultiesView } from "@/components/admin/DifficultiesView";
 import { SettingsView } from "@/components/admin/SettingsView";
 import { AnalyticsView } from "@/components/admin/AnalyticsView";
+import { SystemView } from "@/components/admin/SystemView";
 
-type AdminView = "dashboard" | "challenges" | "announcements" | "categories" | "difficulties" | "settings" | "analytics";
+type AdminView = "dashboard" | "challenges" | "announcements" | "categories" | "difficulties" | "settings" | "analytics" | "system";
 
 interface AdminStats {
   totalChallenges: number;
@@ -546,6 +548,18 @@ export function Admin() {
             <BarChart3 className="h-5 w-5" />
             <span className="font-semibold">Analytics</span>
           </button>
+
+          <button
+            onClick={() => setCurrentView("system")}
+            className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-200 ${
+              currentView === "system"
+                ? "bg-gradient-to-r from-primary to-primary/90 text-primary-foreground shadow-lg scale-105"
+                : "hover:bg-accent/50 hover:scale-102"
+            }`}
+          >
+            <Server className="h-5 w-5" />
+            <span className="font-semibold">System</span>
+          </button>
         </nav>
 
         <div className="absolute bottom-0 w-72 p-4 border-t bg-card/80 backdrop-blur">
@@ -998,6 +1012,8 @@ export function Admin() {
           {currentView === "settings" && <SettingsView />}
 
           {currentView === "analytics" && <AnalyticsView />}
+
+          {currentView === "system" && <SystemView />}
         </div>
       </main>
 

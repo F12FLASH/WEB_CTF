@@ -12,6 +12,7 @@ import installRoutes from "./routes/install.routes";
 import analyticsRoutes from "./routes/analytics.routes";
 import categoriesRoutes from "./routes/categories.routes";
 import difficultiesRoutes from "./routes/difficulties.routes";
+import systemRoutes from "./routes/system.routes";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   app.use(cookieParser());
@@ -29,6 +30,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.use("/api/analytics", analyticsRoutes);
   app.use("/api/categories", categoriesRoutes);
   app.use("/api/difficulties", difficultiesRoutes);
+  app.use("/api/system", systemRoutes);
   app.use("/api", publicRoutes);
 
   const httpServer = createServer(app);
