@@ -43,6 +43,7 @@ export interface IStorage {
 
   // Admin methods
   getAdminByUsername(username: string): Promise<AdminUser | undefined>;
+  getAllAdmins(): Promise<AdminUser[]>;
   createAdmin(admin: InsertAdminUser): Promise<AdminUser>;
   verifyAdminPassword(username: string, password: string): Promise<boolean>;
 
@@ -56,11 +57,15 @@ export interface IStorage {
 }
 
 export class DatabaseStorage implements IStorage {
-  constructor() {
-    this.initializeSampleData();
+  private isInitialized = false;
+
+  async ensureInitialized(): Promise<void> {
+    if (this.isInitialized) return;
+    await this.initializeSampleData();
+    this.isInitialized = true;
   }
 
-  private async initializeSampleData() {
+  private async initializeSampleData(): Promise<void> {
     try {
       // Check if we already have data
       const existingChallenges = await db.select().from(challenges).limit(1);
@@ -241,6 +246,10 @@ export class DatabaseStorage implements IStorage {
       .from(adminUsers)
       .where(eq(adminUsers.username, username));
     return admin;
+  }
+
+  async getAllAdmins(): Promise<AdminUser[]> {
+    return await db.select().from(adminUsers);
   }
 
   async createAdmin(insertAdmin: InsertAdminUser): Promise<AdminUser> {

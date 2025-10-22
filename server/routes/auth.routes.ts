@@ -6,16 +6,14 @@ import rateLimit from "express-rate-limit";
 
 const router = Router();
 
-// Rate limiting for login/register attempts
 const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
+  windowMs: 15 * 60 * 1000,
   max: 5,
   message: "Too many authentication attempts, please try again later",
   standardHeaders: true,
   legacyHeaders: false,
 });
 
-// User registration
 router.post("/register", authLimiter, async (req, res) => {
   try {
     const result = registerUserSchema.safeParse(req.body);
@@ -26,7 +24,6 @@ router.post("/register", authLimiter, async (req, res) => {
 
     const { username, email, password } = result.data;
 
-    // Check if username or email already exists
     const existingUsername = await storage.getPlayerByUsername(username);
     if (existingUsername) {
       return res.status(400).json({ message: "Username already taken" });
@@ -37,20 +34,27 @@ router.post("/register", authLimiter, async (req, res) => {
       return res.status(400).json({ message: "Email already registered" });
     }
 
-    // Create user
     const user = await storage.createPlayer({
       username,
       email,
-      passwordHash: password, // Will be hashed in storage layer
+      passwordHash: password,
     });
 
-    // Clear any existing admin session before setting user session
-    req.session.adminId = undefined;
-    req.session.adminUsername = undefined;
-
-    // Set user session
-    req.session.userId = user.id;
-    req.session.username = user.username;
+    await new Promise<void>((resolve, reject) => {
+      req.session.regenerate((err) => {
+        if (err) return reject(err);
+        
+        req.session.userId = user.id;
+        req.session.username = user.username;
+        req.session.adminId = undefined;
+        req.session.adminUsername = undefined;
+        
+        req.session.save((saveErr) => {
+          if (saveErr) return reject(saveErr);
+          resolve();
+        });
+      });
+    });
 
     res.status(201).json({
       message: "Registration successful",
@@ -67,7 +71,6 @@ router.post("/register", authLimiter, async (req, res) => {
   }
 });
 
-// User login
 router.post("/login", authLimiter, async (req, res) => {
   try {
     const result = loginUserSchema.safeParse(req.body);
@@ -88,13 +91,21 @@ router.post("/login", authLimiter, async (req, res) => {
       return res.status(401).json({ message: "Invalid username or password" });
     }
 
-    // Clear any existing admin session before setting user session
-    req.session.adminId = undefined;
-    req.session.adminUsername = undefined;
-
-    // Set user session
-    req.session.userId = user.id;
-    req.session.username = user.username;
+    await new Promise<void>((resolve, reject) => {
+      req.session.regenerate((err) => {
+        if (err) return reject(err);
+        
+        req.session.userId = user.id;
+        req.session.username = user.username;
+        req.session.adminId = undefined;
+        req.session.adminUsername = undefined;
+        
+        req.session.save((saveErr) => {
+          if (saveErr) return reject(saveErr);
+          resolve();
+        });
+      });
+    });
 
     res.json({
       message: "Login successful",
@@ -111,22 +122,23 @@ router.post("/login", authLimiter, async (req, res) => {
   }
 });
 
-// User logout - clear user session only, preserve admin session if exists
 router.post("/logout", async (req, res) => {
-  // Clear user-specific session data
-  req.session.userId = undefined;
-  req.session.username = undefined;
-  
-  // Save session after clearing user data
-  req.session.save((err) => {
-    if (err) {
-      return res.status(500).json({ message: "Failed to logout" });
-    }
+  try {
+    await new Promise<void>((resolve, reject) => {
+      req.session.destroy((err) => {
+        if (err) return reject(err);
+        res.clearCookie('connect.sid');
+        resolve();
+      });
+    });
+    
     res.json({ message: "Logout successful" });
-  });
+  } catch (error) {
+    console.error("Logout error:", error);
+    res.status(500).json({ message: "Failed to logout" });
+  }
 });
 
-// Get current user
 router.get("/user", async (req, res) => {
   if (req.session && req.session.userId) {
     try {

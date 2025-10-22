@@ -72,17 +72,27 @@ export const insertPlayerSchema = createInsertSchema(players).omit({
   createdAt: true,
 });
 
-// Registration schema with password validation
+// Registration schema with strong password validation
 export const registerUserSchema = z.object({
-  username: z.string().min(3).max(50),
-  email: z.string().email(),
-  password: z.string().min(6),
+  username: z.string().min(3, "Username must be at least 3 characters").max(50, "Username too long"),
+  email: z.string().email("Invalid email address"),
+  password: z.string()
+    .min(8, "Password must be at least 8 characters")
+    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+    .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+    .regex(/[0-9]/, "Password must contain at least one number"),
 });
 
 // Login schema
 export const loginUserSchema = z.object({
-  username: z.string(),
-  password: z.string(),
+  username: z.string().min(1, "Username is required"),
+  password: z.string().min(1, "Password is required"),
+});
+
+// Admin login schema with strict validation
+export const loginAdminSchema = z.object({
+  username: z.string().min(1, "Username is required").max(100),
+  password: z.string().min(1, "Password is required").max(200),
 });
 
 export const insertSubmissionSchema = createInsertSchema(submissions).omit({
@@ -107,6 +117,7 @@ export type Player = typeof players.$inferSelect;
 export type InsertPlayer = z.infer<typeof insertPlayerSchema>;
 export type RegisterUser = z.infer<typeof registerUserSchema>;
 export type LoginUser = z.infer<typeof loginUserSchema>;
+export type LoginAdmin = z.infer<typeof loginAdminSchema>;
 
 export type Submission = typeof submissions.$inferSelect;
 export type InsertSubmission = z.infer<typeof insertSubmissionSchema>;

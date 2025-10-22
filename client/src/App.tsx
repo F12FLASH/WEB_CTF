@@ -13,12 +13,23 @@ import { Admin } from "@/pages/Admin";
 import { AdminLogin } from "@/pages/AdminLogin";
 import { Register } from "@/pages/Register";
 import { Login } from "@/pages/Login";
+import Install from "@/pages/Install";
 import NotFound from "@/pages/not-found";
 import { useState, useEffect } from "react";
 
 function Router() {
   const [location] = useLocation();
   const isAdminRoute = location.startsWith('/admin');
+  const isInstallRoute = location.startsWith('/install');
+
+  if (isInstallRoute) {
+    return (
+      <Switch>
+        <Route path="/install" component={Install} />
+        <Route component={NotFound} />
+      </Switch>
+    );
+  }
 
   if (isAdminRoute) {
     return (

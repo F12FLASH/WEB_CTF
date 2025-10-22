@@ -4,9 +4,8 @@ import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 
 const app = express();
-app.set("trust proxy", 1); // Trust first proxy for rate limiting
+app.set("trust proxy", 1);
 
-// Security headers with Helmet
 const isDevelopment = process.env.NODE_ENV === 'development';
 app.use(helmet({
   contentSecurityPolicy: {
@@ -19,21 +18,21 @@ app.use(helmet({
       fontSrc: ["'self'", "https://fonts.gstatic.com"],
       imgSrc: ["'self'", "data:", "https:"],
       connectSrc: ["'self'"],
-      frameAncestors: ["'none'"], // Prevent clickjacking
+      frameAncestors: ["'none'"],
       baseUri: ["'self'"],
       formAction: ["'self'"],
     },
   },
   hsts: {
-    maxAge: 31536000, // 1 year
+    maxAge: 31536000,
     includeSubDomains: true,
     preload: true,
   },
   frameguard: {
-    action: "deny", // Prevent site from being framed
+    action: "deny",
   },
-  noSniff: true, // Prevent MIME type sniffing
-  xssFilter: true, // Enable XSS filter
+  noSniff: true,
+  xssFilter: true,
   referrerPolicy: {
     policy: "strict-origin-when-cross-origin",
   },
@@ -78,10 +77,17 @@ app.use((req, res, next) => {
 
     app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
       const status = err.status || err.statusCode || 500;
-      const message = err.message || "Internal Server Error";
+      const message = isDevelopment ? err.message || "Internal Server Error" : "Internal Server Error";
+      
+      if (isDevelopment) {
+        console.error("Error:", err);
+      } else {
+        console.error("Error occurred:", message);
+      }
 
-      res.status(status).json({ message });
-      throw err;
+      if (!res.headersSent) {
+        res.status(status).json({ message });
+      }
     });
 
     if (app.get("env") === "development") {

@@ -1,27 +1,29 @@
 import { Router } from "express";
 import { storage } from "../storage";
 import { requireAdmin } from "../auth";
+import { loginAdminSchema } from "@shared/schema";
+import { fromZodError } from "zod-validation-error";
 import rateLimit from "express-rate-limit";
 
 const router = Router();
 
-// Rate limiting for admin login
 const adminLoginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 3, // Stricter limit for admin
+  max: 3,
   message: "Too many admin login attempts, please try again later",
   standardHeaders: true,
   legacyHeaders: false,
 });
 
-// Admin login
 router.post("/login", adminLoginLimiter, async (req, res) => {
   try {
-    const { username, password } = req.body;
-
-    if (!username || !password) {
-      return res.status(400).json({ message: "Username and password are required" });
+    const result = loginAdminSchema.safeParse(req.body);
+    if (!result.success) {
+      const validationError = fromZodError(result.error);
+      return res.status(400).json({ message: validationError.message });
     }
+
+    const { username, password } = result.data;
 
     const isValid = await storage.verifyAdminPassword(username, password);
     
@@ -34,13 +36,21 @@ router.post("/login", adminLoginLimiter, async (req, res) => {
       return res.status(401).json({ message: "Invalid username or password" });
     }
 
-    // Clear any existing user session before setting admin session
-    req.session.userId = undefined;
-    req.session.username = undefined;
-
-    // Set admin session
-    req.session.adminId = admin.id;
-    req.session.adminUsername = admin.username;
+    await new Promise<void>((resolve, reject) => {
+      req.session.regenerate((err) => {
+        if (err) return reject(err);
+        
+        req.session.adminId = admin.id;
+        req.session.adminUsername = admin.username;
+        req.session.userId = undefined;
+        req.session.username = undefined;
+        
+        req.session.save((saveErr) => {
+          if (saveErr) return reject(saveErr);
+          resolve();
+        });
+      });
+    });
 
     res.json({ 
       message: "Login successful",
@@ -55,22 +65,23 @@ router.post("/login", adminLoginLimiter, async (req, res) => {
   }
 });
 
-// Admin logout - clear admin session only, preserve user session if exists
 router.post("/logout", async (req, res) => {
-  // Clear admin-specific session data
-  req.session.adminId = undefined;
-  req.session.adminUsername = undefined;
-  
-  // Save session after clearing admin data
-  req.session.save((err) => {
-    if (err) {
-      return res.status(500).json({ message: "Failed to logout" });
-    }
+  try {
+    await new Promise<void>((resolve, reject) => {
+      req.session.destroy((err) => {
+        if (err) return reject(err);
+        res.clearCookie('connect.sid');
+        resolve();
+      });
+    });
+    
     res.json({ message: "Logout successful" });
-  });
+  } catch (error) {
+    console.error("Logout error:", error);
+    res.status(500).json({ message: "Failed to logout" });
+  }
 });
 
-// Check admin session
 router.get("/session", async (req, res) => {
   if (req.session && req.session.adminId) {
     res.json({
@@ -85,7 +96,6 @@ router.get("/session", async (req, res) => {
   }
 });
 
-// Get all challenges (with flags) - admin only
 router.get("/challenges", requireAdmin, async (req, res) => {
   try {
     const challenges = await storage.getAllChallenges();
@@ -96,7 +106,6 @@ router.get("/challenges", requireAdmin, async (req, res) => {
   }
 });
 
-// Get challenge by ID (with flag) - admin only
 router.get("/challenges/:id", requireAdmin, async (req, res) => {
   try {
     const challenge = await storage.getChallengeById(req.params.id);
@@ -110,7 +119,6 @@ router.get("/challenges/:id", requireAdmin, async (req, res) => {
   }
 });
 
-// Get admin statistics
 router.get("/stats", requireAdmin, async (req, res) => {
   try {
     const [challenges, players, submissions] = await Promise.all([
@@ -119,25 +127,21 @@ router.get("/stats", requireAdmin, async (req, res) => {
       storage.getAllSubmissions(),
     ]);
 
-    // Calculate statistics
     const totalChallenges = challenges.length;
     const totalPlayers = players.length;
     const totalSubmissions = submissions.length;
     const successfulSolves = submissions.filter(s => s.isCorrect).length;
     
-    // Calculate challenges by category
     const challengesByCategory = challenges.reduce((acc, challenge) => {
       acc[challenge.category] = (acc[challenge.category] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
 
-    // Calculate challenges by difficulty
     const challengesByDifficulty = challenges.reduce((acc, challenge) => {
       acc[challenge.difficulty] = (acc[challenge.difficulty] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
 
-    // Get recent submissions (last 10)
     const recentSubmissions = submissions
       .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
       .slice(0, 10);
