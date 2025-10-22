@@ -32,12 +32,17 @@ Preferred communication style: Simple, everyday language.
   - Real-time system information (version, uptime, database stats)
   - Database export/import functionality with full transaction support
   - JSON and SQL format support for backups and migrations
-  - Overwrite toggle for flexible import strategies
+  - **Conflict Resolution UI**: Interactive conflict detection and resolution before import
 - **Database Management**:
   - **JSON Export/Import**: Complete backup and restore with all entity types (categories, difficulties, challenges, players, submissions, announcements, settings)
   - **SQL Export/Import**: Raw SQL dumps for advanced migration scenarios
   - **Transaction Safety**: All imports wrapped in database transactions with automatic rollback on failure
-  - **Conflict Handling**: Overwrite mode updates existing records, skip mode preserves existing data
+  - **Intelligent Conflict Handling**:
+    - **Preview Mode**: Upload file → system detects conflicts → shows side-by-side comparison
+    - **Per-Item Resolution**: For each conflict, choose to keep existing, update with new, or edit before import
+    - **Visual Diff**: Clear comparison of existing vs. incoming data
+    - **Edit Capability**: Modify incoming data before import with inline form editor
+    - **Automatic New Items**: Non-conflicting items automatically added
   - **CLI Scripts**: `npm run db:backup` (JSON), `npm run db:export` (SQL)
 - **Enhanced Rate Limiting**: Configurable limits on authentication, flag submission, and export/import endpoints
 - **Input Sanitization**: Middleware for XSS prevention on all user inputs
@@ -62,6 +67,7 @@ Preferred communication style: Simple, everyday language.
   - Setup: Install (guided installation)
 - Admin components in `client/src/components/admin/`:
   - **SystemView** - System management and database export/import UI
+  - **ConflictResolution** - Interactive UI for resolving import conflicts
   - ChallengeManager, AnnouncementManager
 - Reusable UI components in `client/src/components/`
 - Shadcn UI component library in `client/src/components/ui/`
@@ -98,7 +104,7 @@ Preferred communication style: Simple, everyday language.
   - `announcement.routes.ts` - Announcement management
   - `public.routes.ts` - Leaderboard, logout, solved challenges
   - **`install.routes.ts`** - Installation and setup endpoints
-  - **`system.routes.ts`** - System management, database export/import (admin-only)
+  - **`system.routes.ts`** - System management, database export/import with conflict resolution (admin-only)
 - Rate limiting:
   - Authentication: 5 attempts/15min (users), 3 attempts/15min (admins)
   - Flag submissions: 10 attempts/minute
