@@ -26,12 +26,21 @@ Preferred communication style: Simple, everyday language.
 - **IMPROVED**: Install page with guided setup for first-time deployment
 - **IMPROVED**: Install page now shows only safe, minimal system information
 
-### New Features
+### New Features (October 2025)
 - **Installation Wizard**: `/install` route provides guided setup with database checks and admin account creation
-- **Database Management**: Backup and export scripts for data portability
-  - `npm run db:backup` - Creates JSON backup with metadata
-  - `npm run db:export` - Exports SQL dump for migration
-- **Enhanced Rate Limiting**: Configurable limits on authentication and flag submission endpoints
+- **System Management Dashboard**: 
+  - Real-time system information (version, uptime, database stats)
+  - Database export/import functionality with full transaction support
+  - JSON and SQL format support for backups and migrations
+  - Overwrite toggle for flexible import strategies
+- **Database Management**:
+  - **JSON Export/Import**: Complete backup and restore with all entity types (categories, difficulties, challenges, players, submissions, announcements, settings)
+  - **SQL Export/Import**: Raw SQL dumps for advanced migration scenarios
+  - **Transaction Safety**: All imports wrapped in database transactions with automatic rollback on failure
+  - **Conflict Handling**: Overwrite mode updates existing records, skip mode preserves existing data
+  - **CLI Scripts**: `npm run db:backup` (JSON), `npm run db:export` (SQL)
+- **Enhanced Rate Limiting**: Configurable limits on authentication, flag submission, and export/import endpoints
+- **Input Sanitization**: Middleware for XSS prevention on all user inputs
 
 ## System Architecture
 
@@ -49,8 +58,11 @@ Preferred communication style: Simple, everyday language.
 - Page components in `client/src/pages/`:
   - Core: ChallengeList, ChallengeDetail, Leaderboard
   - Auth: Login, Register, AdminLogin
-  - Admin: Admin (dashboard)
-  - Setup: **Install** (new - guided installation)
+  - Admin: Admin (dashboard with System View tab)
+  - Setup: Install (guided installation)
+- Admin components in `client/src/components/admin/`:
+  - **SystemView** - System management and database export/import UI
+  - ChallengeManager, AnnouncementManager
 - Reusable UI components in `client/src/components/`
 - Shadcn UI component library in `client/src/components/ui/`
 - Custom hooks in `client/src/hooks/` for authentication state
@@ -85,11 +97,16 @@ Preferred communication style: Simple, everyday language.
   - `challenge.routes.ts` - Challenge CRUD and flag submission
   - `announcement.routes.ts` - Announcement management
   - `public.routes.ts` - Leaderboard, logout, solved challenges
-  - **`install.routes.ts`** (new) - Installation and setup endpoints
+  - **`install.routes.ts`** - Installation and setup endpoints
+  - **`system.routes.ts`** - System management, database export/import (admin-only)
 - Rate limiting:
   - Authentication: 5 attempts/15min (users), 3 attempts/15min (admins)
   - Flag submissions: 10 attempts/minute
   - Install: 10 attempts/15min
+  - Export/Import: 10 attempts/15min (admin-only)
+- Middleware:
+  - `rateLimiter.ts` - Rate limiting for sensitive endpoints
+  - `sanitize.ts` - XSS prevention and input sanitization
 
 **Authentication & Authorization:**
 - **Session Regeneration**: Sessions regenerated on login/logout to prevent fixation attacks
