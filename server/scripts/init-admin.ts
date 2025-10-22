@@ -45,7 +45,7 @@ async function initAdmin() {
     } else {
       await storage.createAdmin({
         username,
-        passwordHash: await AuthService.hashPassword(password),
+        passwordHash: password,
       });
       console.log(`✅ Admin user '${username}' created successfully!`);
     }

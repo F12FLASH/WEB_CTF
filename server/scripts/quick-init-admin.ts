@@ -21,10 +21,10 @@ async function quickInitAdmin() {
       process.exit(0);
     }
 
-    // Create admin with hashed password
+    // Create admin (password will be hashed by storage layer)
     await storage.createAdmin({
       username,
-      passwordHash: await AuthService.hashPassword(password),
+      passwordHash: password,
     });
 
     console.log("✅ Admin user created successfully!");

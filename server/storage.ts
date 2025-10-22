@@ -226,9 +226,14 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createAdmin(insertAdmin: InsertAdminUser): Promise<AdminUser> {
+    // Hash password before storing using AuthService (12 rounds)
+    const passwordHash = await AuthService.hashPassword(insertAdmin.passwordHash);
     const [admin] = await db
       .insert(adminUsers)
-      .values(insertAdmin)
+      .values({
+        ...insertAdmin,
+        passwordHash,
+      })
       .returning();
     return admin;
   }

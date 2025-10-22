@@ -166,7 +166,7 @@ export class InstallService {
 
       const admin = await storage.createAdmin({
         username: config.adminUsername,
-        passwordHash: await AuthService.hashPassword(config.adminPassword),
+        passwordHash: config.adminPassword,
       });
 
       await storage.setSetting("site_name", config.siteName || "CTF Platform");
