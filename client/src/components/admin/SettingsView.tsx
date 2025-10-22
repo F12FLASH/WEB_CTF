@@ -20,7 +20,7 @@ const settingsSchema = z.object({
 });
 
 type SettingsForm = z.infer<typeof settingsSchema>;
-type Setting = { key: string; value: string };
+type SettingsMap = Record<string, string>;
 
 export function SettingsView() {
   const { toast } = useToast();
@@ -37,47 +37,33 @@ export function SettingsView() {
     },
   });
 
-  const { data: settings, isLoading } = useQuery<Setting[]>({
+  const { data: settings, isLoading } = useQuery<SettingsMap>({
     queryKey: ["/api/admin/settings"],
   });
 
   if (settings && !isLoading) {
-    const settingsMap: Record<string, string> = {};
-    settings.forEach((setting: Setting) => {
-      settingsMap[setting.key] = setting.value;
-    });
-    
     if (form.formState.defaultValues?.siteName === "") {
       form.reset({
-        siteName: settingsMap.siteName || "",
-        siteDescription: settingsMap.siteDescription || "",
-        contactEmail: settingsMap.contactEmail || "",
-        enableRegistration: settingsMap.enableRegistration || "true",
-        maxUploadSize: settingsMap.maxUploadSize || "10485760",
+        siteName: settings.siteName || "",
+        siteDescription: settings.siteDescription || "",
+        contactEmail: settings.contactEmail || "",
+        enableRegistration: settings.enableRegistration || "true",
+        maxUploadSize: settings.maxUploadSize || "10485760",
       });
     }
   }
 
   const updateMutation = useMutation({
     mutationFn: async (data: SettingsForm) => {
-      const updates = Object.entries(data).map(([key, value]) => ({
-        key,
-        value: value || "",
-      }));
+      const res = await fetch("/api/admin/settings", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(data),
+      });
 
-      const promises = updates.map((setting) =>
-        fetch("/api/admin/settings", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify(setting),
-        }).then((res) => {
-          if (!res.ok) throw new Error("Failed to update setting");
-          return res.json();
-        })
-      );
-
-      return Promise.all(promises);
+      if (!res.ok) throw new Error("Failed to update settings");
+      return res.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/settings"] });

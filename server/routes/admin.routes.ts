@@ -133,12 +133,14 @@ router.get("/stats", requireAdmin, async (req, res) => {
     const successfulSolves = submissions.filter(s => s.isCorrect).length;
     
     const challengesByCategory = challenges.reduce((acc, challenge) => {
-      acc[challenge.category] = (acc[challenge.category] || 0) + 1;
+      const categoryName = challenge.category?.name || 'Uncategorized';
+      acc[categoryName] = (acc[categoryName] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
 
     const challengesByDifficulty = challenges.reduce((acc, challenge) => {
-      acc[challenge.difficulty] = (acc[challenge.difficulty] || 0) + 1;
+      const difficultyName = challenge.difficulty?.name || 'Unknown';
+      acc[difficultyName] = (acc[difficultyName] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
 

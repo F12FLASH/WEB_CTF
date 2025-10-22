@@ -32,7 +32,7 @@ type AnalyticsData = {
 
 export function AnalyticsView() {
   const { data: analytics, isLoading } = useQuery<AnalyticsData>({
-    queryKey: ["/api/analytics"],
+    queryKey: ["/api/analytics/stats"],
   });
 
   return (

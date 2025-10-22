@@ -58,22 +58,22 @@ export default function Install() {
   const performSystemCheck = async () => {
     try {
       setLoading(true);
-      const res = await fetch("/api/install/system-check");
+      setError("");
       
-      if (res.status === 403) {
-        const errorData = await res.json();
-        setError(errorData.message || "Không có quyền truy cập trang này");
-        setSystemCheck({
-          hasDatabase: true,
-          databaseConnected: true,
-          isInstalled: true,
-          schemaReady: true,
-          adminCount: 1,
-          challengeCount: 0,
-          playerCount: 0,
+      // Try admin endpoint first (will work if logged in as admin)
+      let res = await fetch("/api/install/admin-system-check", {
+        credentials: "include"
+      });
+      
+      // If not authorized (401 or 403), try regular public endpoint
+      if (res.status === 401 || res.status === 403) {
+        res = await fetch("/api/install/system-check", {
+          credentials: "include"
         });
-        setStep("complete");
-        return;
+      }
+      
+      if (!res.ok) {
+        throw new Error("Không thể tải thông tin hệ thống");
       }
       
       const data = await res.json();
