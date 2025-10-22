@@ -63,7 +63,7 @@ router.post("/", requireAdmin, difficultyLimiter, async (req, res) => {
 router.put("/:id", requireAdmin, difficultyLimiter, async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, slug, description, sortOrder, pointsMultiplier } = req.body;
+    const { name, slug, description, color, level, sortOrder, pointsMultiplier } = req.body;
 
     if (slug) {
       const existingDifficulty = await storage.getDifficultyBySlug(slug);
@@ -76,6 +76,8 @@ router.put("/:id", requireAdmin, difficultyLimiter, async (req, res) => {
       name,
       slug,
       description,
+      color,
+      level,
       sortOrder,
       pointsMultiplier,
     });
@@ -101,7 +103,7 @@ router.delete("/:id", requireAdmin, difficultyLimiter, async (req, res) => {
     }
 
     const challenges = await storage.getAllChallenges();
-    const hasAssociatedChallenges = challenges.some(c => c.difficulty === difficulty.slug);
+    const hasAssociatedChallenges = challenges.some(c => c.difficultyId === difficulty.id);
     
     if (hasAssociatedChallenges) {
       return res.status(400).json({ 

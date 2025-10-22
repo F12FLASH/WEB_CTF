@@ -63,7 +63,7 @@ router.post("/", requireAdmin, categoryLimiter, async (req, res) => {
 router.put("/:id", requireAdmin, categoryLimiter, async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, slug, description, sortOrder } = req.body;
+    const { name, slug, description, color, icon, sortOrder } = req.body;
 
     if (slug) {
       const existingCategory = await storage.getCategoryBySlug(slug);
@@ -76,6 +76,8 @@ router.put("/:id", requireAdmin, categoryLimiter, async (req, res) => {
       name,
       slug,
       description,
+      color,
+      icon,
       sortOrder,
     });
 
@@ -100,7 +102,7 @@ router.delete("/:id", requireAdmin, categoryLimiter, async (req, res) => {
     }
 
     const challenges = await storage.getAllChallenges();
-    const hasAssociatedChallenges = challenges.some(c => c.category === category.slug);
+    const hasAssociatedChallenges = challenges.some(c => c.categoryId === category.id);
     
     if (hasAssociatedChallenges) {
       return res.status(400).json({ 

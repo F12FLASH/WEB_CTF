@@ -9,6 +9,8 @@ export const challengeCategories = pgTable("challenge_categories", {
   name: text("name").notNull(),
   slug: text("slug").notNull().unique(),
   description: text("description"),
+  color: text("color"),
+  icon: text("icon"),
   sortOrder: integer("sort_order").notNull().default(0),
   createdAt: timestamp("created_at").defaultNow(),
 });
@@ -19,6 +21,8 @@ export const challengeDifficulties = pgTable("challenge_difficulties", {
   name: text("name").notNull(),
   slug: text("slug").notNull().unique(),
   description: text("description"),
+  color: text("color"),
+  level: integer("level"),
   sortOrder: integer("sort_order").notNull().default(0),
   pointsMultiplier: integer("points_multiplier").notNull().default(1),
   createdAt: timestamp("created_at").defaultNow(),

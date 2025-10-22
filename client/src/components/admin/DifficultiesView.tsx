@@ -22,7 +22,7 @@ const difficultySchema = z.object({
   slug: z.string().min(1, "Slug is required").max(20, "Slug must be 20 characters or less").regex(/^[a-z0-9-]+$/, "Slug can only contain lowercase letters, numbers, and hyphens"),
   description: z.string().optional(),
   color: z.string().regex(/^#[0-9A-Fa-f]{6}$/, "Must be a valid hex color").optional(),
-  level: z.number().int().min(1).max(10).optional(),
+  level: z.coerce.number().int().min(1).max(10).optional(),
 });
 
 type DifficultyForm = z.infer<typeof difficultySchema>;
