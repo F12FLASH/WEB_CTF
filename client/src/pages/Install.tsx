@@ -11,15 +11,11 @@ import { Shield, Database, CheckCircle, AlertCircle, Server, Settings, Loader2 }
 interface SystemCheck {
   hasDatabase: boolean;
   databaseConnected: boolean;
-  hasSessionSecret: boolean;
-  hasDatabaseUrl: boolean;
   isInstalled: boolean;
   schemaReady: boolean;
   adminCount: number;
   challengeCount: number;
   playerCount: number;
-  errors: string[];
-  warnings: string[];
 }
 
 export default function Install() {
@@ -65,18 +61,16 @@ export default function Install() {
       const res = await fetch("/api/install/system-check");
       
       if (res.status === 403) {
+        const errorData = await res.json();
+        setError(errorData.message || "Không có quyền truy cập trang này");
         setSystemCheck({
           hasDatabase: true,
           databaseConnected: true,
-          hasSessionSecret: true,
-          hasDatabaseUrl: true,
           isInstalled: true,
           schemaReady: true,
           adminCount: 1,
           challengeCount: 0,
           playerCount: 0,
-          errors: [],
-          warnings: [],
         });
         setStep("complete");
         return;
@@ -87,7 +81,7 @@ export default function Install() {
 
       if (data.isInstalled) {
         setStep("complete");
-      } else if (data.databaseConnected && data.errors.length === 0) {
+      } else if (data.databaseConnected) {
         setStep("config");
       }
     } catch (err: any) {
@@ -95,15 +89,11 @@ export default function Install() {
       setSystemCheck({
         hasDatabase: false,
         databaseConnected: false,
-        hasSessionSecret: false,
-        hasDatabaseUrl: false,
         isInstalled: false,
         schemaReady: false,
         adminCount: 0,
         challengeCount: 0,
         playerCount: 0,
-        errors: [err.message],
-        warnings: [],
       });
     } finally {
       setLoading(false);
@@ -206,21 +196,12 @@ export default function Install() {
             ) : systemCheck ? (
               <div className="space-y-3">
                 <div className="flex items-center gap-3 p-3 bg-gray-700/50 rounded-lg">
-                  {systemCheck.hasDatabaseUrl ? (
+                  {systemCheck.hasDatabase ? (
                     <CheckCircle className="h-5 w-5 text-green-500" />
                   ) : (
                     <AlertCircle className="h-5 w-5 text-red-500" />
                   )}
-                  <span className="text-gray-200">DATABASE_URL: {systemCheck.hasDatabaseUrl ? "Có" : "Không có"}</span>
-                </div>
-                
-                <div className="flex items-center gap-3 p-3 bg-gray-700/50 rounded-lg">
-                  {systemCheck.hasSessionSecret ? (
-                    <CheckCircle className="h-5 w-5 text-green-500" />
-                  ) : (
-                    <AlertCircle className="h-5 w-5 text-red-500" />
-                  )}
-                  <span className="text-gray-200">SESSION_SECRET: {systemCheck.hasSessionSecret ? "Có" : "Không có"}</span>
+                  <span className="text-gray-200">Cơ sở dữ liệu: {systemCheck.hasDatabase ? "Có sẵn" : "Không có"}</span>
                 </div>
 
                 <div className="flex items-center gap-3 p-3 bg-gray-700/50 rounded-lg">
@@ -232,27 +213,14 @@ export default function Install() {
                   <span className="text-gray-200">Kết nối Database: {systemCheck.databaseConnected ? "Thành công" : "Thất bại"}</span>
                 </div>
 
-                {systemCheck.warnings && systemCheck.warnings.length > 0 && (
-                  <Alert className="bg-yellow-900/20 border-yellow-800">
-                    <AlertCircle className="h-4 w-4 text-yellow-500" />
-                    <AlertDescription className="text-sm text-yellow-200">
-                      {systemCheck.warnings.map((warn, i) => (
-                        <div key={i}>⚠ {warn}</div>
-                      ))}
-                    </AlertDescription>
-                  </Alert>
-                )}
-
-                {systemCheck.errors && systemCheck.errors.length > 0 && (
-                  <Alert variant="destructive" className="bg-red-900/20 border-red-800">
-                    <AlertCircle className="h-4 w-4" />
-                    <AlertDescription className="text-sm">
-                      {systemCheck.errors.map((err, i) => (
-                        <div key={i}>• {err}</div>
-                      ))}
-                    </AlertDescription>
-                  </Alert>
-                )}
+                <div className="flex items-center gap-3 p-3 bg-gray-700/50 rounded-lg">
+                  {systemCheck.schemaReady ? (
+                    <CheckCircle className="h-5 w-5 text-green-500" />
+                  ) : (
+                    <AlertCircle className="h-5 w-5 text-red-500" />
+                  )}
+                  <span className="text-gray-200">Schema Database: {systemCheck.schemaReady ? "Sẵn sàng" : "Chưa sẵn sàng"}</span>
+                </div>
 
                 {systemCheck.databaseConnected && !systemCheck.isInstalled && (
                   <div className="mt-6">
@@ -265,7 +233,7 @@ export default function Install() {
                   </div>
                 )}
 
-                {systemCheck.errors.length > 0 && (
+                {!systemCheck.databaseConnected && (
                   <div className="mt-4">
                     <Button 
                       onClick={performSystemCheck}
