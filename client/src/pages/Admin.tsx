@@ -68,7 +68,7 @@ import {
   Settings as SettingsIcon,
   TrendingUp,
 } from "lucide-react";
-import type { Challenge, InsertChallenge, Announcement, InsertAnnouncement, ChallengeCategory, InsertChallengeCategory, ChallengeDifficulty, InsertChallengeDifficulty } from "@shared/schema";
+import type { Challenge, ChallengeWithRelations, InsertChallenge, Announcement, InsertAnnouncement, ChallengeCategory, InsertChallengeCategory, ChallengeDifficulty, InsertChallengeDifficulty } from "@shared/schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { insertChallengeSchema, insertAnnouncementSchema, insertChallengeCategorySchema, insertChallengeDifficultySchema } from "@shared/schema";
@@ -93,7 +93,7 @@ export function Admin() {
   const [currentView, setCurrentView] = useState<AdminView>("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
-  const [editingChallenge, setEditingChallenge] = useState<Challenge | null>(null);
+  const [editingChallenge, setEditingChallenge] = useState<ChallengeWithRelations | null>(null);
   const [originalFlag, setOriginalFlag] = useState<string>("");
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -129,7 +129,7 @@ export function Admin() {
     enabled: !!session?.authenticated,
   });
 
-  const { data: challenges, isLoading: challengesLoading } = useQuery<Challenge[]>({
+  const { data: challenges, isLoading: challengesLoading } = useQuery<ChallengeWithRelations[]>({
     queryKey: ["/api/admin/challenges"],
     enabled: !!session?.authenticated,
   });
@@ -139,13 +139,23 @@ export function Admin() {
     enabled: !!session?.authenticated,
   });
 
+  const { data: categories } = useQuery<ChallengeCategory[]>({
+    queryKey: ["/api/categories"],
+    enabled: !!session?.authenticated,
+  });
+
+  const { data: difficulties } = useQuery<ChallengeDifficulty[]>({
+    queryKey: ["/api/difficulties"],
+    enabled: !!session?.authenticated,
+  });
+
   const form = useForm<InsertChallenge>({
     resolver: zodResolver(insertChallengeSchema),
     defaultValues: {
       title: "",
       description: "",
-      category: "web",
-      difficulty: "easy",
+      categoryId: categories?.[0]?.id || "",
+      difficultyId: difficulties?.[0]?.id || "",
       points: 100,
       flag: "",
     },
@@ -326,14 +336,14 @@ export function Admin() {
     }
   };
 
-  const handleEdit = (challenge: Challenge) => {
+  const handleEdit = (challenge: ChallengeWithRelations) => {
     setEditingChallenge(challenge);
     setOriginalFlag(challenge.flag || "");
     form.reset({
       title: challenge.title,
       description: challenge.description,
-      category: challenge.category,
-      difficulty: challenge.difficulty,
+      categoryId: challenge.categoryId,
+      difficultyId: challenge.difficultyId,
       points: challenge.points,
       flag: challenge.flag || "",
     });
@@ -381,8 +391,8 @@ export function Admin() {
     return challenges.filter((challenge) => {
       const matchesSearch = challenge.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         challenge.description.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesCategory = categoryFilter === "all" || challenge.category === categoryFilter;
-      const matchesDifficulty = difficultyFilter === "all" || challenge.difficulty === difficultyFilter;
+      const matchesCategory = categoryFilter === "all" || challenge.categoryId === categoryFilter;
+      const matchesDifficulty = difficultyFilter === "all" || challenge.difficultyId === difficultyFilter;
       
       return matchesSearch && matchesCategory && matchesDifficulty;
     });
@@ -851,11 +861,11 @@ export function Admin() {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="all">All Categories</SelectItem>
-                        <SelectItem value="web">Web</SelectItem>
-                        <SelectItem value="crypto">Crypto</SelectItem>
-                        <SelectItem value="forensics">Forensics</SelectItem>
-                        <SelectItem value="reverse">Reverse</SelectItem>
-                        <SelectItem value="binary">Binary</SelectItem>
+                        {categories?.map((cat) => (
+                          <SelectItem key={cat.id} value={cat.id}>
+                            {cat.name}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     <Select value={difficultyFilter} onValueChange={setDifficultyFilter}>
@@ -865,9 +875,11 @@ export function Admin() {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="all">All Difficulties</SelectItem>
-                        <SelectItem value="easy">Easy</SelectItem>
-                        <SelectItem value="medium">Medium</SelectItem>
-                        <SelectItem value="hard">Hard</SelectItem>
+                        {difficulties?.map((diff) => (
+                          <SelectItem key={diff.id} value={diff.id}>
+                            {diff.name}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </div>
@@ -908,20 +920,20 @@ export function Admin() {
                             </TableCell>
                             <TableCell>
                               <Badge variant="outline" className="capitalize">
-                                {challenge.category}
+                                {challenge.category.name}
                               </Badge>
                             </TableCell>
                             <TableCell>
                               <Badge
                                 className={
-                                  challenge.difficulty === "easy"
+                                  challenge.difficulty.slug === "easy"
                                     ? "bg-chart-1 text-primary-foreground"
-                                    : challenge.difficulty === "medium"
+                                    : challenge.difficulty.slug === "medium"
                                     ? "bg-chart-3 text-primary-foreground"
                                     : "bg-chart-5 text-primary-foreground"
                                 }
                               >
-                                {challenge.difficulty}
+                                {challenge.difficulty.name}
                               </Badge>
                             </TableCell>
                             <TableCell>
@@ -1038,13 +1050,14 @@ export function Admin() {
               <div className="grid grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
-                  name="category"
+                  name="categoryId"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Category</FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
+                        value={field.value}
                       >
                         <FormControl>
                           <SelectTrigger data-testid="select-category">
@@ -1052,11 +1065,11 @@ export function Admin() {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="web">Web</SelectItem>
-                          <SelectItem value="crypto">Crypto</SelectItem>
-                          <SelectItem value="forensics">Forensics</SelectItem>
-                          <SelectItem value="reverse">Reverse</SelectItem>
-                          <SelectItem value="binary">Binary</SelectItem>
+                          {categories?.map((cat) => (
+                            <SelectItem key={cat.id} value={cat.id}>
+                              {cat.name}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -1066,13 +1079,14 @@ export function Admin() {
 
                 <FormField
                   control={form.control}
-                  name="difficulty"
+                  name="difficultyId"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Difficulty</FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
+                        value={field.value}
                       >
                         <FormControl>
                           <SelectTrigger data-testid="select-difficulty">
@@ -1080,9 +1094,11 @@ export function Admin() {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="easy">Easy</SelectItem>
-                          <SelectItem value="medium">Medium</SelectItem>
-                          <SelectItem value="hard">Hard</SelectItem>
+                          {difficulties?.map((diff) => (
+                            <SelectItem key={diff.id} value={diff.id}>
+                              {diff.name}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                       <FormMessage />
