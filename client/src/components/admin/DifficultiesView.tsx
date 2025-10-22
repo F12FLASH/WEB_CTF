@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Plus, Pencil, Trash2, TrendingUp } from "lucide-react";
+import { apiRequest } from "@/lib/queryClient";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -51,16 +52,7 @@ export function DifficultiesView() {
 
   const createMutation = useMutation({
     mutationFn: async (data: DifficultyForm) => {
-      const res = await fetch("/api/difficulties", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify(data),
-      });
-      if (!res.ok) {
-        const error = await res.json();
-        throw new Error(error.message || "Failed to create difficulty");
-      }
+      const res = await apiRequest("POST", "/api/difficulties", data);
       return res.json();
     },
     onSuccess: () => {
@@ -75,16 +67,7 @@ export function DifficultiesView() {
 
   const updateMutation = useMutation({
     mutationFn: async ({ id, data }: { id: string; data: DifficultyForm }) => {
-      const res = await fetch(`/api/difficulties/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify(data),
-      });
-      if (!res.ok) {
-        const error = await res.json();
-        throw new Error(error.message || "Failed to update difficulty");
-      }
+      const res = await apiRequest("PUT", `/api/difficulties/${id}`, data);
       return res.json();
     },
     onSuccess: () => {
@@ -99,14 +82,7 @@ export function DifficultiesView() {
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      const res = await fetch(`/api/difficulties/${id}`, {
-        method: "DELETE",
-        credentials: "include",
-      });
-      if (!res.ok) {
-        const error = await res.json();
-        throw new Error(error.message || "Failed to delete difficulty");
-      }
+      const res = await apiRequest("DELETE", `/api/difficulties/${id}`);
       return res.json();
     },
     onSuccess: () => {

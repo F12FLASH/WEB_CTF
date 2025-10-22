@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Plus, Pencil, Trash2, FolderTree } from "lucide-react";
+import { apiRequest } from "@/lib/queryClient";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -51,16 +52,7 @@ export function CategoriesView() {
 
   const createMutation = useMutation({
     mutationFn: async (data: CategoryForm) => {
-      const res = await fetch("/api/categories", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify(data),
-      });
-      if (!res.ok) {
-        const error = await res.json();
-        throw new Error(error.message || "Failed to create category");
-      }
+      const res = await apiRequest("POST", "/api/categories", data);
       return res.json();
     },
     onSuccess: () => {
@@ -75,16 +67,7 @@ export function CategoriesView() {
 
   const updateMutation = useMutation({
     mutationFn: async ({ id, data }: { id: string; data: CategoryForm }) => {
-      const res = await fetch(`/api/categories/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify(data),
-      });
-      if (!res.ok) {
-        const error = await res.json();
-        throw new Error(error.message || "Failed to update category");
-      }
+      const res = await apiRequest("PUT", `/api/categories/${id}`, data);
       return res.json();
     },
     onSuccess: () => {
@@ -99,14 +82,7 @@ export function CategoriesView() {
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      const res = await fetch(`/api/categories/${id}`, {
-        method: "DELETE",
-        credentials: "include",
-      });
-      if (!res.ok) {
-        const error = await res.json();
-        throw new Error(error.message || "Failed to delete category");
-      }
+      const res = await apiRequest("DELETE", `/api/categories/${id}`);
       return res.json();
     },
     onSuccess: () => {

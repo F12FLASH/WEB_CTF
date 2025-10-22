@@ -2,7 +2,9 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useEffect } from "react";
 import { Save, Settings as SettingsIcon } from "lucide-react";
+import { apiRequest } from "@/lib/queryClient";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -41,8 +43,8 @@ export function SettingsView() {
     queryKey: ["/api/admin/settings"],
   });
 
-  if (settings && !isLoading) {
-    if (form.formState.defaultValues?.siteName === "") {
+  useEffect(() => {
+    if (settings && !isLoading) {
       form.reset({
         siteName: settings.siteName || "",
         siteDescription: settings.siteDescription || "",
@@ -51,18 +53,11 @@ export function SettingsView() {
         maxUploadSize: settings.maxUploadSize || "10485760",
       });
     }
-  }
+  }, [settings, isLoading]);
 
   const updateMutation = useMutation({
     mutationFn: async (data: SettingsForm) => {
-      const res = await fetch("/api/admin/settings", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify(data),
-      });
-
-      if (!res.ok) throw new Error("Failed to update settings");
+      const res = await apiRequest("PUT", "/api/admin/settings", data);
       return res.json();
     },
     onSuccess: () => {
