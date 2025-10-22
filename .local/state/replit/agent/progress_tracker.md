@@ -41,6 +41,7 @@
 ✅ Server running successfully on port 5000
 ✅ Database connected and schema bootstrapped
 ✅ Frontend loading properly
+✅ **CRITICAL SECURITY FIX**: Password hashing now consistent across all admin creation paths
 🚧 Frontend UI work in progress (ready for development)
 ⏳ QA and documentation pending
 

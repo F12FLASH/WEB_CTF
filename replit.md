@@ -15,6 +15,7 @@ Preferred communication style: Simple, everyday language.
 ### Security Enhancements (October 2025)
 - **CRITICAL**: Fixed CSRF bypass vulnerability - now enforces strict double-submit cookie pattern in all environments
 - **CRITICAL**: Fixed session fixation vulnerability - sessions regenerated on login/logout
+- **CRITICAL**: Fixed admin password hashing inconsistency - all admin creation paths now consistently hash passwords at storage layer
 - **NEW**: Strong password validation (8+ chars, uppercase, lowercase, numbers) enforced in registration schema
 - **NEW**: Admin login now uses Zod validation schema with strict input sanitization
 - **IMPROVED**: Error handling no longer leaks stack traces in production
