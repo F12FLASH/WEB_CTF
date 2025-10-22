@@ -29,6 +29,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import ConflictResolution from "./ConflictResolution";
 
 interface SystemInfo {
   version: string;
@@ -59,6 +60,9 @@ export function SystemView() {
   const [importFile, setImportFile] = useState<File | null>(null);
   const [showImportConfirm, setShowImportConfirm] = useState(false);
   const [overwriteExisting, setOverwriteExisting] = useState(false);
+  const [showConflictResolution, setShowConflictResolution] = useState(false);
+  const [previewData, setPreviewData] = useState<any>(null);
+  const [importData, setImportData] = useState<any>(null);
 
   const { data: systemInfo, isLoading } = useQuery<SystemInfo>({
     queryKey: ["/api/system/info"],
@@ -82,6 +86,53 @@ export function SystemView() {
     },
     onError: (error: Error) => {
       toast({ title: "Error", description: error.message, variant: "destructive" });
+    },
+  });
+
+  const previewImportMutation = useMutation({
+    mutationFn: async (file: File) => {
+      const text = await file.text();
+      const data = JSON.parse(text);
+      
+      const dataToPreview = data.version && data.data ? data.data : data;
+      
+      const res = await apiRequest("POST", "/api/system/import/preview", { 
+        data: JSON.stringify(dataToPreview) 
+      });
+      return res.json();
+    },
+    onSuccess: (data) => {
+      setPreviewData(data);
+      setShowConflictResolution(true);
+      setShowImportConfirm(false);
+    },
+    onError: (error: Error) => {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+    },
+  });
+
+  const executeImportMutation = useMutation({
+    mutationFn: async ({ data, resolutions }: { data: any; resolutions: Record<string, any> }) => {
+      const res = await apiRequest("POST", "/api/system/import/execute", { data, resolutions });
+      return res.json();
+    },
+    onSuccess: (data) => {
+      const message = data.errors 
+        ? `Imported ${data.imported} items with ${data.errors.length} errors`
+        : `Imported ${data.imported} items${data.skipped ? `, skipped ${data.skipped}` : ""}`;
+      toast({ 
+        title: "Import completed", 
+        description: message,
+        variant: data.errors ? "destructive" : "default"
+      });
+      setImportFile(null);
+      setShowConflictResolution(false);
+      setPreviewData(null);
+      setImportData(null);
+    },
+    onError: (error: Error) => {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+      setShowConflictResolution(false);
     },
   });
 
@@ -120,6 +171,28 @@ export function SystemView() {
   const handleExport = (format: "json" | "sql") => {
     setExportFormat(format);
     exportMutation.mutate(format);
+  };
+
+  const handleStartImport = async () => {
+    if (!importFile) return;
+
+    const text = await importFile.text();
+    const data = JSON.parse(text);
+    const dataToImport = data.version && data.data ? data.data : data;
+    
+    setImportData(dataToImport);
+    previewImportMutation.mutate(importFile);
+  };
+
+  const handleResolveConflicts = (resolutions: Record<string, any>) => {
+    executeImportMutation.mutate({ data: importData, resolutions });
+  };
+
+  const handleCancelConflictResolution = () => {
+    setShowConflictResolution(false);
+    setPreviewData(null);
+    setImportData(null);
+    setImportFile(null);
   };
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -411,21 +484,27 @@ export function SystemView() {
               <p>
                 Are you sure you want to import data from <strong>{importFile?.name}</strong>?
               </p>
-              <div className="flex items-center space-x-2 p-3 bg-muted rounded-lg">
-                <Switch
-                  id="overwrite-mode"
-                  checked={overwriteExisting}
-                  onCheckedChange={setOverwriteExisting}
-                />
-                <Label htmlFor="overwrite-mode" className="cursor-pointer">
-                  <div className="text-sm font-semibold">Overwrite existing records</div>
-                  <div className="text-xs text-muted-foreground">
-                    {overwriteExisting 
-                      ? "Existing records will be updated with imported data"
-                      : "Existing records will be skipped, only new records added"}
-                  </div>
-                </Label>
-              </div>
+              {importFile?.name.endsWith(".json") ? (
+                <p className="text-sm text-muted-foreground">
+                  The system will check for conflicts and let you review before importing.
+                </p>
+              ) : (
+                <div className="flex items-center space-x-2 p-3 bg-muted rounded-lg">
+                  <Switch
+                    id="overwrite-mode"
+                    checked={overwriteExisting}
+                    onCheckedChange={setOverwriteExisting}
+                  />
+                  <Label htmlFor="overwrite-mode" className="cursor-pointer">
+                    <div className="text-sm font-semibold">Overwrite existing records</div>
+                    <div className="text-xs text-muted-foreground">
+                      {overwriteExisting 
+                        ? "Existing records will be updated with imported data"
+                        : "Existing records will be skipped, only new records added"}
+                    </div>
+                  </Label>
+                </div>
+              )}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -435,12 +514,25 @@ export function SystemView() {
             }}>
               Cancel
             </AlertDialogCancel>
-            <AlertDialogAction onClick={handleImport}>
-              {importMutation.isPending ? "Importing..." : "Import"}
+            <AlertDialogAction onClick={importFile?.name.endsWith(".json") ? handleStartImport : handleImport}>
+              {previewImportMutation.isPending || importMutation.isPending ? "Processing..." : "Continue"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {showConflictResolution && previewData && (
+        <div className="fixed inset-0 bg-background/95 backdrop-blur z-50 overflow-y-auto">
+          <div className="container max-w-6xl py-8">
+            <ConflictResolution
+              conflicts={previewData.conflicts || []}
+              newItems={previewData.newItems || []}
+              onResolve={handleResolveConflicts}
+              onCancel={handleCancelConflictResolution}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
