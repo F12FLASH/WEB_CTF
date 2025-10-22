@@ -6,7 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Filter, Trophy } from "lucide-react";
-import type { ChallengeWithRelations } from "@shared/schema";
+import type { ChallengeWithRelations, ChallengeCategory, ChallengeDifficulty } from "@shared/schema";
 import { useState } from "react";
 
 export function ChallengeList() {
@@ -21,8 +21,13 @@ export function ChallengeList() {
     queryKey: ["/api/solved"],
   });
 
-  const categories = ["all", "web", "crypto", "forensics", "reverse", "binary"];
-  const difficulties = ["all", "easy", "medium", "hard"];
+  const { data: categoriesData } = useQuery<ChallengeCategory[]>({
+    queryKey: ["/api/categories"],
+  });
+
+  const { data: difficultiesData } = useQuery<ChallengeDifficulty[]>({
+    queryKey: ["/api/difficulties"],
+  });
 
   const filteredChallenges = challenges?.filter((challenge) => {
     const categoryMatch = selectedCategory === "all" || challenge.category.slug === selectedCategory;
@@ -137,16 +142,34 @@ export function ChallengeList() {
             <div>
               <p className="text-sm text-muted-foreground mb-2">Category</p>
               <div className="flex flex-wrap gap-2">
-                {categories.map((category) => (
+                <Button
+                  key="all"
+                  variant={selectedCategory === "all" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setSelectedCategory("all")}
+                  data-testid="button-filter-category-all"
+                  className="capitalize"
+                >
+                  All
+                </Button>
+                {categoriesData?.map((category) => (
                   <Button
-                    key={category}
-                    variant={selectedCategory === category ? "default" : "outline"}
+                    key={category.id}
+                    variant={selectedCategory === category.slug ? "default" : "outline"}
                     size="sm"
-                    onClick={() => setSelectedCategory(category)}
-                    data-testid={`button-filter-category-${category}`}
+                    onClick={() => setSelectedCategory(category.slug)}
+                    data-testid={`button-filter-category-${category.slug}`}
                     className="capitalize"
+                    style={
+                      selectedCategory === category.slug && category.color
+                        ? { backgroundColor: category.color, borderColor: category.color, color: 'white' }
+                        : category.color
+                        ? { borderColor: category.color, color: category.color }
+                        : undefined
+                    }
                   >
-                    {category}
+                    {category.icon && <span className="mr-1">{category.icon}</span>}
+                    {category.name}
                   </Button>
                 ))}
               </div>
@@ -155,16 +178,34 @@ export function ChallengeList() {
             <div>
               <p className="text-sm text-muted-foreground mb-2">Difficulty</p>
               <div className="flex flex-wrap gap-2">
-                {difficulties.map((difficulty) => (
+                <Button
+                  key="all"
+                  variant={selectedDifficulty === "all" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setSelectedDifficulty("all")}
+                  data-testid="button-filter-difficulty-all"
+                  className="capitalize"
+                >
+                  All
+                </Button>
+                {difficultiesData?.map((difficulty) => (
                   <Button
-                    key={difficulty}
-                    variant={selectedDifficulty === difficulty ? "default" : "outline"}
+                    key={difficulty.id}
+                    variant={selectedDifficulty === difficulty.slug ? "default" : "outline"}
                     size="sm"
-                    onClick={() => setSelectedDifficulty(difficulty)}
-                    data-testid={`button-filter-difficulty-${difficulty}`}
+                    onClick={() => setSelectedDifficulty(difficulty.slug)}
+                    data-testid={`button-filter-difficulty-${difficulty.slug}`}
                     className="capitalize"
+                    style={
+                      selectedDifficulty === difficulty.slug && difficulty.color
+                        ? { backgroundColor: difficulty.color, borderColor: difficulty.color, color: 'white' }
+                        : difficulty.color
+                        ? { borderColor: difficulty.color, color: difficulty.color }
+                        : undefined
+                    }
                   >
-                    {difficulty}
+                    {difficulty.name}
+                    {difficulty.level && <span className="ml-1 text-xs opacity-70">({difficulty.level})</span>}
                   </Button>
                 ))}
               </div>
