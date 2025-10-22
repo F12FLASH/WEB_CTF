@@ -14,10 +14,12 @@ interface SystemCheck {
   hasSessionSecret: boolean;
   hasDatabaseUrl: boolean;
   isInstalled: boolean;
+  schemaReady: boolean;
   adminCount: number;
   challengeCount: number;
   playerCount: number;
   errors: string[];
+  warnings: string[];
 }
 
 export default function Install() {
@@ -38,6 +40,12 @@ export default function Install() {
       performSystemCheck();
     }
   }, [step]);
+
+  useEffect(() => {
+    if (systemCheck?.isInstalled && step === "check") {
+      setStep("complete");
+    }
+  }, [systemCheck, step]);
 
   const performSystemCheck = async () => {
     try {
@@ -60,10 +68,12 @@ export default function Install() {
         hasSessionSecret: false,
         hasDatabaseUrl: false,
         isInstalled: false,
+        schemaReady: false,
         adminCount: 0,
         challengeCount: 0,
         playerCount: 0,
         errors: [err.message],
+        warnings: [],
       });
     } finally {
       setLoading(false);
@@ -192,7 +202,18 @@ export default function Install() {
                   <span className="text-gray-200">Kết nối Database: {systemCheck.databaseConnected ? "Thành công" : "Thất bại"}</span>
                 </div>
 
-                {systemCheck.errors.length > 0 && (
+                {systemCheck.warnings && systemCheck.warnings.length > 0 && (
+                  <Alert className="bg-yellow-900/20 border-yellow-800">
+                    <AlertCircle className="h-4 w-4 text-yellow-500" />
+                    <AlertDescription className="text-sm text-yellow-200">
+                      {systemCheck.warnings.map((warn, i) => (
+                        <div key={i}>⚠ {warn}</div>
+                      ))}
+                    </AlertDescription>
+                  </Alert>
+                )}
+
+                {systemCheck.errors && systemCheck.errors.length > 0 && (
                   <Alert variant="destructive" className="bg-red-900/20 border-red-800">
                     <AlertCircle className="h-4 w-4" />
                     <AlertDescription className="text-sm">
@@ -447,24 +468,23 @@ export default function Install() {
             <ul className="text-sm text-gray-400 space-y-1 ml-4">
               <li>• 12 thử thách CTF đa dạng (Web, Crypto, Forensics, Binary, Reverse)</li>
               <li>• 3 thông báo hệ thống</li>
-              <li>• 3 tài khoản người dùng mẫu</li>
-              <li>• 1 tài khoản quản trị</li>
+              <li>• 1 tài khoản quản trị (đã đăng nhập)</li>
             </ul>
           </div>
 
           <Alert className="bg-blue-900/20 border-blue-800">
             <Shield className="h-4 w-4 text-blue-400" />
             <AlertDescription className="text-gray-300 text-sm">
-              <strong className="text-blue-400">Lưu ý bảo mật:</strong> Vui lòng đổi mật khẩu admin sau lần đăng nhập đầu tiên!
+              <strong className="text-blue-400">Bạn đã đăng nhập vào hệ thống với tư cách Admin!</strong> Click vào "Trang Quản Trị" để bắt đầu quản lý CTF Platform của bạn.
             </AlertDescription>
           </Alert>
 
           <div className="flex gap-3">
             <Button
-              onClick={() => setLocation("/admin/login")}
+              onClick={() => setLocation("/admin")}
               className="flex-1 bg-green-600 hover:bg-green-700"
             >
-              Đăng nhập Admin
+              Trang Quản Trị
             </Button>
             <Button
               onClick={() => setLocation("/")}

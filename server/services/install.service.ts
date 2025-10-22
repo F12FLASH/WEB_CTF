@@ -1,8 +1,12 @@
 import { storage } from "../storage";
 import { AuthService } from "./auth.service";
-import { db } from "../db";
-import { challenges, submissions, announcements } from "@shared/schema";
-import type { InsertChallenge, InsertAnnouncement, InsertPlayer } from "@shared/schema";
+import { db, pool } from "../db";
+import { challenges, submissions, announcements, players, adminUsers, sessions, settings } from "@shared/schema";
+import type { InsertChallenge, InsertAnnouncement } from "@shared/schema";
+import { exec } from "child_process";
+import { promisify } from "util";
+
+const execAsync = promisify(exec);
 
 export interface SystemCheck {
   hasDatabase: boolean;
@@ -10,10 +14,12 @@ export interface SystemCheck {
   hasSessionSecret: boolean;
   hasDatabaseUrl: boolean;
   isInstalled: boolean;
+  schemaReady: boolean;
   adminCount: number;
   challengeCount: number;
   playerCount: number;
   errors: string[];
+  warnings: string[];
 }
 
 export interface InstallConfig {
@@ -24,6 +30,49 @@ export interface InstallConfig {
 }
 
 export class InstallService {
+  private static bootstrapAttempted = false;
+
+  static async bootstrapDatabase(): Promise<{ success: boolean; message: string }> {
+    if (this.bootstrapAttempted) {
+      return { success: true, message: "Bootstrap already attempted" };
+    }
+
+    try {
+      console.log("🔧 Bootstrapping database schema...");
+      
+      const { stdout, stderr } = await execAsync("npx drizzle-kit push");
+      
+      if (stderr && !stderr.includes("No schema changes")) {
+        console.log("⚠️ Drizzle stderr:", stderr);
+      }
+      
+      this.bootstrapAttempted = true;
+      console.log("✅ Database schema bootstrapped successfully");
+      return { success: true, message: "Schema created successfully" };
+    } catch (error: any) {
+      console.error("❌ Bootstrap error:", error);
+      this.bootstrapAttempted = false;
+      return { 
+        success: false, 
+        message: `Failed to bootstrap schema: ${error.message}` 
+      };
+    }
+  }
+
+  static async checkTablesExist(): Promise<boolean> {
+    try {
+      const result = await pool.query(`
+        SELECT EXISTS (
+          SELECT FROM information_schema.tables 
+          WHERE table_name = 'admin_users'
+        );
+      `);
+      return result.rows[0].exists;
+    } catch (error) {
+      return false;
+    }
+  }
+
   static async checkSystem(): Promise<SystemCheck> {
     const checks: SystemCheck = {
       hasDatabase: false,
@@ -31,18 +80,52 @@ export class InstallService {
       hasSessionSecret: !!process.env.SESSION_SECRET,
       hasDatabaseUrl: !!process.env.DATABASE_URL,
       isInstalled: false,
+      schemaReady: false,
       adminCount: 0,
       challengeCount: 0,
       playerCount: 0,
       errors: [],
+      warnings: [],
     };
+
+    if (!checks.hasDatabaseUrl) {
+      checks.errors.push("DATABASE_URL environment variable is not set");
+      return checks;
+    }
+
+    if (!checks.hasSessionSecret) {
+      checks.errors.push("SESSION_SECRET environment variable is not set");
+      return checks;
+    }
+
+    try {
+      await pool.query("SELECT 1");
+      checks.databaseConnected = true;
+      checks.hasDatabase = true;
+    } catch (error: any) {
+      checks.errors.push(`Database connection failed: ${error.message}`);
+      checks.databaseConnected = false;
+      return checks;
+    }
+
+    const tablesExist = await this.checkTablesExist();
+    
+    if (!tablesExist) {
+      checks.warnings.push("Database schema not initialized. Will bootstrap automatically.");
+      
+      const bootstrap = await this.bootstrapDatabase();
+      if (!bootstrap.success) {
+        checks.errors.push(bootstrap.message);
+        return checks;
+      }
+    }
+
+    checks.schemaReady = true;
 
     try {
       const admins = await storage.getAllAdmins();
       checks.adminCount = admins.length;
       checks.isInstalled = admins.length > 0;
-      checks.databaseConnected = true;
-      checks.hasDatabase = true;
 
       const challengesCount = await db.query.challenges.findMany();
       checks.challengeCount = challengesCount.length;
@@ -50,22 +133,17 @@ export class InstallService {
       const playersCount = await db.query.players.findMany();
       checks.playerCount = playersCount.length;
     } catch (error: any) {
-      checks.errors.push(`Database connection error: ${error.message}`);
-      checks.databaseConnected = false;
-    }
-
-    if (!checks.hasDatabaseUrl) {
-      checks.errors.push("DATABASE_URL environment variable is not set");
-    }
-
-    if (!checks.hasSessionSecret) {
-      checks.errors.push("SESSION_SECRET environment variable is not set");
+      checks.errors.push(`Database query error: ${error.message}`);
     }
 
     return checks;
   }
 
-  static async performInstall(config: InstallConfig): Promise<{ success: boolean; message: string }> {
+  static async performInstall(config: InstallConfig, sessionId?: string): Promise<{ 
+    success: boolean; 
+    message: string;
+    adminId?: string;
+  }> {
     try {
       const systemCheck = await this.checkSystem();
 
@@ -77,12 +155,16 @@ export class InstallService {
         return { success: false, message: "Database connection failed" };
       }
 
+      if (!systemCheck.schemaReady) {
+        return { success: false, message: "Database schema is not ready" };
+      }
+
       const passwordValidation = AuthService.validatePasswordStrength(config.adminPassword);
       if (!passwordValidation.valid) {
         return { success: false, message: passwordValidation.message || "Password validation failed" };
       }
 
-      await storage.createAdmin({
+      const admin = await storage.createAdmin({
         username: config.adminUsername,
         passwordHash: await AuthService.hashPassword(config.adminPassword),
       });
@@ -96,7 +178,13 @@ export class InstallService {
         await this.seedDemoData();
       }
 
-      return { success: true, message: "Installation completed successfully" };
+      console.log("✅ Installation completed successfully. Admin ID:", admin.id);
+
+      return { 
+        success: true, 
+        message: "Installation completed successfully",
+        adminId: admin.id
+      };
     } catch (error: any) {
       console.error("Installation error:", error);
       return { success: false, message: error.message || "Installation failed" };
@@ -227,24 +315,6 @@ export class InstallService {
       },
     ];
 
-    const samplePlayers: InsertPlayer[] = [
-      {
-        username: "alice",
-        email: "alice@example.com",
-        passwordHash: await AuthService.hashPassword("Alice123!"),
-      },
-      {
-        username: "bob",
-        email: "bob@example.com",
-        passwordHash: await AuthService.hashPassword("Bob123!"),
-      },
-      {
-        username: "charlie",
-        email: "charlie@example.com",
-        passwordHash: await AuthService.hashPassword("Charlie123!"),
-      },
-    ];
-
     for (const challenge of sampleChallenges) {
       await storage.createChallenge(challenge);
     }
@@ -253,11 +323,8 @@ export class InstallService {
       await storage.createAnnouncement(announcement);
     }
 
-    for (const player of samplePlayers) {
-      await storage.createPlayer(player);
-    }
-
-    console.log("✅ Demo data seeded successfully");
+    console.log("✅ Demo data seeded successfully (12 challenges, 3 announcements)");
+    console.log("ℹ️  Note: No demo players created. Players must register through the website.");
   }
 
   static async resetDemoData(): Promise<void> {

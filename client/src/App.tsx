@@ -18,9 +18,39 @@ import NotFound from "@/pages/not-found";
 import { useState, useEffect } from "react";
 
 function Router() {
-  const [location] = useLocation();
+  const [location, setLocation] = useLocation();
+  const [installCheckDone, setInstallCheckDone] = useState(false);
+  const [needsInstall, setNeedsInstall] = useState(false);
   const isAdminRoute = location.startsWith('/admin');
   const isInstallRoute = location.startsWith('/install');
+
+  useEffect(() => {
+    const checkInstallStatus = async () => {
+      try {
+        const res = await fetch("/api/install/check");
+        const data = await res.json();
+        
+        if (data.needsSetup && !isInstallRoute) {
+          setNeedsInstall(true);
+          setLocation("/install");
+        }
+      } catch (error) {
+        console.error("Failed to check install status:", error);
+      } finally {
+        setInstallCheckDone(true);
+      }
+    };
+
+    if (!isInstallRoute) {
+      checkInstallStatus();
+    } else {
+      setInstallCheckDone(true);
+    }
+  }, []);
+
+  if (!installCheckDone && !isInstallRoute) {
+    return <PageLoader />;
+  }
 
   if (isInstallRoute) {
     return (

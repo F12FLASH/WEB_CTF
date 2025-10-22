@@ -87,12 +87,25 @@ router.post("/setup", installLimiter, async (req, res) => {
       adminPassword,
       siteName,
       siteDescription,
-    });
+    }, req.sessionID);
 
-    if (result.success) {
+    if (result.success && result.adminId) {
+      req.session.adminId = result.adminId;
+      req.session.adminUsername = adminUsername;
+      
+      await new Promise<void>((resolve, reject) => {
+        req.session.save((err) => {
+          if (err) reject(err);
+          else resolve();
+        });
+      });
+
+      console.log("✅ Admin session created successfully");
+      
       res.json({
         success: true,
         message: result.message,
+        adminId: result.adminId,
       });
     } else {
       res.status(400).json({
