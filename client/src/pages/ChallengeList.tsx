@@ -6,14 +6,14 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Filter, Trophy } from "lucide-react";
-import type { Challenge } from "@shared/schema";
+import type { ChallengeWithRelations } from "@shared/schema";
 import { useState } from "react";
 
 export function ChallengeList() {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>("all");
 
-  const { data: challenges, isLoading } = useQuery<Challenge[]>({
+  const { data: challenges, isLoading } = useQuery<ChallengeWithRelations[]>({
     queryKey: ["/api/challenges"],
   });
 
@@ -25,8 +25,8 @@ export function ChallengeList() {
   const difficulties = ["all", "easy", "medium", "hard"];
 
   const filteredChallenges = challenges?.filter((challenge) => {
-    const categoryMatch = selectedCategory === "all" || challenge.category.toLowerCase() === selectedCategory;
-    const difficultyMatch = selectedDifficulty === "all" || challenge.difficulty.toLowerCase() === selectedDifficulty;
+    const categoryMatch = selectedCategory === "all" || challenge.category.slug === selectedCategory;
+    const difficultyMatch = selectedDifficulty === "all" || challenge.difficulty.slug === selectedDifficulty;
     return categoryMatch && difficultyMatch;
   });
 

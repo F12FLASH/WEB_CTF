@@ -10,7 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
 import { CheckCircle2, XCircle, ArrowLeft, Terminal, Trophy, LogIn, Shield } from "lucide-react";
-import type { Challenge } from "@shared/schema";
+import type { ChallengeWithRelations } from "@shared/schema";
 import { useState, useEffect } from "react";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 
@@ -28,7 +28,7 @@ export function ChallengeDetail() {
   const { user, isAuthenticated } = useAuth();
   const { isAdmin } = useAdminAuth();
 
-  const { data: challenge, isLoading } = useQuery<Challenge>({
+  const { data: challenge, isLoading } = useQuery<ChallengeWithRelations>({
     queryKey: ["/api/challenges", challengeId],
     enabled: !!challengeId,
   });
@@ -149,7 +149,7 @@ export function ChallengeDetail() {
     );
   }
 
-  const difficulty = challenge.difficulty.toLowerCase() as keyof typeof difficultyConfig;
+  const difficulty = challenge.difficulty.slug as keyof typeof difficultyConfig;
   const diffConfig = difficultyConfig[difficulty] || difficultyConfig.medium;
 
   return (
@@ -170,10 +170,10 @@ export function ChallengeDetail() {
                   <div className="flex items-center gap-2 flex-wrap">
                     <Badge variant="outline" className="gap-1">
                       <Terminal className="h-3 w-3" />
-                      {challenge.category}
+                      {challenge.category.name}
                     </Badge>
                     <Badge className={diffConfig.color}>
-                      {diffConfig.label}
+                      {challenge.difficulty.name}
                     </Badge>
                     {isSolved && (
                       <Badge className="bg-primary text-primary-foreground gap-1">
