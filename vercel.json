@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/index.mjs",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/index.mjs"
+    },
+    {
+      "src": "/(.*\\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot))",
+      "dest": "/dist/public/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/dist/public/index.html"
+    }
+  ],
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist/public",
+  "env": {
+    "NODE_ENV": "production"
+  }
+}
