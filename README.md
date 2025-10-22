@@ -17,6 +17,10 @@ A modern, full-stack Capture The Flag (CTF) platform built with React, Express, 
 ### 🛡️ Admin Features
 - **Modern Admin Dashboard** - Overview of platform statistics and activity
 - **Challenge Management** - Create, edit, and delete challenges with a user-friendly interface
+- **Category Management** - Create and manage custom challenge categories with colors and icons
+- **Difficulty Management** - Define custom difficulty levels with colors and level numbers
+- **Settings Management** - Configure platform settings including site name, description, and policies
+- **Analytics Dashboard** - Track challenge views, visitor statistics, and engagement metrics
 - **Announcement Management** - Create and manage platform-wide announcements with priority levels
 - **Player Analytics** - View player statistics and submission history
 - **Responsive Admin Panel** - Fully responsive with sidebar navigation
@@ -29,6 +33,16 @@ A modern, full-stack Capture The Flag (CTF) platform built with React, Express, 
 - **Gradient Accents** - Beautiful gradient color schemes for visual appeal
 - **Loading States** - Elegant loading animations and skeletons
 - **Error Handling** - User-friendly error messages and error boundaries
+- **Guided Setup** - User-friendly installation wizard with system checks
+
+### 📊 Analytics & Tracking
+- **Challenge View Tracking** - Automatic tracking of challenge page visits
+- **Device Detection** - Track visitor device types (desktop, mobile, tablet)
+- **Geographic Data** - Optional IP-based location tracking
+- **User Agent Logging** - Browser and platform analytics
+- **Referrer Tracking** - See where visitors come from
+- **Top Challenges** - View most popular challenges by view count
+- **Real-time Activity** - Monitor recent challenge views in admin panel
 
 ### 🔒 Security Features
 - **CSRF Protection** - Double-submit cookie pattern for CSRF prevention
@@ -113,7 +127,16 @@ npm run db:push
 
 This will create all necessary tables in your database.
 
-#### 5. Create Admin User
+#### 5. Set Up Your Platform
+Visit `http://localhost:5000/install` for the guided setup process:
+
+The installation wizard will:
+- Verify database connection
+- Create all necessary tables
+- Guide you through admin account creation
+- Configure initial platform settings
+
+**Or create admin manually:**
 ```bash
 npx tsx server/scripts/quick-init-admin.ts
 ```
@@ -181,6 +204,11 @@ ctf-platform/
 │   ├── src/
 │   │   ├── components/       # Reusable UI components
 │   │   │   ├── ui/          # Radix UI components
+│   │   │   ├── admin/       # Admin-specific components
+│   │   │   │   ├── CategoriesView.tsx
+│   │   │   │   ├── DifficultiesView.tsx
+│   │   │   │   ├── SettingsView.tsx
+│   │   │   │   └── AnalyticsView.tsx
 │   │   │   ├── ChallengeCard.tsx
 │   │   │   ├── AnnouncementPopup.tsx
 │   │   │   ├── Layout.tsx
@@ -188,6 +216,7 @@ ctf-platform/
 │   │   ├── pages/           # Page components
 │   │   │   ├── Admin.tsx
 │   │   │   ├── AdminLogin.tsx
+│   │   │   ├── Install.tsx
 │   │   │   ├── ChallengeList.tsx
 │   │   │   ├── ChallengeDetail.tsx
 │   │   │   ├── Leaderboard.tsx
@@ -209,7 +238,11 @@ ctf-platform/
 │   │   ├── admin.routes.ts
 │   │   ├── challenge.routes.ts
 │   │   ├── announcement.routes.ts
-│   │   └── public.routes.ts
+│   │   ├── analytics.routes.ts
+│   │   ├── categories.routes.ts
+│   │   ├── difficulties.routes.ts
+│   │   ├── public.routes.ts
+│   │   └── install.routes.ts
 │   ├── middleware/          # Express middleware
 │   │   └── csrf.ts
 │   ├── services/            # Business logic
@@ -308,7 +341,34 @@ ctf-platform/
    - Edit or delete announcements
    - Active announcements appear to all users as popups
 
-5. **Monitor Platform**
+5. **Manage Categories & Difficulties**
+   - Create custom challenge categories with:
+     - Name and slug (used for URL-friendly identifiers)
+     - Description
+     - Color code and icon
+   - Define difficulty levels with:
+     - Name, slug, and description
+     - Numerical level (1-10)
+     - Color code for visual distinction
+   - Delete unused categories/difficulties (protected if in use)
+
+6. **Configure Platform Settings**
+   - Update site name and description
+   - Set contact email
+   - Toggle user registration
+   - Configure max upload size
+   - All settings stored in database
+
+7. **View Analytics**
+   - Total challenge views and unique visitors
+   - Top challenges by view count
+   - Recent activity log with:
+     - Timestamp and challenge ID
+     - Geographic location (country, region, city)
+     - Device type (desktop, mobile, tablet)
+     - IP address and referrer
+
+8. **Monitor Platform**
    - View statistics on the dashboard
    - Track player activity and submissions
    - Monitor challenge completion rates
@@ -333,6 +393,18 @@ ctf-platform/
 
 - **announcements** - Platform announcements
   - `id`, `title`, `content`, `priority`, `is_active`, `created_at`
+
+- **challenge_categories** - Custom challenge categories
+  - `id`, `name`, `slug`, `description`, `color`, `icon`, `created_at`
+
+- **challenge_difficulties** - Custom difficulty levels
+  - `id`, `name`, `slug`, `description`, `color`, `level`, `created_at`
+
+- **challenge_access_logs** - Analytics tracking for challenge views
+  - `id`, `challenge_id`, `player_id`, `visited_at`, `device_type`, `ip_address`, `geo_country`, `geo_region`, `geo_city`, `user_agent`, `referrer`
+
+- **settings** - Platform configuration
+  - `key`, `value`, `updated_at`
 
 - **session** - User session data (auto-created by connect-pg-simple)
   - `sid`, `sess`, `expire`
@@ -422,6 +494,30 @@ await storage.createChallenge({
 - `POST /api/admin/announcements` - Create announcement
 - `PUT /api/admin/announcements/:id` - Update announcement
 - `DELETE /api/admin/announcements/:id` - Delete announcement
+- `GET /api/admin/settings` - Get all platform settings
+- `POST /api/admin/settings` - Update/create a setting
+
+### Category & Difficulty Management
+- `GET /api/categories` - List all categories
+- `GET /api/categories/:id` - Get category by ID
+- `POST /api/categories` - Create new category (admin only)
+- `PUT /api/categories/:id` - Update category (admin only)
+- `DELETE /api/categories/:id` - Delete category (admin only)
+- `GET /api/difficulties` - List all difficulties
+- `GET /api/difficulties/:id` - Get difficulty by ID
+- `POST /api/difficulties` - Create new difficulty (admin only)
+- `PUT /api/difficulties/:id` - Update difficulty (admin only)
+- `DELETE /api/difficulties/:id` - Delete difficulty (admin only)
+
+### Analytics Endpoints
+- `POST /api/analytics/challenge-access` - Log challenge view (auto-called)
+- `GET /api/analytics` - Get analytics dashboard data (admin only)
+
+### Installation
+- `GET /api/install/check` - Check if installation is needed
+- `GET /api/install/system-check` - Verify system requirements
+- `POST /api/install/create-admin` - Create initial admin account
+- `GET /api/site-info` - Get public site information
 
 ## 🐛 Troubleshooting
 
