@@ -62,7 +62,11 @@ export function SettingsView() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/settings"] });
-      toast({ title: "Settings updated successfully" });
+      queryClient.invalidateQueries({ queryKey: ["/api/site-info"] });
+      toast({ 
+        title: "Settings updated successfully",
+        description: "Changes will be reflected across the site immediately"
+      });
     },
     onError: (error: Error) => {
       toast({ title: "Error", description: error.message, variant: "destructive" });

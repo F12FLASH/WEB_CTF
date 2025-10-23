@@ -4,9 +4,16 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+
+interface SiteInfo {
+  siteName: string;
+  siteDescription: string;
+  contactEmail?: string;
+  enableRegistration?: string;
+}
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const [location] = useLocation();
@@ -15,6 +22,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const { isAdmin, admin } = useAdminAuth();
   const [, setLocation] = useLocation();
   const { toast } = useToast();
+  
+  const { data: siteInfo } = useQuery<SiteInfo>({
+    queryKey: ["/api/site-info"],
+    staleTime: 5 * 60 * 1000, // Cache for 5 minutes
+  });
 
   const logoutMutation = useMutation({
     mutationFn: async () => {
@@ -55,8 +67,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   <Flag className="h-5 w-5 text-primary-foreground" />
                 </div>
                 <div className="flex flex-col">
-                  <span className="font-serif text-lg font-bold tracking-tight group-hover:text-primary transition-colors duration-300">CTF Platform</span>
-                  <span className="text-xs text-muted-foreground">Capture The Flag</span>
+                  <span className="font-serif text-lg font-bold tracking-tight group-hover:text-primary transition-colors duration-300">
+                    {siteInfo?.siteName || "CTF Platform"}
+                  </span>
+                  <span className="text-xs text-muted-foreground">
+                    {siteInfo?.siteDescription || "Capture The Flag"}
+                  </span>
                 </div>
               </div>
             </Link>
@@ -226,7 +242,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <footer className="border-t border-border py-6 mt-12 animate-fade-in">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-            <p>© 2025 CTF Platform. Test your cybersecurity skills.</p>
+            <p>© 2025 {siteInfo?.siteName || "CTF Platform"}. {siteInfo?.siteDescription || "Test your cybersecurity skills."}</p>
             <p className="font-mono">Flag format: flag{"{"}...{"}"}</p>
           </div>
         </div>
