@@ -1,3 +1,19 @@
+// server/index.ts - SIMPLE VERSION
+import { config } from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// ES Module equivalent of __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Load environment variables
+console.log('🔍 index.ts - Loading environment...');
+config({ path: path.resolve(__dirname, '.env') });
+
+console.log('🔍 index.ts - DATABASE_URL:', process.env.DATABASE_URL ? '✅ Loaded' : '❌ Missing');
+
+// Bây giờ mới import các module khác
 import express, { type Request, Response, NextFunction } from "express";
 import helmet from "helmet";
 import { registerRoutes } from "./routes";
@@ -73,6 +89,7 @@ app.use((req, res, next) => {
 
 (async () => {
   try {
+    console.log('🚀 Starting server...');
     const server = await registerRoutes(app);
 
     app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
@@ -97,7 +114,7 @@ app.use((req, res, next) => {
     }
 
     const PORT = 5000;
-    const HOST = "0.0.0.0";
+    const HOST = "127.0.0.1";
     
     server.listen(PORT, HOST, () => {
       log(`✅ Server successfully started on http://${HOST}:${PORT}`);
@@ -106,4 +123,13 @@ app.use((req, res, next) => {
     log(`❌ Server startup error: ${error}`);
     process.exit(1);
   }
+
+  // server/index.ts - THÊM Ở ĐẦU SAU IMPORTS
+// 🔥 HARDCODE FALLBACKS
+if (!process.env.SESSION_SECRET) {
+  process.env.SESSION_SECRET = "9f1a3a94f9c62efb3b7851a7e18cf47b08b0b78dc726f8e12af418fc26a0b71973e3f2c7f5b72f1485d30db58a38bbdbd74a6226d6537eb3be3d6b4c19b02c88";
+}
+if (!process.env.NODE_ENV) {
+  process.env.NODE_ENV = "development";
+}
 })();

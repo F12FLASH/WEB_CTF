@@ -1,0 +1,2725 @@
+{
+  "version": "1.0.0",
+  "exportDate": "2025-10-23T06:22:43.010Z",
+  "description": "CTF Platform Demo Database - Complete dataset with realistic challenges, players, and submissions",
+  "credentials": {
+    "players": "Username: any player username | Password: DemoPassword123!",
+    "admins": "Username: admin or ctf_organizer | Password: AdminDemo123!"
+  },
+  "data": {
+    "categories": [
+      {
+        "id": "11cfb1ef-4319-4b7d-97ce-4f7d4729ffcd",
+        "name": "Web Security",
+        "slug": "web",
+        "description": "Web application vulnerabilities and exploits",
+        "color": "#3b82f6",
+        "icon": "Globe",
+        "sortOrder": 1,
+        "createdAt": "2025-10-23T06:22:42.555Z"
+      },
+      {
+        "id": "eb9ac153-c260-46a2-bed0-e74f92762134",
+        "name": "Cryptography",
+        "slug": "crypto",
+        "description": "Encryption, decryption, and cryptographic challenges",
+        "color": "#8b5cf6",
+        "icon": "Lock",
+        "sortOrder": 2,
+        "createdAt": "2025-10-23T06:22:42.556Z"
+      },
+      {
+        "id": "3fdfbd6e-97d6-4430-8fbe-df35d99d3c3c",
+        "name": "Forensics",
+        "slug": "forensics",
+        "description": "Digital forensics and data analysis",
+        "color": "#ec4899",
+        "icon": "Search",
+        "sortOrder": 3,
+        "createdAt": "2025-10-23T06:22:42.556Z"
+      },
+      {
+        "id": "62d69fb6-3de6-4acb-8628-3312d430a3d0",
+        "name": "Binary Exploitation",
+        "slug": "binary",
+        "description": "Buffer overflows, ROP, and binary exploitation",
+        "color": "#ef4444",
+        "icon": "Binary",
+        "sortOrder": 4,
+        "createdAt": "2025-10-23T06:22:42.556Z"
+      },
+      {
+        "id": "31e8e319-1784-46e8-ad39-0004876b8a53",
+        "name": "Reverse Engineering",
+        "slug": "reverse",
+        "description": "Disassembly, decompilation, and program analysis",
+        "color": "#10b981",
+        "icon": "Code",
+        "sortOrder": 5,
+        "createdAt": "2025-10-23T06:22:42.556Z"
+      }
+    ],
+    "difficulties": [
+      {
+        "id": "6abe8fda-97a8-41e5-a33e-b7d16881eedc",
+        "name": "Easy",
+        "slug": "easy",
+        "description": "Beginner-friendly challenges",
+        "color": "#10b981",
+        "level": 1,
+        "sortOrder": 1,
+        "pointsMultiplier": 1,
+        "createdAt": "2025-10-23T06:22:42.556Z"
+      },
+      {
+        "id": "7421d987-1987-47d3-83b7-ac26d4ae1bc4",
+        "name": "Medium",
+        "slug": "medium",
+        "description": "Intermediate level challenges",
+        "color": "#f59e0b",
+        "level": 2,
+        "sortOrder": 2,
+        "pointsMultiplier": 2,
+        "createdAt": "2025-10-23T06:22:42.556Z"
+      },
+      {
+        "id": "002f1d22-2cab-4477-8bbc-5f5572e6a26e",
+        "name": "Hard",
+        "slug": "hard",
+        "description": "Advanced challenges for experts",
+        "color": "#ef4444",
+        "level": 3,
+        "sortOrder": 3,
+        "pointsMultiplier": 3,
+        "createdAt": "2025-10-23T06:22:42.556Z"
+      }
+    ],
+    "challenges": [
+      {
+        "id": "790ef990-4f5b-458b-b41d-7289c8a634d6",
+        "title": "SQL Injection Basics",
+        "description": "Exploit a simple SQL injection vulnerability to retrieve the admin password. The login form is vulnerable to basic SQL injection attacks. Try using `' OR '1'='1` to bypass authentication.",
+        "categoryId": "11cfb1ef-4319-4b7d-97ce-4f7d4729ffcd",
+        "difficultyId": "6abe8fda-97a8-41e5-a33e-b7d16881eedc",
+        "points": 100,
+        "flag": "CTF{sql_1nj3ct10n_1s_d4ng3r0us}"
+      },
+      {
+        "id": "a05a186e-5c87-4702-818a-a1d0d74cc05e",
+        "title": "XSS Playground",
+        "description": "Find and exploit a Cross-Site Scripting (XSS) vulnerability. The comment section doesn't properly sanitize user input. Can you execute JavaScript in another user's browser?",
+        "categoryId": "11cfb1ef-4319-4b7d-97ce-4f7d4729ffcd",
+        "difficultyId": "6abe8fda-97a8-41e5-a33e-b7d16881eedc",
+        "points": 150,
+        "flag": "CTF{xss_c4n_st34l_c00k13s}"
+      },
+      {
+        "id": "18b7e7c9-2f03-4ea9-9457-98a93e9bcf7b",
+        "title": "CSRF Token Bypass",
+        "description": "Exploit a Cross-Site Request Forgery vulnerability. The application has CSRF protection but it's implemented incorrectly. Find the flaw and exploit it.",
+        "categoryId": "11cfb1ef-4319-4b7d-97ce-4f7d4729ffcd",
+        "difficultyId": "7421d987-1987-47d3-83b7-ac26d4ae1bc4",
+        "points": 250,
+        "flag": "CTF{csrf_pr0t3ct10n_f41l3d}"
+      },
+      {
+        "id": "b07e96f9-d7fb-4e93-86f5-5fdbe070da83",
+        "title": "JWT Secret Cracking",
+        "description": "The application uses JWT tokens with a weak secret. Crack the secret and forge an admin token. The secret is a common English word.",
+        "categoryId": "11cfb1ef-4319-4b7d-97ce-4f7d4729ffcd",
+        "difficultyId": "7421d987-1987-47d3-83b7-ac26d4ae1bc4",
+        "points": 300,
+        "flag": "CTF{jwt_s3cr3t_1s_p4ssw0rd}"
+      },
+      {
+        "id": "a530efad-f516-4314-9756-e4f0ab147c55",
+        "title": "Server-Side Template Injection",
+        "description": "Find and exploit a Server-Side Template Injection (SSTI) vulnerability. The template engine executes user input without proper sanitization. Get remote code execution!",
+        "categoryId": "11cfb1ef-4319-4b7d-97ce-4f7d4729ffcd",
+        "difficultyId": "002f1d22-2cab-4477-8bbc-5f5572e6a26e",
+        "points": 500,
+        "flag": "CTF{ssti_l34ds_t0_rc3}"
+      },
+      {
+        "id": "3467562d-b462-4cc6-8b1b-c1a8a0d43153",
+        "title": "Caesar Cipher",
+        "description": "Decrypt this message encrypted with a simple Caesar cipher: `FWI{fdhvdu_flskhu_lv_wrr_hdvb}`. The shift is 3.",
+        "categoryId": "eb9ac153-c260-46a2-bed0-e74f92762134",
+        "difficultyId": "6abe8fda-97a8-41e5-a33e-b7d16881eedc",
+        "points": 100,
+        "flag": "CTF{caesar_cipher_is_too_easy}"
+      },
+      {
+        "id": "dbef89b0-2aaa-4342-9acd-5e51f73bc19b",
+        "title": "Base64 Encoding",
+        "description": "Decode this Base64 encoded flag: `Q1RGe2I0czY0X2lzX25vdF9lbmNyeXB0aW9ufQ==`",
+        "categoryId": "eb9ac153-c260-46a2-bed0-e74f92762134",
+        "difficultyId": "6abe8fda-97a8-41e5-a33e-b7d16881eedc",
+        "points": 100,
+        "flag": "CTF{b4s64_is_not_encryption}"
+      },
+      {
+        "id": "ee2a996e-ca8f-4d2c-a878-0947451f7f14",
+        "title": "RSA Small Exponent",
+        "description": "The RSA implementation uses e=3 with a small message. Use the small exponent attack to recover the plaintext. n = 0x9b3f..., c = 0x1234...",
+        "categoryId": "eb9ac153-c260-46a2-bed0-e74f92762134",
+        "difficultyId": "7421d987-1987-47d3-83b7-ac26d4ae1bc4",
+        "points": 300,
+        "flag": "CTF{sm4ll_3xp0n3nt_4tt4ck}"
+      },
+      {
+        "id": "bc49a6cb-371c-4249-8607-cc9c6b552288",
+        "title": "AES ECB Mode Weakness",
+        "description": "Exploit the weakness of AES in ECB mode. The server encrypts user input and returns the ciphertext. Use the ECB penguin attack to leak information.",
+        "categoryId": "eb9ac153-c260-46a2-bed0-e74f92762134",
+        "difficultyId": "7421d987-1987-47d3-83b7-ac26d4ae1bc4",
+        "points": 350,
+        "flag": "CTF{ecb_m0d3_1s_w34k}"
+      },
+      {
+        "id": "1d42ce4a-42e3-49e2-bbe1-81ec79e71606",
+        "title": "Padding Oracle Attack",
+        "description": "Exploit a padding oracle vulnerability in CBC mode encryption. The server reveals whether padding is valid. Use this to decrypt the ciphertext byte by byte.",
+        "categoryId": "eb9ac153-c260-46a2-bed0-e74f92762134",
+        "difficultyId": "002f1d22-2cab-4477-8bbc-5f5572e6a26e",
+        "points": 500,
+        "flag": "CTF{p4dd1ng_0r4cl3_pwn3d}"
+      },
+      {
+        "id": "f1dacc8c-5c96-422c-ac7b-57bcdef13132",
+        "title": "Hidden EXIF Data",
+        "description": "Download the image and examine the EXIF metadata. The flag is hidden in the GPS coordinates field.",
+        "categoryId": "3fdfbd6e-97d6-4430-8fbe-df35d99d3c3c",
+        "difficultyId": "6abe8fda-97a8-41e5-a33e-b7d16881eedc",
+        "points": 100,
+        "flag": "CTF{3x1f_d4t4_l34ks_s3cr3ts}"
+      },
+      {
+        "id": "db1443d1-1f40-4828-b7de-088fcc078dfa",
+        "title": "Deleted Files Recovery",
+        "description": "A file was deleted from this disk image. Use forensic tools to recover it. The flag is in the recovered file.",
+        "categoryId": "3fdfbd6e-97d6-4430-8fbe-df35d99d3c3c",
+        "difficultyId": "7421d987-1987-47d3-83b7-ac26d4ae1bc4",
+        "points": 250,
+        "flag": "CTF{d3l3t3d_f1l3s_c4n_b3_r3c0v3r3d}"
+      },
+      {
+        "id": "b1247c57-f488-4121-8cf6-60f7f306553f",
+        "title": "Memory Dump Analysis",
+        "description": "Analyze this memory dump from a compromised system. The attacker's password is stored in plaintext in memory. Use volatility to find it.",
+        "categoryId": "3fdfbd6e-97d6-4430-8fbe-df35d99d3c3c",
+        "difficultyId": "7421d987-1987-47d3-83b7-ac26d4ae1bc4",
+        "points": 300,
+        "flag": "CTF{m3m0ry_f0r3ns1cs_r0cks}"
+      },
+      {
+        "id": "b6a66f9d-75b0-4676-9e79-43dfe41d2223",
+        "title": "Network Traffic Analysis",
+        "description": "Analyze the PCAP file to find the flag. An attacker exfiltrated data using DNS tunneling. Decode the DNS queries to get the flag.",
+        "categoryId": "3fdfbd6e-97d6-4430-8fbe-df35d99d3c3c",
+        "difficultyId": "002f1d22-2cab-4477-8bbc-5f5572e6a26e",
+        "points": 450,
+        "flag": "CTF{dns_tunn3l1ng_d3t3ct3d}"
+      },
+      {
+        "id": "f8676156-4fb5-463d-8f6e-7b6100666bf1",
+        "title": "Steganography in Audio",
+        "description": "The flag is hidden in this audio file using LSB steganography. Extract the hidden data from the least significant bits.",
+        "categoryId": "3fdfbd6e-97d6-4430-8fbe-df35d99d3c3c",
+        "difficultyId": "002f1d22-2cab-4477-8bbc-5f5572e6a26e",
+        "points": 500,
+        "flag": "CTF{4ud10_st3g4n0gr4phy_m4st3r}"
+      },
+      {
+        "id": "e40c12dd-be82-4aa1-af84-bd02b2c99f13",
+        "title": "Buffer Overflow 101",
+        "description": "Exploit a simple buffer overflow to overwrite the return address. The binary has no protections (NX disabled, no ASLR, no PIE).",
+        "categoryId": "62d69fb6-3de6-4acb-8628-3312d430a3d0",
+        "difficultyId": "6abe8fda-97a8-41e5-a33e-b7d16881eedc",
+        "points": 150,
+        "flag": "CTF{buff3r_0v3rfl0w_b4s1cs}"
+      },
+      {
+        "id": "692809fa-bd91-4410-9e04-cd3234518fae",
+        "title": "Format String Vulnerability",
+        "description": "Exploit a format string vulnerability to leak stack data. Use %x and %s format specifiers to read memory.",
+        "categoryId": "62d69fb6-3de6-4acb-8628-3312d430a3d0",
+        "difficultyId": "7421d987-1987-47d3-83b7-ac26d4ae1bc4",
+        "points": 300,
+        "flag": "CTF{f0rm4t_str1ng_l34ks}"
+      },
+      {
+        "id": "23183ff5-afeb-4339-8a03-f3b43f03ab90",
+        "title": "Return-Oriented Programming",
+        "description": "Chain ROP gadgets to bypass NX protection and get a shell. The binary has NX enabled but no ASLR. Gadgets are available in libc.",
+        "categoryId": "62d69fb6-3de6-4acb-8628-3312d430a3d0",
+        "difficultyId": "002f1d22-2cab-4477-8bbc-5f5572e6a26e",
+        "points": 500,
+        "flag": "CTF{r0p_ch41n_m4st3r}"
+      },
+      {
+        "id": "a5a0bf5d-3553-4e43-8730-893ccca376ce",
+        "title": "Heap Overflow Exploitation",
+        "description": "Exploit a heap overflow vulnerability to overwrite function pointers. The binary uses malloc/free without proper bounds checking.",
+        "categoryId": "62d69fb6-3de6-4acb-8628-3312d430a3d0",
+        "difficultyId": "002f1d22-2cab-4477-8bbc-5f5572e6a26e",
+        "points": 500,
+        "flag": "CTF{h34p_0v3rfl0w_pwn3d}"
+      },
+      {
+        "id": "37c75a74-bec6-4e30-afe1-9c48184de894",
+        "title": "Simple Crack Me",
+        "description": "Reverse engineer this binary to find the correct password. The password checking logic is straightforward with simple comparisons.",
+        "categoryId": "31e8e319-1784-46e8-ad39-0004876b8a53",
+        "difficultyId": "6abe8fda-97a8-41e5-a33e-b7d16881eedc",
+        "points": 100,
+        "flag": "CTF{r3v3rs3_3ng1n33r1ng_fun}"
+      },
+      {
+        "id": "04c1d966-b341-45d1-b965-88a530013499",
+        "title": "String Obfuscation",
+        "description": "The flag is obfuscated using XOR encoding. Reverse the algorithm and decode the flag. The XOR key is 0x42.",
+        "categoryId": "31e8e319-1784-46e8-ad39-0004876b8a53",
+        "difficultyId": "6abe8fda-97a8-41e5-a33e-b7d16881eedc",
+        "points": 150,
+        "flag": "CTF{x0r_0bfusc4t10n_s1mpl3}"
+      },
+      {
+        "id": "6763ab8f-b173-4bd2-9c72-ad30c1ffe0ae",
+        "title": "Anti-Debugging Tricks",
+        "description": "This binary uses anti-debugging techniques. Bypass the debugger detection to find the flag. Use patching or emulation.",
+        "categoryId": "31e8e319-1784-46e8-ad39-0004876b8a53",
+        "difficultyId": "7421d987-1987-47d3-83b7-ac26d4ae1bc4",
+        "points": 300,
+        "flag": "CTF{4nt1_d3bugg1ng_byp4ss3d}"
+      },
+      {
+        "id": "9859f49c-af6e-44bf-a68f-d8fbca592c38",
+        "title": "VM-Based Obfuscation",
+        "description": "The binary implements a custom virtual machine to obfuscate the flag checking logic. Reverse the VM instructions to find the flag.",
+        "categoryId": "31e8e319-1784-46e8-ad39-0004876b8a53",
+        "difficultyId": "002f1d22-2cab-4477-8bbc-5f5572e6a26e",
+        "points": 500,
+        "flag": "CTF{vm_0bfusc4t10n_cr4ck3d}"
+      },
+      {
+        "id": "858f5f78-6d28-479e-90fe-0d650ba34d2b",
+        "title": "Malware Analysis",
+        "description": "Analyze this malware sample to extract the C2 server address. The address is encrypted with a custom algorithm. WARNING: Run in a sandboxed environment!",
+        "categoryId": "31e8e319-1784-46e8-ad39-0004876b8a53",
+        "difficultyId": "002f1d22-2cab-4477-8bbc-5f5572e6a26e",
+        "points": 500,
+        "flag": "CTF{m4lw4r3_4n4lys1s_c0mpl3t3}"
+      }
+    ],
+    "players": [
+      {
+        "id": "d75226db-6588-4549-8a19-ad666f74afaf",
+        "username": "h4ck3rm4n",
+        "email": "hacker@ctf.local",
+        "passwordHash": "$2b$12$7fELmjz2LZRrsEyxeyOghOGFZo8unHxUcbv3PU9J7zxARzYLIqLue",
+        "score": 2300,
+        "createdAt": "2025-10-01T10:00:00.000Z"
+      },
+      {
+        "id": "10c690d1-da26-4c11-b97c-03f69ee7b67c",
+        "username": "cyber_ninja",
+        "email": "ninja@ctf.local",
+        "passwordHash": "$2b$12$7fELmjz2LZRrsEyxeyOghOGFZo8unHxUcbv3PU9J7zxARzYLIqLue",
+        "score": 2350,
+        "createdAt": "2025-10-02T11:30:00.000Z"
+      },
+      {
+        "id": "402e58eb-df7d-4494-b554-58ff416017b5",
+        "username": "pwn_master",
+        "email": "pwn@ctf.local",
+        "passwordHash": "$2b$12$7fELmjz2LZRrsEyxeyOghOGFZo8unHxUcbv3PU9J7zxARzYLIqLue",
+        "score": 3300,
+        "createdAt": "2025-10-03T09:15:00.000Z"
+      },
+      {
+        "id": "808f2d9f-38e0-4bd3-8379-719ad08adf5b",
+        "username": "crypto_queen",
+        "email": "crypto@ctf.local",
+        "passwordHash": "$2b$12$7fELmjz2LZRrsEyxeyOghOGFZo8unHxUcbv3PU9J7zxARzYLIqLue",
+        "score": 3050,
+        "createdAt": "2025-10-04T14:20:00.000Z"
+      },
+      {
+        "id": "674f2f07-2e65-4e97-86e5-92fe223c5744",
+        "username": "forensics_pro",
+        "email": "forensics@ctf.local",
+        "passwordHash": "$2b$12$7fELmjz2LZRrsEyxeyOghOGFZo8unHxUcbv3PU9J7zxARzYLIqLue",
+        "score": 3550,
+        "createdAt": "2025-10-05T16:45:00.000Z"
+      },
+      {
+        "id": "371cba28-539e-4410-aec8-f0de3ec9e110",
+        "username": "web_wizard",
+        "email": "webwiz@ctf.local",
+        "passwordHash": "$2b$12$7fELmjz2LZRrsEyxeyOghOGFZo8unHxUcbv3PU9J7zxARzYLIqLue",
+        "score": 2050,
+        "createdAt": "2025-10-06T08:30:00.000Z"
+      },
+      {
+        "id": "d684bcaf-93df-45cc-a997-cf9969073309",
+        "username": "binary_beast",
+        "email": "binary@ctf.local",
+        "passwordHash": "$2b$12$7fELmjz2LZRrsEyxeyOghOGFZo8unHxUcbv3PU9J7zxARzYLIqLue",
+        "score": 2200,
+        "createdAt": "2025-10-07T13:00:00.000Z"
+      },
+      {
+        "id": "7705d631-9df5-42f5-a086-bb55df54d8dc",
+        "username": "rev_engineer",
+        "email": "reverse@ctf.local",
+        "passwordHash": "$2b$12$7fELmjz2LZRrsEyxeyOghOGFZo8unHxUcbv3PU9J7zxARzYLIqLue",
+        "score": 1850,
+        "createdAt": "2025-10-08T10:30:00.000Z"
+      },
+      {
+        "id": "1772eb85-3a88-4b82-bc26-4430c27a9221",
+        "username": "script_kiddie",
+        "email": "script@ctf.local",
+        "passwordHash": "$2b$12$7fELmjz2LZRrsEyxeyOghOGFZo8unHxUcbv3PU9J7zxARzYLIqLue",
+        "score": 2700,
+        "createdAt": "2025-10-09T15:00:00.000Z"
+      },
+      {
+        "id": "6b7d41c9-29c1-4991-ab68-98251ee7c93d",
+        "username": "elite_hacker",
+        "email": "elite@ctf.local",
+        "passwordHash": "$2b$12$7fELmjz2LZRrsEyxeyOghOGFZo8unHxUcbv3PU9J7zxARzYLIqLue",
+        "score": 3250,
+        "createdAt": "2025-10-10T11:00:00.000Z"
+      },
+      {
+        "id": "3ae2324b-9d9f-477a-8576-78258e5e2ea6",
+        "username": "noob_player",
+        "email": "noob@ctf.local",
+        "passwordHash": "$2b$12$7fELmjz2LZRrsEyxeyOghOGFZo8unHxUcbv3PU9J7zxARzYLIqLue",
+        "score": 3750,
+        "createdAt": "2025-10-11T09:00:00.000Z"
+      },
+      {
+        "id": "c750324d-872d-43c2-887d-a86e56dd4a95",
+        "username": "sec_analyst",
+        "email": "analyst@ctf.local",
+        "passwordHash": "$2b$12$7fELmjz2LZRrsEyxeyOghOGFZo8unHxUcbv3PU9J7zxARzYLIqLue",
+        "score": 1400,
+        "createdAt": "2025-10-12T14:30:00.000Z"
+      },
+      {
+        "id": "381d4599-b190-42e3-9ff8-b2eda2f5a150",
+        "username": "bug_hunter",
+        "email": "bugs@ctf.local",
+        "passwordHash": "$2b$12$7fELmjz2LZRrsEyxeyOghOGFZo8unHxUcbv3PU9J7zxARzYLIqLue",
+        "score": 3350,
+        "createdAt": "2025-10-13T16:00:00.000Z"
+      },
+      {
+        "id": "3592c268-71ba-47e4-934d-f5c69ee12e56",
+        "username": "exploit_dev",
+        "email": "exploit@ctf.local",
+        "passwordHash": "$2b$12$7fELmjz2LZRrsEyxeyOghOGFZo8unHxUcbv3PU9J7zxARzYLIqLue",
+        "score": 2650,
+        "createdAt": "2025-10-14T12:00:00.000Z"
+      },
+      {
+        "id": "80df51e1-9ddf-4af0-9bb2-f1a19aded721",
+        "username": "pentest_pro",
+        "email": "pentest@ctf.local",
+        "passwordHash": "$2b$12$7fELmjz2LZRrsEyxeyOghOGFZo8unHxUcbv3PU9J7zxARzYLIqLue",
+        "score": 4150,
+        "createdAt": "2025-10-15T10:00:00.000Z"
+      }
+    ],
+    "submissions": [
+      {
+        "id": "f3ce855c-d190-41e4-afbd-59c885d3e83e",
+        "playerId": "3592c268-71ba-47e4-934d-f5c69ee12e56",
+        "challengeId": "790ef990-4f5b-458b-b41d-7289c8a634d6",
+        "submittedFlag": "CTF{sql_1nj3ct10n_1s_d4ng3r0us}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-16T09:02:00.000Z"
+      },
+      {
+        "id": "f574cd0f-766b-460d-87e8-408c74afebbf",
+        "playerId": "d75226db-6588-4549-8a19-ad666f74afaf",
+        "challengeId": "790ef990-4f5b-458b-b41d-7289c8a634d6",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-16T10:00:00.000Z"
+      },
+      {
+        "id": "fe4b5c3d-f142-47df-b2a7-cfd2c1542a60",
+        "playerId": "d75226db-6588-4549-8a19-ad666f74afaf",
+        "challengeId": "790ef990-4f5b-458b-b41d-7289c8a634d6",
+        "submittedFlag": "CTF{sql_1nj3ct10n_1s_d4ng3r0us}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-16T10:03:00.000Z"
+      },
+      {
+        "id": "0b9a98f4-8853-4fdf-a850-1a3c7a3a33dd",
+        "playerId": "1772eb85-3a88-4b82-bc26-4430c27a9221",
+        "challengeId": "790ef990-4f5b-458b-b41d-7289c8a634d6",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-16T11:00:00.000Z"
+      },
+      {
+        "id": "4c32cc9f-0193-4367-8bc3-494c44fc4be4",
+        "playerId": "1772eb85-3a88-4b82-bc26-4430c27a9221",
+        "challengeId": "790ef990-4f5b-458b-b41d-7289c8a634d6",
+        "submittedFlag": "CTF{sql_1nj3ct10n_1s_d4ng3r0us}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-16T11:03:00.000Z"
+      },
+      {
+        "id": "984a1def-9162-4ec2-9596-6c393ec05283",
+        "playerId": "7705d631-9df5-42f5-a086-bb55df54d8dc",
+        "challengeId": "790ef990-4f5b-458b-b41d-7289c8a634d6",
+        "submittedFlag": "CTF{sql_1nj3ct10n_1s_d4ng3r0us}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-16T12:02:00.000Z"
+      },
+      {
+        "id": "84a99441-9073-413a-8fe8-553d298a6d26",
+        "playerId": "c750324d-872d-43c2-887d-a86e56dd4a95",
+        "challengeId": "790ef990-4f5b-458b-b41d-7289c8a634d6",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-16T13:00:00.000Z"
+      },
+      {
+        "id": "85573a38-d26b-44f4-8250-b4c05b6ae112",
+        "playerId": "c750324d-872d-43c2-887d-a86e56dd4a95",
+        "challengeId": "790ef990-4f5b-458b-b41d-7289c8a634d6",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-16T13:01:00.000Z"
+      },
+      {
+        "id": "2cbab9d8-c45e-4db3-8d1a-71b22f11befc",
+        "playerId": "c750324d-872d-43c2-887d-a86e56dd4a95",
+        "challengeId": "790ef990-4f5b-458b-b41d-7289c8a634d6",
+        "submittedFlag": "CTF{sql_1nj3ct10n_1s_d4ng3r0us}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-16T13:04:00.000Z"
+      },
+      {
+        "id": "1adde9ff-f686-44c6-900a-3a4548bca24f",
+        "playerId": "674f2f07-2e65-4e97-86e5-92fe223c5744",
+        "challengeId": "a05a186e-5c87-4702-818a-a1d0d74cc05e",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-16T14:00:00.000Z"
+      },
+      {
+        "id": "aaf3ec98-3050-40d5-85f2-709f5da2ca20",
+        "playerId": "674f2f07-2e65-4e97-86e5-92fe223c5744",
+        "challengeId": "a05a186e-5c87-4702-818a-a1d0d74cc05e",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-16T14:01:00.000Z"
+      },
+      {
+        "id": "5f415722-7ccd-41bf-98b7-04a00fe2a649",
+        "playerId": "674f2f07-2e65-4e97-86e5-92fe223c5744",
+        "challengeId": "a05a186e-5c87-4702-818a-a1d0d74cc05e",
+        "submittedFlag": "CTF{xss_c4n_st34l_c00k13s}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-16T14:04:00.000Z"
+      },
+      {
+        "id": "7581321d-3a7f-4b4d-9031-60df0de82d3b",
+        "playerId": "80df51e1-9ddf-4af0-9bb2-f1a19aded721",
+        "challengeId": "a05a186e-5c87-4702-818a-a1d0d74cc05e",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-16T15:00:00.000Z"
+      },
+      {
+        "id": "0580bb70-8648-473b-b3f3-8ff5e277be02",
+        "playerId": "80df51e1-9ddf-4af0-9bb2-f1a19aded721",
+        "challengeId": "a05a186e-5c87-4702-818a-a1d0d74cc05e",
+        "submittedFlag": "CTF{xss_c4n_st34l_c00k13s}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-16T15:03:00.000Z"
+      },
+      {
+        "id": "455a7bab-b743-4cea-93ee-47696d3a5e79",
+        "playerId": "371cba28-539e-4410-aec8-f0de3ec9e110",
+        "challengeId": "a05a186e-5c87-4702-818a-a1d0d74cc05e",
+        "submittedFlag": "CTF{xss_c4n_st34l_c00k13s}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-16T16:02:00.000Z"
+      },
+      {
+        "id": "14c10c31-7a5e-49c6-b7c9-2b4444ef217e",
+        "playerId": "674f2f07-2e65-4e97-86e5-92fe223c5744",
+        "challengeId": "18b7e7c9-2f03-4ea9-9457-98a93e9bcf7b",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-16T17:00:00.000Z"
+      },
+      {
+        "id": "d0ffd2c5-f837-4907-ab6b-4cffc732c36b",
+        "playerId": "674f2f07-2e65-4e97-86e5-92fe223c5744",
+        "challengeId": "18b7e7c9-2f03-4ea9-9457-98a93e9bcf7b",
+        "submittedFlag": "CTF{csrf_pr0t3ct10n_f41l3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-16T17:03:00.000Z"
+      },
+      {
+        "id": "c379b5f7-9faa-4874-a927-543bf9e77551",
+        "playerId": "1772eb85-3a88-4b82-bc26-4430c27a9221",
+        "challengeId": "18b7e7c9-2f03-4ea9-9457-98a93e9bcf7b",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-16T18:00:00.000Z"
+      },
+      {
+        "id": "f2152d51-618a-496a-b9ca-522ba535e449",
+        "playerId": "1772eb85-3a88-4b82-bc26-4430c27a9221",
+        "challengeId": "18b7e7c9-2f03-4ea9-9457-98a93e9bcf7b",
+        "submittedFlag": "CTF{csrf_pr0t3ct10n_f41l3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-16T18:03:00.000Z"
+      },
+      {
+        "id": "e389bd86-0b75-4357-8b91-3699f72c23d8",
+        "playerId": "808f2d9f-38e0-4bd3-8379-719ad08adf5b",
+        "challengeId": "18b7e7c9-2f03-4ea9-9457-98a93e9bcf7b",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-16T19:00:00.000Z"
+      },
+      {
+        "id": "c740378f-8acb-4b34-9663-4f6db01f44a3",
+        "playerId": "808f2d9f-38e0-4bd3-8379-719ad08adf5b",
+        "challengeId": "18b7e7c9-2f03-4ea9-9457-98a93e9bcf7b",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-16T19:01:00.000Z"
+      },
+      {
+        "id": "dcf5978d-2b20-44ea-a868-9909be98ff83",
+        "playerId": "808f2d9f-38e0-4bd3-8379-719ad08adf5b",
+        "challengeId": "18b7e7c9-2f03-4ea9-9457-98a93e9bcf7b",
+        "submittedFlag": "CTF{csrf_pr0t3ct10n_f41l3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-16T19:04:00.000Z"
+      },
+      {
+        "id": "5284a86c-a5ce-447f-8679-4dc3149ec90e",
+        "playerId": "d684bcaf-93df-45cc-a997-cf9969073309",
+        "challengeId": "18b7e7c9-2f03-4ea9-9457-98a93e9bcf7b",
+        "submittedFlag": "CTF{csrf_pr0t3ct10n_f41l3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-16T20:02:00.000Z"
+      },
+      {
+        "id": "e50d48ad-01a9-4d23-b0b7-4cc0127716dd",
+        "playerId": "7705d631-9df5-42f5-a086-bb55df54d8dc",
+        "challengeId": "18b7e7c9-2f03-4ea9-9457-98a93e9bcf7b",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-16T21:00:00.000Z"
+      },
+      {
+        "id": "ec977fa7-43d2-4deb-8319-d1d990d582ad",
+        "playerId": "7705d631-9df5-42f5-a086-bb55df54d8dc",
+        "challengeId": "18b7e7c9-2f03-4ea9-9457-98a93e9bcf7b",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-16T21:01:00.000Z"
+      },
+      {
+        "id": "31af475b-773d-431d-a6d4-f49df2993dc4",
+        "playerId": "7705d631-9df5-42f5-a086-bb55df54d8dc",
+        "challengeId": "18b7e7c9-2f03-4ea9-9457-98a93e9bcf7b",
+        "submittedFlag": "CTF{csrf_pr0t3ct10n_f41l3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-16T21:04:00.000Z"
+      },
+      {
+        "id": "2d629f24-0546-47dd-9751-2eebefbdfe84",
+        "playerId": "6b7d41c9-29c1-4991-ab68-98251ee7c93d",
+        "challengeId": "18b7e7c9-2f03-4ea9-9457-98a93e9bcf7b",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-16T22:00:00.000Z"
+      },
+      {
+        "id": "ab075a0f-e110-47ba-91d3-49179030d568",
+        "playerId": "6b7d41c9-29c1-4991-ab68-98251ee7c93d",
+        "challengeId": "18b7e7c9-2f03-4ea9-9457-98a93e9bcf7b",
+        "submittedFlag": "CTF{csrf_pr0t3ct10n_f41l3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-16T22:03:00.000Z"
+      },
+      {
+        "id": "ce58ea6c-9550-4a06-a9ca-574a4825eac5",
+        "playerId": "371cba28-539e-4410-aec8-f0de3ec9e110",
+        "challengeId": "18b7e7c9-2f03-4ea9-9457-98a93e9bcf7b",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-16T23:00:00.000Z"
+      },
+      {
+        "id": "6427b766-df40-41f0-9ca3-f285fe5417cf",
+        "playerId": "371cba28-539e-4410-aec8-f0de3ec9e110",
+        "challengeId": "18b7e7c9-2f03-4ea9-9457-98a93e9bcf7b",
+        "submittedFlag": "CTF{csrf_pr0t3ct10n_f41l3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-16T23:03:00.000Z"
+      },
+      {
+        "id": "9e02b826-73e9-4860-bd8c-d3e1e85aa815",
+        "playerId": "402e58eb-df7d-4494-b554-58ff416017b5",
+        "challengeId": "18b7e7c9-2f03-4ea9-9457-98a93e9bcf7b",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-17T00:00:00.000Z"
+      },
+      {
+        "id": "007a972f-0088-40b2-9f5f-4acd695d2fa4",
+        "playerId": "402e58eb-df7d-4494-b554-58ff416017b5",
+        "challengeId": "18b7e7c9-2f03-4ea9-9457-98a93e9bcf7b",
+        "submittedFlag": "CTF{csrf_pr0t3ct10n_f41l3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-17T00:03:00.000Z"
+      },
+      {
+        "id": "2b474eb1-1b8c-4632-8078-2cc9af659bbc",
+        "playerId": "80df51e1-9ddf-4af0-9bb2-f1a19aded721",
+        "challengeId": "b07e96f9-d7fb-4e93-86f5-5fdbe070da83",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-17T01:00:00.000Z"
+      },
+      {
+        "id": "ed7e54eb-eef9-4bed-bcb8-94d933642c1e",
+        "playerId": "80df51e1-9ddf-4af0-9bb2-f1a19aded721",
+        "challengeId": "b07e96f9-d7fb-4e93-86f5-5fdbe070da83",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-17T01:01:00.000Z"
+      },
+      {
+        "id": "f41cb2e4-3462-4ed3-b018-4ee0e04b18fd",
+        "playerId": "80df51e1-9ddf-4af0-9bb2-f1a19aded721",
+        "challengeId": "b07e96f9-d7fb-4e93-86f5-5fdbe070da83",
+        "submittedFlag": "CTF{jwt_s3cr3t_1s_p4ssw0rd}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-17T01:04:00.000Z"
+      },
+      {
+        "id": "1e58b7d2-1726-46cd-9715-6f6f9541ee6a",
+        "playerId": "808f2d9f-38e0-4bd3-8379-719ad08adf5b",
+        "challengeId": "b07e96f9-d7fb-4e93-86f5-5fdbe070da83",
+        "submittedFlag": "CTF{jwt_s3cr3t_1s_p4ssw0rd}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-17T02:02:00.000Z"
+      },
+      {
+        "id": "7879781d-7cf8-42b7-9e76-19c0980292b7",
+        "playerId": "10c690d1-da26-4c11-b97c-03f69ee7b67c",
+        "challengeId": "b07e96f9-d7fb-4e93-86f5-5fdbe070da83",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-17T03:00:00.000Z"
+      },
+      {
+        "id": "aa5a2e57-a184-4610-bf60-bca0c1c90937",
+        "playerId": "10c690d1-da26-4c11-b97c-03f69ee7b67c",
+        "challengeId": "b07e96f9-d7fb-4e93-86f5-5fdbe070da83",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-17T03:01:00.000Z"
+      },
+      {
+        "id": "0c115ef0-e5a6-40f4-950b-b0ae7bc6bb64",
+        "playerId": "10c690d1-da26-4c11-b97c-03f69ee7b67c",
+        "challengeId": "b07e96f9-d7fb-4e93-86f5-5fdbe070da83",
+        "submittedFlag": "CTF{jwt_s3cr3t_1s_p4ssw0rd}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-17T03:04:00.000Z"
+      },
+      {
+        "id": "8482633c-b0d8-450d-a8dd-a4ae901104c8",
+        "playerId": "6b7d41c9-29c1-4991-ab68-98251ee7c93d",
+        "challengeId": "b07e96f9-d7fb-4e93-86f5-5fdbe070da83",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-17T04:00:00.000Z"
+      },
+      {
+        "id": "11031060-eb5f-4be3-b354-e9a651fb39b9",
+        "playerId": "6b7d41c9-29c1-4991-ab68-98251ee7c93d",
+        "challengeId": "b07e96f9-d7fb-4e93-86f5-5fdbe070da83",
+        "submittedFlag": "CTF{jwt_s3cr3t_1s_p4ssw0rd}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-17T04:03:00.000Z"
+      },
+      {
+        "id": "78bf4b2a-fe22-4ea2-af9b-9715512c3b1e",
+        "playerId": "371cba28-539e-4410-aec8-f0de3ec9e110",
+        "challengeId": "b07e96f9-d7fb-4e93-86f5-5fdbe070da83",
+        "submittedFlag": "CTF{jwt_s3cr3t_1s_p4ssw0rd}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-17T05:02:00.000Z"
+      },
+      {
+        "id": "c9bbcc65-4232-469c-8640-ce27eabf03de",
+        "playerId": "674f2f07-2e65-4e97-86e5-92fe223c5744",
+        "challengeId": "b07e96f9-d7fb-4e93-86f5-5fdbe070da83",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-17T06:00:00.000Z"
+      },
+      {
+        "id": "de6b6de3-c520-4819-b7ae-610b3135073c",
+        "playerId": "674f2f07-2e65-4e97-86e5-92fe223c5744",
+        "challengeId": "b07e96f9-d7fb-4e93-86f5-5fdbe070da83",
+        "submittedFlag": "CTF{jwt_s3cr3t_1s_p4ssw0rd}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-17T06:03:00.000Z"
+      },
+      {
+        "id": "9b925bf5-9ad1-4dc9-b04c-c737a2e7f448",
+        "playerId": "674f2f07-2e65-4e97-86e5-92fe223c5744",
+        "challengeId": "a530efad-f516-4314-9756-e4f0ab147c55",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-17T07:00:00.000Z"
+      },
+      {
+        "id": "c9c84b59-a1a2-4527-970b-914e8fd85e0a",
+        "playerId": "674f2f07-2e65-4e97-86e5-92fe223c5744",
+        "challengeId": "a530efad-f516-4314-9756-e4f0ab147c55",
+        "submittedFlag": "CTF{ssti_l34ds_t0_rc3}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-17T07:03:00.000Z"
+      },
+      {
+        "id": "62be4793-3de7-45a3-aa2b-b41cd2acae16",
+        "playerId": "808f2d9f-38e0-4bd3-8379-719ad08adf5b",
+        "challengeId": "a530efad-f516-4314-9756-e4f0ab147c55",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-17T08:00:00.000Z"
+      },
+      {
+        "id": "5bb29cb9-a0bf-4a3a-88d0-b00c00a29597",
+        "playerId": "808f2d9f-38e0-4bd3-8379-719ad08adf5b",
+        "challengeId": "a530efad-f516-4314-9756-e4f0ab147c55",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-17T08:01:00.000Z"
+      },
+      {
+        "id": "13161413-5d01-4742-b6d4-40363f4cf93a",
+        "playerId": "808f2d9f-38e0-4bd3-8379-719ad08adf5b",
+        "challengeId": "a530efad-f516-4314-9756-e4f0ab147c55",
+        "submittedFlag": "CTF{ssti_l34ds_t0_rc3}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-17T08:04:00.000Z"
+      },
+      {
+        "id": "40e31049-929f-49d0-878c-e17c76f71e7e",
+        "playerId": "7705d631-9df5-42f5-a086-bb55df54d8dc",
+        "challengeId": "3467562d-b462-4cc6-8b1b-c1a8a0d43153",
+        "submittedFlag": "CTF{caesar_cipher_is_too_easy}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-17T09:02:00.000Z"
+      },
+      {
+        "id": "016cd634-4652-46b4-bc78-049137a26420",
+        "playerId": "d684bcaf-93df-45cc-a997-cf9969073309",
+        "challengeId": "3467562d-b462-4cc6-8b1b-c1a8a0d43153",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-17T10:00:00.000Z"
+      },
+      {
+        "id": "528780d8-30a4-40e2-90a0-b627251f7b17",
+        "playerId": "d684bcaf-93df-45cc-a997-cf9969073309",
+        "challengeId": "3467562d-b462-4cc6-8b1b-c1a8a0d43153",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-17T10:01:00.000Z"
+      },
+      {
+        "id": "d25018fe-c40e-44eb-9f1c-a01dfc72d8bc",
+        "playerId": "d684bcaf-93df-45cc-a997-cf9969073309",
+        "challengeId": "3467562d-b462-4cc6-8b1b-c1a8a0d43153",
+        "submittedFlag": "CTF{caesar_cipher_is_too_easy}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-17T10:04:00.000Z"
+      },
+      {
+        "id": "3d5e6014-46f7-47d3-8609-71e2ab4af6f5",
+        "playerId": "6b7d41c9-29c1-4991-ab68-98251ee7c93d",
+        "challengeId": "3467562d-b462-4cc6-8b1b-c1a8a0d43153",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-17T11:00:00.000Z"
+      },
+      {
+        "id": "2b54580e-155c-494f-a7d2-778298f32a58",
+        "playerId": "6b7d41c9-29c1-4991-ab68-98251ee7c93d",
+        "challengeId": "3467562d-b462-4cc6-8b1b-c1a8a0d43153",
+        "submittedFlag": "CTF{caesar_cipher_is_too_easy}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-17T11:03:00.000Z"
+      },
+      {
+        "id": "93cc3e13-d128-4ec1-aa0f-327b548cbe29",
+        "playerId": "d75226db-6588-4549-8a19-ad666f74afaf",
+        "challengeId": "3467562d-b462-4cc6-8b1b-c1a8a0d43153",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-17T12:00:00.000Z"
+      },
+      {
+        "id": "15fbc9d4-9199-441c-be16-29b30fe32832",
+        "playerId": "d75226db-6588-4549-8a19-ad666f74afaf",
+        "challengeId": "3467562d-b462-4cc6-8b1b-c1a8a0d43153",
+        "submittedFlag": "CTF{caesar_cipher_is_too_easy}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-17T12:03:00.000Z"
+      },
+      {
+        "id": "6456d433-7c87-4dbd-abc5-dcec5f84c03b",
+        "playerId": "381d4599-b190-42e3-9ff8-b2eda2f5a150",
+        "challengeId": "dbef89b0-2aaa-4342-9acd-5e51f73bc19b",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-17T13:00:00.000Z"
+      },
+      {
+        "id": "af738602-4da5-4776-b499-0f5b9b479b82",
+        "playerId": "381d4599-b190-42e3-9ff8-b2eda2f5a150",
+        "challengeId": "dbef89b0-2aaa-4342-9acd-5e51f73bc19b",
+        "submittedFlag": "CTF{b4s64_is_not_encryption}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-17T13:03:00.000Z"
+      },
+      {
+        "id": "1c3a20cb-39ea-4e62-88e9-1c526d19df19",
+        "playerId": "7705d631-9df5-42f5-a086-bb55df54d8dc",
+        "challengeId": "dbef89b0-2aaa-4342-9acd-5e51f73bc19b",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-17T14:00:00.000Z"
+      },
+      {
+        "id": "2820f68f-5d4c-42a0-b7b9-61299195bfdf",
+        "playerId": "7705d631-9df5-42f5-a086-bb55df54d8dc",
+        "challengeId": "dbef89b0-2aaa-4342-9acd-5e51f73bc19b",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-17T14:01:00.000Z"
+      },
+      {
+        "id": "9fa1e2c4-8f93-4680-b352-147bf8c1f360",
+        "playerId": "7705d631-9df5-42f5-a086-bb55df54d8dc",
+        "challengeId": "dbef89b0-2aaa-4342-9acd-5e51f73bc19b",
+        "submittedFlag": "CTF{b4s64_is_not_encryption}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-17T14:04:00.000Z"
+      },
+      {
+        "id": "93201800-36f5-434c-8fb6-71fd1f21cbca",
+        "playerId": "6b7d41c9-29c1-4991-ab68-98251ee7c93d",
+        "challengeId": "dbef89b0-2aaa-4342-9acd-5e51f73bc19b",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-17T15:00:00.000Z"
+      },
+      {
+        "id": "e2081a1b-8e5b-4c70-bd07-fb3525b44dc5",
+        "playerId": "6b7d41c9-29c1-4991-ab68-98251ee7c93d",
+        "challengeId": "dbef89b0-2aaa-4342-9acd-5e51f73bc19b",
+        "submittedFlag": "CTF{b4s64_is_not_encryption}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-17T15:03:00.000Z"
+      },
+      {
+        "id": "87a16c00-e594-4765-be1b-7daea5da698f",
+        "playerId": "80df51e1-9ddf-4af0-9bb2-f1a19aded721",
+        "challengeId": "dbef89b0-2aaa-4342-9acd-5e51f73bc19b",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-17T16:00:00.000Z"
+      },
+      {
+        "id": "8c59ec91-4877-40f2-91be-478e479f64bf",
+        "playerId": "80df51e1-9ddf-4af0-9bb2-f1a19aded721",
+        "challengeId": "dbef89b0-2aaa-4342-9acd-5e51f73bc19b",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-17T16:01:00.000Z"
+      },
+      {
+        "id": "68d2ff46-2e2b-43c0-a501-4ce9683d30b1",
+        "playerId": "80df51e1-9ddf-4af0-9bb2-f1a19aded721",
+        "challengeId": "dbef89b0-2aaa-4342-9acd-5e51f73bc19b",
+        "submittedFlag": "CTF{b4s64_is_not_encryption}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-17T16:04:00.000Z"
+      },
+      {
+        "id": "17144a77-9d51-4e42-b682-18a44c95fe1b",
+        "playerId": "808f2d9f-38e0-4bd3-8379-719ad08adf5b",
+        "challengeId": "dbef89b0-2aaa-4342-9acd-5e51f73bc19b",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-17T17:00:00.000Z"
+      },
+      {
+        "id": "a03d64b5-b025-4879-ad30-585f573b40ae",
+        "playerId": "808f2d9f-38e0-4bd3-8379-719ad08adf5b",
+        "challengeId": "dbef89b0-2aaa-4342-9acd-5e51f73bc19b",
+        "submittedFlag": "CTF{b4s64_is_not_encryption}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-17T17:03:00.000Z"
+      },
+      {
+        "id": "846b4352-ff03-4569-b77e-cc52b2a1aadf",
+        "playerId": "c750324d-872d-43c2-887d-a86e56dd4a95",
+        "challengeId": "dbef89b0-2aaa-4342-9acd-5e51f73bc19b",
+        "submittedFlag": "CTF{b4s64_is_not_encryption}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-17T18:02:00.000Z"
+      },
+      {
+        "id": "47dafb4a-eb13-4aa9-8ad6-b74a17a907f4",
+        "playerId": "402e58eb-df7d-4494-b554-58ff416017b5",
+        "challengeId": "dbef89b0-2aaa-4342-9acd-5e51f73bc19b",
+        "submittedFlag": "CTF{b4s64_is_not_encryption}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-17T19:02:00.000Z"
+      },
+      {
+        "id": "c713c8c8-f346-4ba9-8b0a-b534f33d2bc7",
+        "playerId": "3ae2324b-9d9f-477a-8576-78258e5e2ea6",
+        "challengeId": "ee2a996e-ca8f-4d2c-a878-0947451f7f14",
+        "submittedFlag": "CTF{sm4ll_3xp0n3nt_4tt4ck}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-17T20:02:00.000Z"
+      },
+      {
+        "id": "a75f2344-e683-472f-a16e-575372df573d",
+        "playerId": "381d4599-b190-42e3-9ff8-b2eda2f5a150",
+        "challengeId": "ee2a996e-ca8f-4d2c-a878-0947451f7f14",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-17T21:00:00.000Z"
+      },
+      {
+        "id": "57489473-c401-4922-aa21-c1de9dd7db6c",
+        "playerId": "381d4599-b190-42e3-9ff8-b2eda2f5a150",
+        "challengeId": "ee2a996e-ca8f-4d2c-a878-0947451f7f14",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-17T21:01:00.000Z"
+      },
+      {
+        "id": "b2acad40-c4fd-416c-a4ef-f0596a6a2ba7",
+        "playerId": "381d4599-b190-42e3-9ff8-b2eda2f5a150",
+        "challengeId": "ee2a996e-ca8f-4d2c-a878-0947451f7f14",
+        "submittedFlag": "CTF{sm4ll_3xp0n3nt_4tt4ck}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-17T21:04:00.000Z"
+      },
+      {
+        "id": "ea3219d4-1726-4dc8-b772-5945f601f688",
+        "playerId": "d75226db-6588-4549-8a19-ad666f74afaf",
+        "challengeId": "ee2a996e-ca8f-4d2c-a878-0947451f7f14",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-17T22:00:00.000Z"
+      },
+      {
+        "id": "b4a2690e-8f3c-48b9-ab08-e177ecf9e75d",
+        "playerId": "d75226db-6588-4549-8a19-ad666f74afaf",
+        "challengeId": "ee2a996e-ca8f-4d2c-a878-0947451f7f14",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-17T22:01:00.000Z"
+      },
+      {
+        "id": "6e953fdf-e500-4c8b-95c7-01d5c755a1ad",
+        "playerId": "d75226db-6588-4549-8a19-ad666f74afaf",
+        "challengeId": "ee2a996e-ca8f-4d2c-a878-0947451f7f14",
+        "submittedFlag": "CTF{sm4ll_3xp0n3nt_4tt4ck}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-17T22:04:00.000Z"
+      },
+      {
+        "id": "d40da1ca-36d7-429f-a8a0-4ce7ce15f81e",
+        "playerId": "674f2f07-2e65-4e97-86e5-92fe223c5744",
+        "challengeId": "ee2a996e-ca8f-4d2c-a878-0947451f7f14",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-17T23:00:00.000Z"
+      },
+      {
+        "id": "b6f6d783-800c-4e64-8b4a-4fdfb7e90cc5",
+        "playerId": "674f2f07-2e65-4e97-86e5-92fe223c5744",
+        "challengeId": "ee2a996e-ca8f-4d2c-a878-0947451f7f14",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-17T23:01:00.000Z"
+      },
+      {
+        "id": "a0277898-fc59-4554-8929-073d655672fa",
+        "playerId": "674f2f07-2e65-4e97-86e5-92fe223c5744",
+        "challengeId": "ee2a996e-ca8f-4d2c-a878-0947451f7f14",
+        "submittedFlag": "CTF{sm4ll_3xp0n3nt_4tt4ck}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-17T23:04:00.000Z"
+      },
+      {
+        "id": "09e0af7e-3658-4907-b8ec-070cee79c3b1",
+        "playerId": "80df51e1-9ddf-4af0-9bb2-f1a19aded721",
+        "challengeId": "ee2a996e-ca8f-4d2c-a878-0947451f7f14",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-18T00:00:00.000Z"
+      },
+      {
+        "id": "5b27f10e-4721-43a5-8415-fde53fae4a8b",
+        "playerId": "80df51e1-9ddf-4af0-9bb2-f1a19aded721",
+        "challengeId": "ee2a996e-ca8f-4d2c-a878-0947451f7f14",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-18T00:01:00.000Z"
+      },
+      {
+        "id": "f2fa05b5-4509-4519-af2c-66b2413e45d7",
+        "playerId": "80df51e1-9ddf-4af0-9bb2-f1a19aded721",
+        "challengeId": "ee2a996e-ca8f-4d2c-a878-0947451f7f14",
+        "submittedFlag": "CTF{sm4ll_3xp0n3nt_4tt4ck}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-18T00:04:00.000Z"
+      },
+      {
+        "id": "6c723448-7568-4bd1-bd6f-7bdcb9df3935",
+        "playerId": "371cba28-539e-4410-aec8-f0de3ec9e110",
+        "challengeId": "ee2a996e-ca8f-4d2c-a878-0947451f7f14",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-18T01:00:00.000Z"
+      },
+      {
+        "id": "d03dbaef-fafe-4877-b357-b4292052eb36",
+        "playerId": "371cba28-539e-4410-aec8-f0de3ec9e110",
+        "challengeId": "ee2a996e-ca8f-4d2c-a878-0947451f7f14",
+        "submittedFlag": "CTF{sm4ll_3xp0n3nt_4tt4ck}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-18T01:03:00.000Z"
+      },
+      {
+        "id": "4ddefbaf-af75-41a0-8bcc-5469b1ec427e",
+        "playerId": "1772eb85-3a88-4b82-bc26-4430c27a9221",
+        "challengeId": "ee2a996e-ca8f-4d2c-a878-0947451f7f14",
+        "submittedFlag": "CTF{sm4ll_3xp0n3nt_4tt4ck}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-18T02:02:00.000Z"
+      },
+      {
+        "id": "a4acf64b-e3b5-4a78-92b8-60d340ba0a22",
+        "playerId": "402e58eb-df7d-4494-b554-58ff416017b5",
+        "challengeId": "bc49a6cb-371c-4249-8607-cc9c6b552288",
+        "submittedFlag": "CTF{ecb_m0d3_1s_w34k}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-18T03:02:00.000Z"
+      },
+      {
+        "id": "15f51757-a69f-4a34-a7d5-60b296a7253d",
+        "playerId": "d684bcaf-93df-45cc-a997-cf9969073309",
+        "challengeId": "bc49a6cb-371c-4249-8607-cc9c6b552288",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-18T04:00:00.000Z"
+      },
+      {
+        "id": "4c2e0d8e-1d94-455e-97d3-416fec7889a6",
+        "playerId": "d684bcaf-93df-45cc-a997-cf9969073309",
+        "challengeId": "bc49a6cb-371c-4249-8607-cc9c6b552288",
+        "submittedFlag": "CTF{ecb_m0d3_1s_w34k}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-18T04:03:00.000Z"
+      },
+      {
+        "id": "9a1b4054-1d32-40b3-90ac-fa640e83a6ab",
+        "playerId": "80df51e1-9ddf-4af0-9bb2-f1a19aded721",
+        "challengeId": "bc49a6cb-371c-4249-8607-cc9c6b552288",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-18T05:00:00.000Z"
+      },
+      {
+        "id": "719c7909-50ad-456a-879f-a1f8936ef647",
+        "playerId": "80df51e1-9ddf-4af0-9bb2-f1a19aded721",
+        "challengeId": "bc49a6cb-371c-4249-8607-cc9c6b552288",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-18T05:01:00.000Z"
+      },
+      {
+        "id": "c01c2e31-9ffa-4e67-86b8-232af1b253c7",
+        "playerId": "80df51e1-9ddf-4af0-9bb2-f1a19aded721",
+        "challengeId": "bc49a6cb-371c-4249-8607-cc9c6b552288",
+        "submittedFlag": "CTF{ecb_m0d3_1s_w34k}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-18T05:04:00.000Z"
+      },
+      {
+        "id": "1607a694-015c-45d4-a7cc-c119b7aacd9c",
+        "playerId": "3ae2324b-9d9f-477a-8576-78258e5e2ea6",
+        "challengeId": "bc49a6cb-371c-4249-8607-cc9c6b552288",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-18T06:00:00.000Z"
+      },
+      {
+        "id": "960dd99e-fdd5-40d0-91de-df3accce1469",
+        "playerId": "3ae2324b-9d9f-477a-8576-78258e5e2ea6",
+        "challengeId": "bc49a6cb-371c-4249-8607-cc9c6b552288",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-18T06:01:00.000Z"
+      },
+      {
+        "id": "b7dc849b-5eff-44e2-8a17-8ee56e9c059a",
+        "playerId": "3ae2324b-9d9f-477a-8576-78258e5e2ea6",
+        "challengeId": "bc49a6cb-371c-4249-8607-cc9c6b552288",
+        "submittedFlag": "CTF{ecb_m0d3_1s_w34k}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-18T06:04:00.000Z"
+      },
+      {
+        "id": "0fa1d223-40dd-43dd-aa6c-90750c677f45",
+        "playerId": "6b7d41c9-29c1-4991-ab68-98251ee7c93d",
+        "challengeId": "bc49a6cb-371c-4249-8607-cc9c6b552288",
+        "submittedFlag": "CTF{ecb_m0d3_1s_w34k}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-18T07:02:00.000Z"
+      },
+      {
+        "id": "60e632da-0c6f-4185-b4d2-1b902f8d87a7",
+        "playerId": "d684bcaf-93df-45cc-a997-cf9969073309",
+        "challengeId": "1d42ce4a-42e3-49e2-bbe1-81ec79e71606",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-18T08:00:00.000Z"
+      },
+      {
+        "id": "a5134efc-0f3c-46de-9651-1e483ee17625",
+        "playerId": "d684bcaf-93df-45cc-a997-cf9969073309",
+        "challengeId": "1d42ce4a-42e3-49e2-bbe1-81ec79e71606",
+        "submittedFlag": "CTF{p4dd1ng_0r4cl3_pwn3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-18T08:03:00.000Z"
+      },
+      {
+        "id": "dd9cfc53-91cd-4170-ad02-762b42a05b63",
+        "playerId": "10c690d1-da26-4c11-b97c-03f69ee7b67c",
+        "challengeId": "1d42ce4a-42e3-49e2-bbe1-81ec79e71606",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-18T09:00:00.000Z"
+      },
+      {
+        "id": "8945c6d4-0208-43b1-8fe9-b43173d2634d",
+        "playerId": "10c690d1-da26-4c11-b97c-03f69ee7b67c",
+        "challengeId": "1d42ce4a-42e3-49e2-bbe1-81ec79e71606",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-18T09:01:00.000Z"
+      },
+      {
+        "id": "ac2d8627-5c32-4f6a-8cb0-666b812365aa",
+        "playerId": "10c690d1-da26-4c11-b97c-03f69ee7b67c",
+        "challengeId": "1d42ce4a-42e3-49e2-bbe1-81ec79e71606",
+        "submittedFlag": "CTF{p4dd1ng_0r4cl3_pwn3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-18T09:04:00.000Z"
+      },
+      {
+        "id": "95fbc443-9a36-4639-a7a3-41b51035fedd",
+        "playerId": "7705d631-9df5-42f5-a086-bb55df54d8dc",
+        "challengeId": "1d42ce4a-42e3-49e2-bbe1-81ec79e71606",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-18T10:00:00.000Z"
+      },
+      {
+        "id": "b26fe3ba-595a-478e-9224-4fd7e32b2dbf",
+        "playerId": "7705d631-9df5-42f5-a086-bb55df54d8dc",
+        "challengeId": "1d42ce4a-42e3-49e2-bbe1-81ec79e71606",
+        "submittedFlag": "CTF{p4dd1ng_0r4cl3_pwn3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-18T10:03:00.000Z"
+      },
+      {
+        "id": "9755ee9c-c747-4a69-97e1-5b1602ed55a9",
+        "playerId": "808f2d9f-38e0-4bd3-8379-719ad08adf5b",
+        "challengeId": "1d42ce4a-42e3-49e2-bbe1-81ec79e71606",
+        "submittedFlag": "CTF{p4dd1ng_0r4cl3_pwn3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-18T11:02:00.000Z"
+      },
+      {
+        "id": "9e99e480-d1fd-4478-a866-223c53150ffb",
+        "playerId": "d75226db-6588-4549-8a19-ad666f74afaf",
+        "challengeId": "1d42ce4a-42e3-49e2-bbe1-81ec79e71606",
+        "submittedFlag": "CTF{p4dd1ng_0r4cl3_pwn3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-18T12:02:00.000Z"
+      },
+      {
+        "id": "8f0b7e2e-277c-401b-99f6-f3dbb12c70ac",
+        "playerId": "674f2f07-2e65-4e97-86e5-92fe223c5744",
+        "challengeId": "1d42ce4a-42e3-49e2-bbe1-81ec79e71606",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-18T13:00:00.000Z"
+      },
+      {
+        "id": "b524a76f-d3a5-4121-80c3-18b77e426e7e",
+        "playerId": "674f2f07-2e65-4e97-86e5-92fe223c5744",
+        "challengeId": "1d42ce4a-42e3-49e2-bbe1-81ec79e71606",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-18T13:01:00.000Z"
+      },
+      {
+        "id": "3086d166-ae18-43f8-a9d4-931730d9ed73",
+        "playerId": "674f2f07-2e65-4e97-86e5-92fe223c5744",
+        "challengeId": "1d42ce4a-42e3-49e2-bbe1-81ec79e71606",
+        "submittedFlag": "CTF{p4dd1ng_0r4cl3_pwn3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-18T13:04:00.000Z"
+      },
+      {
+        "id": "76358573-0580-414f-bb96-12dc9f08ee73",
+        "playerId": "80df51e1-9ddf-4af0-9bb2-f1a19aded721",
+        "challengeId": "1d42ce4a-42e3-49e2-bbe1-81ec79e71606",
+        "submittedFlag": "CTF{p4dd1ng_0r4cl3_pwn3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-18T14:02:00.000Z"
+      },
+      {
+        "id": "8cce167a-516b-43af-9c05-9a0bef4ed0b2",
+        "playerId": "d75226db-6588-4549-8a19-ad666f74afaf",
+        "challengeId": "f1dacc8c-5c96-422c-ac7b-57bcdef13132",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-18T15:00:00.000Z"
+      },
+      {
+        "id": "2200f570-ab5c-4ed4-bb36-0c094c503ec3",
+        "playerId": "d75226db-6588-4549-8a19-ad666f74afaf",
+        "challengeId": "f1dacc8c-5c96-422c-ac7b-57bcdef13132",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-18T15:01:00.000Z"
+      },
+      {
+        "id": "830aab8f-3563-4f83-888d-230b2d48a753",
+        "playerId": "d75226db-6588-4549-8a19-ad666f74afaf",
+        "challengeId": "f1dacc8c-5c96-422c-ac7b-57bcdef13132",
+        "submittedFlag": "CTF{3x1f_d4t4_l34ks_s3cr3ts}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-18T15:04:00.000Z"
+      },
+      {
+        "id": "4a9231e9-4459-441c-94eb-54a79bab3163",
+        "playerId": "3592c268-71ba-47e4-934d-f5c69ee12e56",
+        "challengeId": "f1dacc8c-5c96-422c-ac7b-57bcdef13132",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-18T16:00:00.000Z"
+      },
+      {
+        "id": "dd7edc78-e50f-47da-9a38-002f32893538",
+        "playerId": "3592c268-71ba-47e4-934d-f5c69ee12e56",
+        "challengeId": "f1dacc8c-5c96-422c-ac7b-57bcdef13132",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-18T16:01:00.000Z"
+      },
+      {
+        "id": "54da5469-2a39-49de-84a4-d15d1547aefb",
+        "playerId": "3592c268-71ba-47e4-934d-f5c69ee12e56",
+        "challengeId": "f1dacc8c-5c96-422c-ac7b-57bcdef13132",
+        "submittedFlag": "CTF{3x1f_d4t4_l34ks_s3cr3ts}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-18T16:04:00.000Z"
+      },
+      {
+        "id": "62f9bf0c-c163-482a-8821-236493d5bda8",
+        "playerId": "10c690d1-da26-4c11-b97c-03f69ee7b67c",
+        "challengeId": "f1dacc8c-5c96-422c-ac7b-57bcdef13132",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-18T17:00:00.000Z"
+      },
+      {
+        "id": "9ee07113-d6b5-46b8-afb6-6b393e64d062",
+        "playerId": "10c690d1-da26-4c11-b97c-03f69ee7b67c",
+        "challengeId": "f1dacc8c-5c96-422c-ac7b-57bcdef13132",
+        "submittedFlag": "CTF{3x1f_d4t4_l34ks_s3cr3ts}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-18T17:03:00.000Z"
+      },
+      {
+        "id": "9dcc1ec2-b07d-4460-8d9f-c66015be56a2",
+        "playerId": "d684bcaf-93df-45cc-a997-cf9969073309",
+        "challengeId": "f1dacc8c-5c96-422c-ac7b-57bcdef13132",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-18T18:00:00.000Z"
+      },
+      {
+        "id": "7e86f29a-3789-4030-a779-16eb1364360e",
+        "playerId": "d684bcaf-93df-45cc-a997-cf9969073309",
+        "challengeId": "f1dacc8c-5c96-422c-ac7b-57bcdef13132",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-18T18:01:00.000Z"
+      },
+      {
+        "id": "8aca1768-1e81-417e-b29d-2210d0b2b224",
+        "playerId": "d684bcaf-93df-45cc-a997-cf9969073309",
+        "challengeId": "f1dacc8c-5c96-422c-ac7b-57bcdef13132",
+        "submittedFlag": "CTF{3x1f_d4t4_l34ks_s3cr3ts}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-18T18:04:00.000Z"
+      },
+      {
+        "id": "cd69da06-a424-4492-9ec9-117783118e75",
+        "playerId": "371cba28-539e-4410-aec8-f0de3ec9e110",
+        "challengeId": "f1dacc8c-5c96-422c-ac7b-57bcdef13132",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-18T19:00:00.000Z"
+      },
+      {
+        "id": "1989b852-4bce-4c77-aa6f-5b89eae05d57",
+        "playerId": "371cba28-539e-4410-aec8-f0de3ec9e110",
+        "challengeId": "f1dacc8c-5c96-422c-ac7b-57bcdef13132",
+        "submittedFlag": "CTF{3x1f_d4t4_l34ks_s3cr3ts}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-18T19:03:00.000Z"
+      },
+      {
+        "id": "ed4df0b4-3177-4a0b-9e09-54516d34fad7",
+        "playerId": "1772eb85-3a88-4b82-bc26-4430c27a9221",
+        "challengeId": "f1dacc8c-5c96-422c-ac7b-57bcdef13132",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-18T20:00:00.000Z"
+      },
+      {
+        "id": "bb5fadf8-4c0e-4486-8257-265edc3801e7",
+        "playerId": "1772eb85-3a88-4b82-bc26-4430c27a9221",
+        "challengeId": "f1dacc8c-5c96-422c-ac7b-57bcdef13132",
+        "submittedFlag": "CTF{3x1f_d4t4_l34ks_s3cr3ts}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-18T20:03:00.000Z"
+      },
+      {
+        "id": "dbea331b-75ad-4f06-84f4-1bd41cda0079",
+        "playerId": "3ae2324b-9d9f-477a-8576-78258e5e2ea6",
+        "challengeId": "f1dacc8c-5c96-422c-ac7b-57bcdef13132",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-18T21:00:00.000Z"
+      },
+      {
+        "id": "7e372d17-0826-4e10-acce-1a3d3b3edb5d",
+        "playerId": "3ae2324b-9d9f-477a-8576-78258e5e2ea6",
+        "challengeId": "f1dacc8c-5c96-422c-ac7b-57bcdef13132",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-18T21:01:00.000Z"
+      },
+      {
+        "id": "81e62d21-9bcd-460e-8471-9a7beac518f1",
+        "playerId": "3ae2324b-9d9f-477a-8576-78258e5e2ea6",
+        "challengeId": "f1dacc8c-5c96-422c-ac7b-57bcdef13132",
+        "submittedFlag": "CTF{3x1f_d4t4_l34ks_s3cr3ts}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-18T21:04:00.000Z"
+      },
+      {
+        "id": "8c0bd521-d420-41b1-9d73-a8749483dda2",
+        "playerId": "d75226db-6588-4549-8a19-ad666f74afaf",
+        "challengeId": "db1443d1-1f40-4828-b7de-088fcc078dfa",
+        "submittedFlag": "CTF{d3l3t3d_f1l3s_c4n_b3_r3c0v3r3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-18T22:02:00.000Z"
+      },
+      {
+        "id": "98dc5261-5af1-4f2a-a3b2-33ee913ad842",
+        "playerId": "10c690d1-da26-4c11-b97c-03f69ee7b67c",
+        "challengeId": "db1443d1-1f40-4828-b7de-088fcc078dfa",
+        "submittedFlag": "CTF{d3l3t3d_f1l3s_c4n_b3_r3c0v3r3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-18T23:02:00.000Z"
+      },
+      {
+        "id": "6f9cd1c1-ff7f-4593-b387-0a1fe710cf9b",
+        "playerId": "381d4599-b190-42e3-9ff8-b2eda2f5a150",
+        "challengeId": "db1443d1-1f40-4828-b7de-088fcc078dfa",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-19T00:00:00.000Z"
+      },
+      {
+        "id": "a0cf36ce-8896-421c-a848-9d78b9309835",
+        "playerId": "381d4599-b190-42e3-9ff8-b2eda2f5a150",
+        "challengeId": "db1443d1-1f40-4828-b7de-088fcc078dfa",
+        "submittedFlag": "CTF{d3l3t3d_f1l3s_c4n_b3_r3c0v3r3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-19T00:03:00.000Z"
+      },
+      {
+        "id": "5b9af3f4-738c-4abd-8d2e-061957753b06",
+        "playerId": "1772eb85-3a88-4b82-bc26-4430c27a9221",
+        "challengeId": "db1443d1-1f40-4828-b7de-088fcc078dfa",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-19T01:00:00.000Z"
+      },
+      {
+        "id": "e55cec9f-b318-4cf6-8640-4501d558d3f0",
+        "playerId": "1772eb85-3a88-4b82-bc26-4430c27a9221",
+        "challengeId": "db1443d1-1f40-4828-b7de-088fcc078dfa",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-19T01:01:00.000Z"
+      },
+      {
+        "id": "e1b8f55d-ef2b-496c-a483-0f4c7982623f",
+        "playerId": "1772eb85-3a88-4b82-bc26-4430c27a9221",
+        "challengeId": "db1443d1-1f40-4828-b7de-088fcc078dfa",
+        "submittedFlag": "CTF{d3l3t3d_f1l3s_c4n_b3_r3c0v3r3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-19T01:04:00.000Z"
+      },
+      {
+        "id": "bbd5aa74-9810-4ecd-995f-33d12ec0329d",
+        "playerId": "6b7d41c9-29c1-4991-ab68-98251ee7c93d",
+        "challengeId": "db1443d1-1f40-4828-b7de-088fcc078dfa",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-19T02:00:00.000Z"
+      },
+      {
+        "id": "04e14244-62cd-4f32-b8bf-948415a81d5d",
+        "playerId": "6b7d41c9-29c1-4991-ab68-98251ee7c93d",
+        "challengeId": "db1443d1-1f40-4828-b7de-088fcc078dfa",
+        "submittedFlag": "CTF{d3l3t3d_f1l3s_c4n_b3_r3c0v3r3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-19T02:03:00.000Z"
+      },
+      {
+        "id": "0893acd9-459c-47ce-b75f-45da42d178ba",
+        "playerId": "402e58eb-df7d-4494-b554-58ff416017b5",
+        "challengeId": "db1443d1-1f40-4828-b7de-088fcc078dfa",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-19T03:00:00.000Z"
+      },
+      {
+        "id": "1267e2ee-edcf-461a-85a4-43f36124c04c",
+        "playerId": "402e58eb-df7d-4494-b554-58ff416017b5",
+        "challengeId": "db1443d1-1f40-4828-b7de-088fcc078dfa",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-19T03:01:00.000Z"
+      },
+      {
+        "id": "c7cc620c-d980-4021-a921-313be84df33d",
+        "playerId": "402e58eb-df7d-4494-b554-58ff416017b5",
+        "challengeId": "db1443d1-1f40-4828-b7de-088fcc078dfa",
+        "submittedFlag": "CTF{d3l3t3d_f1l3s_c4n_b3_r3c0v3r3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-19T03:04:00.000Z"
+      },
+      {
+        "id": "e8a1bb9e-ab7a-46f3-9372-81f2be1b70e3",
+        "playerId": "80df51e1-9ddf-4af0-9bb2-f1a19aded721",
+        "challengeId": "b1247c57-f488-4121-8cf6-60f7f306553f",
+        "submittedFlag": "CTF{m3m0ry_f0r3ns1cs_r0cks}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-19T04:02:00.000Z"
+      },
+      {
+        "id": "9a00be6f-7e3d-4768-bd81-73c6a0d5c575",
+        "playerId": "3ae2324b-9d9f-477a-8576-78258e5e2ea6",
+        "challengeId": "b1247c57-f488-4121-8cf6-60f7f306553f",
+        "submittedFlag": "CTF{m3m0ry_f0r3ns1cs_r0cks}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-19T05:02:00.000Z"
+      },
+      {
+        "id": "de260dbf-e15b-4f81-b736-0c7a96c66284",
+        "playerId": "381d4599-b190-42e3-9ff8-b2eda2f5a150",
+        "challengeId": "b6a66f9d-75b0-4676-9e79-43dfe41d2223",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-19T06:00:00.000Z"
+      },
+      {
+        "id": "370acff1-0558-48b6-894e-14e5e3240907",
+        "playerId": "381d4599-b190-42e3-9ff8-b2eda2f5a150",
+        "challengeId": "b6a66f9d-75b0-4676-9e79-43dfe41d2223",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-19T06:01:00.000Z"
+      },
+      {
+        "id": "bbe705eb-f031-4adc-a60c-e335f6840e33",
+        "playerId": "381d4599-b190-42e3-9ff8-b2eda2f5a150",
+        "challengeId": "b6a66f9d-75b0-4676-9e79-43dfe41d2223",
+        "submittedFlag": "CTF{dns_tunn3l1ng_d3t3ct3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-19T06:04:00.000Z"
+      },
+      {
+        "id": "813d3c3b-ea20-470d-843b-97725457cf6e",
+        "playerId": "402e58eb-df7d-4494-b554-58ff416017b5",
+        "challengeId": "b6a66f9d-75b0-4676-9e79-43dfe41d2223",
+        "submittedFlag": "CTF{dns_tunn3l1ng_d3t3ct3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-19T07:02:00.000Z"
+      },
+      {
+        "id": "0155d85d-ef3f-4d03-b0d5-01bc47fe3f66",
+        "playerId": "3ae2324b-9d9f-477a-8576-78258e5e2ea6",
+        "challengeId": "b6a66f9d-75b0-4676-9e79-43dfe41d2223",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-19T08:00:00.000Z"
+      },
+      {
+        "id": "3af434fa-4d3a-4c62-88b8-9419ef898f59",
+        "playerId": "3ae2324b-9d9f-477a-8576-78258e5e2ea6",
+        "challengeId": "b6a66f9d-75b0-4676-9e79-43dfe41d2223",
+        "submittedFlag": "CTF{dns_tunn3l1ng_d3t3ct3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-19T08:03:00.000Z"
+      },
+      {
+        "id": "f060bacd-563d-46f7-b178-864d7e09a7d1",
+        "playerId": "c750324d-872d-43c2-887d-a86e56dd4a95",
+        "challengeId": "b6a66f9d-75b0-4676-9e79-43dfe41d2223",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-19T09:00:00.000Z"
+      },
+      {
+        "id": "78cdca53-b1ed-4084-83cb-62b6bad9877d",
+        "playerId": "c750324d-872d-43c2-887d-a86e56dd4a95",
+        "challengeId": "b6a66f9d-75b0-4676-9e79-43dfe41d2223",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-19T09:01:00.000Z"
+      },
+      {
+        "id": "4e751627-ce78-4adc-83a8-6216e3a9c8dd",
+        "playerId": "c750324d-872d-43c2-887d-a86e56dd4a95",
+        "challengeId": "b6a66f9d-75b0-4676-9e79-43dfe41d2223",
+        "submittedFlag": "CTF{dns_tunn3l1ng_d3t3ct3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-19T09:04:00.000Z"
+      },
+      {
+        "id": "bd258a18-8fa9-450b-9f43-0b28660a7dde",
+        "playerId": "674f2f07-2e65-4e97-86e5-92fe223c5744",
+        "challengeId": "b6a66f9d-75b0-4676-9e79-43dfe41d2223",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-19T10:00:00.000Z"
+      },
+      {
+        "id": "c62c6197-8621-48e0-b82e-9513e54d0bed",
+        "playerId": "674f2f07-2e65-4e97-86e5-92fe223c5744",
+        "challengeId": "b6a66f9d-75b0-4676-9e79-43dfe41d2223",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-19T10:01:00.000Z"
+      },
+      {
+        "id": "9e256e0a-7c13-40ba-8ff7-2eb79ccec416",
+        "playerId": "674f2f07-2e65-4e97-86e5-92fe223c5744",
+        "challengeId": "b6a66f9d-75b0-4676-9e79-43dfe41d2223",
+        "submittedFlag": "CTF{dns_tunn3l1ng_d3t3ct3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-19T10:04:00.000Z"
+      },
+      {
+        "id": "b3ff998d-d828-4e17-ace9-a3467a072906",
+        "playerId": "80df51e1-9ddf-4af0-9bb2-f1a19aded721",
+        "challengeId": "f8676156-4fb5-463d-8f6e-7b6100666bf1",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-19T11:00:00.000Z"
+      },
+      {
+        "id": "96a37296-79c5-4540-896e-bc7054c9c7ed",
+        "playerId": "80df51e1-9ddf-4af0-9bb2-f1a19aded721",
+        "challengeId": "f8676156-4fb5-463d-8f6e-7b6100666bf1",
+        "submittedFlag": "CTF{4ud10_st3g4n0gr4phy_m4st3r}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-19T11:03:00.000Z"
+      },
+      {
+        "id": "fdbbb46a-b5a6-4a65-8669-61c53ce1f5c4",
+        "playerId": "7705d631-9df5-42f5-a086-bb55df54d8dc",
+        "challengeId": "f8676156-4fb5-463d-8f6e-7b6100666bf1",
+        "submittedFlag": "CTF{4ud10_st3g4n0gr4phy_m4st3r}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-19T12:02:00.000Z"
+      },
+      {
+        "id": "75f96322-259c-4060-822a-b6477746da9d",
+        "playerId": "3592c268-71ba-47e4-934d-f5c69ee12e56",
+        "challengeId": "e40c12dd-be82-4aa1-af84-bd02b2c99f13",
+        "submittedFlag": "CTF{buff3r_0v3rfl0w_b4s1cs}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-19T13:02:00.000Z"
+      },
+      {
+        "id": "1172b90f-4657-4d83-820f-22e6a240a6be",
+        "playerId": "10c690d1-da26-4c11-b97c-03f69ee7b67c",
+        "challengeId": "e40c12dd-be82-4aa1-af84-bd02b2c99f13",
+        "submittedFlag": "CTF{buff3r_0v3rfl0w_b4s1cs}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-19T14:02:00.000Z"
+      },
+      {
+        "id": "1dcc74b0-768e-482b-80a0-3df4385974aa",
+        "playerId": "402e58eb-df7d-4494-b554-58ff416017b5",
+        "challengeId": "e40c12dd-be82-4aa1-af84-bd02b2c99f13",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-19T15:00:00.000Z"
+      },
+      {
+        "id": "4bc25e25-8e05-49f7-87a0-712803e2e986",
+        "playerId": "402e58eb-df7d-4494-b554-58ff416017b5",
+        "challengeId": "e40c12dd-be82-4aa1-af84-bd02b2c99f13",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-19T15:01:00.000Z"
+      },
+      {
+        "id": "5c96de2b-354e-4b32-8707-41e7156fabf1",
+        "playerId": "402e58eb-df7d-4494-b554-58ff416017b5",
+        "challengeId": "e40c12dd-be82-4aa1-af84-bd02b2c99f13",
+        "submittedFlag": "CTF{buff3r_0v3rfl0w_b4s1cs}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-19T15:04:00.000Z"
+      },
+      {
+        "id": "9c0fac78-1956-4047-b7d3-b93bd76e2dbc",
+        "playerId": "1772eb85-3a88-4b82-bc26-4430c27a9221",
+        "challengeId": "e40c12dd-be82-4aa1-af84-bd02b2c99f13",
+        "submittedFlag": "CTF{buff3r_0v3rfl0w_b4s1cs}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-19T16:02:00.000Z"
+      },
+      {
+        "id": "62841a47-b367-41b6-a47d-68232e1f6359",
+        "playerId": "381d4599-b190-42e3-9ff8-b2eda2f5a150",
+        "challengeId": "692809fa-bd91-4410-9e04-cd3234518fae",
+        "submittedFlag": "CTF{f0rm4t_str1ng_l34ks}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-19T17:02:00.000Z"
+      },
+      {
+        "id": "652bd4c8-4a65-492a-b60b-cf1f13ff3c77",
+        "playerId": "674f2f07-2e65-4e97-86e5-92fe223c5744",
+        "challengeId": "692809fa-bd91-4410-9e04-cd3234518fae",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-19T18:00:00.000Z"
+      },
+      {
+        "id": "b246b3cc-a166-49d4-b1e7-72ae2ec291e5",
+        "playerId": "674f2f07-2e65-4e97-86e5-92fe223c5744",
+        "challengeId": "692809fa-bd91-4410-9e04-cd3234518fae",
+        "submittedFlag": "CTF{f0rm4t_str1ng_l34ks}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-19T18:03:00.000Z"
+      },
+      {
+        "id": "0088acb2-07eb-4fac-bf0a-891bf7ee1d58",
+        "playerId": "d75226db-6588-4549-8a19-ad666f74afaf",
+        "challengeId": "692809fa-bd91-4410-9e04-cd3234518fae",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-19T19:00:00.000Z"
+      },
+      {
+        "id": "8da0af35-7365-442e-b00e-6e883010e8e1",
+        "playerId": "d75226db-6588-4549-8a19-ad666f74afaf",
+        "challengeId": "692809fa-bd91-4410-9e04-cd3234518fae",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-19T19:01:00.000Z"
+      },
+      {
+        "id": "e2dc4e45-95f6-4658-9ce4-55051ac946fd",
+        "playerId": "d75226db-6588-4549-8a19-ad666f74afaf",
+        "challengeId": "692809fa-bd91-4410-9e04-cd3234518fae",
+        "submittedFlag": "CTF{f0rm4t_str1ng_l34ks}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-19T19:04:00.000Z"
+      },
+      {
+        "id": "2eaf3e85-e251-430f-b481-0330ae5f8a95",
+        "playerId": "3ae2324b-9d9f-477a-8576-78258e5e2ea6",
+        "challengeId": "692809fa-bd91-4410-9e04-cd3234518fae",
+        "submittedFlag": "CTF{f0rm4t_str1ng_l34ks}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-19T20:02:00.000Z"
+      },
+      {
+        "id": "290b2efa-d090-4a6b-be1a-2f06b477163a",
+        "playerId": "10c690d1-da26-4c11-b97c-03f69ee7b67c",
+        "challengeId": "692809fa-bd91-4410-9e04-cd3234518fae",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-19T21:00:00.000Z"
+      },
+      {
+        "id": "982b10d0-09bf-4f62-9563-4d55afd1a04e",
+        "playerId": "10c690d1-da26-4c11-b97c-03f69ee7b67c",
+        "challengeId": "692809fa-bd91-4410-9e04-cd3234518fae",
+        "submittedFlag": "CTF{f0rm4t_str1ng_l34ks}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-19T21:03:00.000Z"
+      },
+      {
+        "id": "5c7ff03e-c758-43f6-ab9f-e05eefbc423f",
+        "playerId": "6b7d41c9-29c1-4991-ab68-98251ee7c93d",
+        "challengeId": "692809fa-bd91-4410-9e04-cd3234518fae",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-19T22:00:00.000Z"
+      },
+      {
+        "id": "b1deaa99-ce0a-47f8-b366-33dd4ee1ba0f",
+        "playerId": "6b7d41c9-29c1-4991-ab68-98251ee7c93d",
+        "challengeId": "692809fa-bd91-4410-9e04-cd3234518fae",
+        "submittedFlag": "CTF{f0rm4t_str1ng_l34ks}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-19T22:03:00.000Z"
+      },
+      {
+        "id": "7463860a-a504-45a2-9a87-c3f45884a6c0",
+        "playerId": "3592c268-71ba-47e4-934d-f5c69ee12e56",
+        "challengeId": "23183ff5-afeb-4339-8a03-f3b43f03ab90",
+        "submittedFlag": "CTF{r0p_ch41n_m4st3r}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-19T23:02:00.000Z"
+      },
+      {
+        "id": "1fd1aef1-ec47-4cea-9056-3fbd296e4a2d",
+        "playerId": "3ae2324b-9d9f-477a-8576-78258e5e2ea6",
+        "challengeId": "23183ff5-afeb-4339-8a03-f3b43f03ab90",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-20T00:00:00.000Z"
+      },
+      {
+        "id": "c2055aea-3ba9-47b6-b775-4959d449891e",
+        "playerId": "3ae2324b-9d9f-477a-8576-78258e5e2ea6",
+        "challengeId": "23183ff5-afeb-4339-8a03-f3b43f03ab90",
+        "submittedFlag": "CTF{r0p_ch41n_m4st3r}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-20T00:03:00.000Z"
+      },
+      {
+        "id": "55bcc9c9-8e70-4bd0-af4f-da50f27d077a",
+        "playerId": "d684bcaf-93df-45cc-a997-cf9969073309",
+        "challengeId": "23183ff5-afeb-4339-8a03-f3b43f03ab90",
+        "submittedFlag": "CTF{r0p_ch41n_m4st3r}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-20T01:02:00.000Z"
+      },
+      {
+        "id": "c802d09b-f525-4cbe-ad40-f1f74aefe7b9",
+        "playerId": "808f2d9f-38e0-4bd3-8379-719ad08adf5b",
+        "challengeId": "23183ff5-afeb-4339-8a03-f3b43f03ab90",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-20T02:00:00.000Z"
+      },
+      {
+        "id": "46a05db8-1551-4eb3-bdfb-5875f3645f6c",
+        "playerId": "808f2d9f-38e0-4bd3-8379-719ad08adf5b",
+        "challengeId": "23183ff5-afeb-4339-8a03-f3b43f03ab90",
+        "submittedFlag": "CTF{r0p_ch41n_m4st3r}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-20T02:03:00.000Z"
+      },
+      {
+        "id": "ff01bfa9-a0f6-49ff-8aa4-8a904a685cea",
+        "playerId": "6b7d41c9-29c1-4991-ab68-98251ee7c93d",
+        "challengeId": "23183ff5-afeb-4339-8a03-f3b43f03ab90",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-20T03:00:00.000Z"
+      },
+      {
+        "id": "06a0f96f-14a7-4b7c-a85c-cbae894853b8",
+        "playerId": "6b7d41c9-29c1-4991-ab68-98251ee7c93d",
+        "challengeId": "23183ff5-afeb-4339-8a03-f3b43f03ab90",
+        "submittedFlag": "CTF{r0p_ch41n_m4st3r}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-20T03:03:00.000Z"
+      },
+      {
+        "id": "1475bc33-5b18-4fef-b7ef-8090a387ce47",
+        "playerId": "1772eb85-3a88-4b82-bc26-4430c27a9221",
+        "challengeId": "23183ff5-afeb-4339-8a03-f3b43f03ab90",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-20T04:00:00.000Z"
+      },
+      {
+        "id": "cd1f1c41-2168-48a7-b81e-d2d0f949fe8c",
+        "playerId": "1772eb85-3a88-4b82-bc26-4430c27a9221",
+        "challengeId": "23183ff5-afeb-4339-8a03-f3b43f03ab90",
+        "submittedFlag": "CTF{r0p_ch41n_m4st3r}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-20T04:03:00.000Z"
+      },
+      {
+        "id": "03b226d7-c782-4a8c-ad44-6cbe4a2e948c",
+        "playerId": "80df51e1-9ddf-4af0-9bb2-f1a19aded721",
+        "challengeId": "23183ff5-afeb-4339-8a03-f3b43f03ab90",
+        "submittedFlag": "CTF{r0p_ch41n_m4st3r}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-20T05:02:00.000Z"
+      },
+      {
+        "id": "552ee256-8929-4953-a81f-cff2680056c0",
+        "playerId": "3592c268-71ba-47e4-934d-f5c69ee12e56",
+        "challengeId": "a5a0bf5d-3553-4e43-8730-893ccca376ce",
+        "submittedFlag": "CTF{h34p_0v3rfl0w_pwn3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-20T06:02:00.000Z"
+      },
+      {
+        "id": "e65544ab-7812-49ee-9f11-761ffae8793b",
+        "playerId": "3ae2324b-9d9f-477a-8576-78258e5e2ea6",
+        "challengeId": "a5a0bf5d-3553-4e43-8730-893ccca376ce",
+        "submittedFlag": "CTF{h34p_0v3rfl0w_pwn3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-20T07:02:00.000Z"
+      },
+      {
+        "id": "b089294f-8226-4687-8a3a-410a0210ccc4",
+        "playerId": "10c690d1-da26-4c11-b97c-03f69ee7b67c",
+        "challengeId": "a5a0bf5d-3553-4e43-8730-893ccca376ce",
+        "submittedFlag": "CTF{h34p_0v3rfl0w_pwn3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-20T08:02:00.000Z"
+      },
+      {
+        "id": "fd3d4116-0631-4acc-b4fd-d369b06fa38a",
+        "playerId": "381d4599-b190-42e3-9ff8-b2eda2f5a150",
+        "challengeId": "a5a0bf5d-3553-4e43-8730-893ccca376ce",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-20T09:00:00.000Z"
+      },
+      {
+        "id": "b6f16831-2bdc-434e-b53d-ad55cd0fb499",
+        "playerId": "381d4599-b190-42e3-9ff8-b2eda2f5a150",
+        "challengeId": "a5a0bf5d-3553-4e43-8730-893ccca376ce",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-20T09:01:00.000Z"
+      },
+      {
+        "id": "a3c8fb7b-75dc-49fe-a368-3dea8abd8b16",
+        "playerId": "381d4599-b190-42e3-9ff8-b2eda2f5a150",
+        "challengeId": "a5a0bf5d-3553-4e43-8730-893ccca376ce",
+        "submittedFlag": "CTF{h34p_0v3rfl0w_pwn3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-20T09:04:00.000Z"
+      },
+      {
+        "id": "9c7c4a74-2e5c-47c8-aa4c-58334b1ad4e6",
+        "playerId": "402e58eb-df7d-4494-b554-58ff416017b5",
+        "challengeId": "a5a0bf5d-3553-4e43-8730-893ccca376ce",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-20T10:00:00.000Z"
+      },
+      {
+        "id": "2f04a3a8-e9ba-465a-ab2b-1af95865ee27",
+        "playerId": "402e58eb-df7d-4494-b554-58ff416017b5",
+        "challengeId": "a5a0bf5d-3553-4e43-8730-893ccca376ce",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-20T10:01:00.000Z"
+      },
+      {
+        "id": "8394ce4b-8736-440d-8a17-1b0b6586b5d6",
+        "playerId": "402e58eb-df7d-4494-b554-58ff416017b5",
+        "challengeId": "a5a0bf5d-3553-4e43-8730-893ccca376ce",
+        "submittedFlag": "CTF{h34p_0v3rfl0w_pwn3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-20T10:04:00.000Z"
+      },
+      {
+        "id": "0224cded-59f1-4a3f-9fb9-c4b63c17b5c2",
+        "playerId": "402e58eb-df7d-4494-b554-58ff416017b5",
+        "challengeId": "37c75a74-bec6-4e30-afe1-9c48184de894",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-20T11:00:00.000Z"
+      },
+      {
+        "id": "65f68138-b912-4fde-ab36-06b06eeaaf98",
+        "playerId": "402e58eb-df7d-4494-b554-58ff416017b5",
+        "challengeId": "37c75a74-bec6-4e30-afe1-9c48184de894",
+        "submittedFlag": "CTF{r3v3rs3_3ng1n33r1ng_fun}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-20T11:03:00.000Z"
+      },
+      {
+        "id": "f0460e14-45c8-4a2b-b647-f25d73cf7578",
+        "playerId": "808f2d9f-38e0-4bd3-8379-719ad08adf5b",
+        "challengeId": "37c75a74-bec6-4e30-afe1-9c48184de894",
+        "submittedFlag": "CTF{r3v3rs3_3ng1n33r1ng_fun}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-20T12:02:00.000Z"
+      },
+      {
+        "id": "b31183dd-2e56-4883-bf22-ba4ac4b86639",
+        "playerId": "10c690d1-da26-4c11-b97c-03f69ee7b67c",
+        "challengeId": "37c75a74-bec6-4e30-afe1-9c48184de894",
+        "submittedFlag": "CTF{r3v3rs3_3ng1n33r1ng_fun}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-20T13:02:00.000Z"
+      },
+      {
+        "id": "8e4506c3-db81-46f8-960d-4c9ce216249f",
+        "playerId": "6b7d41c9-29c1-4991-ab68-98251ee7c93d",
+        "challengeId": "37c75a74-bec6-4e30-afe1-9c48184de894",
+        "submittedFlag": "CTF{r3v3rs3_3ng1n33r1ng_fun}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-20T14:02:00.000Z"
+      },
+      {
+        "id": "146839ef-854e-49cd-a4db-54a9a277baa7",
+        "playerId": "d684bcaf-93df-45cc-a997-cf9969073309",
+        "challengeId": "37c75a74-bec6-4e30-afe1-9c48184de894",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-20T15:00:00.000Z"
+      },
+      {
+        "id": "8d0f42de-4260-4c4b-a1c6-4656d35217e6",
+        "playerId": "d684bcaf-93df-45cc-a997-cf9969073309",
+        "challengeId": "37c75a74-bec6-4e30-afe1-9c48184de894",
+        "submittedFlag": "CTF{r3v3rs3_3ng1n33r1ng_fun}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-20T15:03:00.000Z"
+      },
+      {
+        "id": "ef6d7f81-852b-4cba-bc5b-07a1d82222d7",
+        "playerId": "c750324d-872d-43c2-887d-a86e56dd4a95",
+        "challengeId": "37c75a74-bec6-4e30-afe1-9c48184de894",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-20T16:00:00.000Z"
+      },
+      {
+        "id": "f0ae5fd6-9ebd-4e03-ba29-3f3c519cef9e",
+        "playerId": "c750324d-872d-43c2-887d-a86e56dd4a95",
+        "challengeId": "37c75a74-bec6-4e30-afe1-9c48184de894",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-20T16:01:00.000Z"
+      },
+      {
+        "id": "c9301448-73bb-4923-b2ff-ac223bf097ae",
+        "playerId": "c750324d-872d-43c2-887d-a86e56dd4a95",
+        "challengeId": "37c75a74-bec6-4e30-afe1-9c48184de894",
+        "submittedFlag": "CTF{r3v3rs3_3ng1n33r1ng_fun}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-20T16:04:00.000Z"
+      },
+      {
+        "id": "e97da1a5-d036-4b99-b19c-acee14f36817",
+        "playerId": "1772eb85-3a88-4b82-bc26-4430c27a9221",
+        "challengeId": "37c75a74-bec6-4e30-afe1-9c48184de894",
+        "submittedFlag": "CTF{r3v3rs3_3ng1n33r1ng_fun}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-20T17:02:00.000Z"
+      },
+      {
+        "id": "7ae2233d-b51e-47d6-817c-29d9901c49cb",
+        "playerId": "381d4599-b190-42e3-9ff8-b2eda2f5a150",
+        "challengeId": "04c1d966-b341-45d1-b965-88a530013499",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-20T18:00:00.000Z"
+      },
+      {
+        "id": "43d858d4-512c-44b0-9df0-39ffb9f6eae2",
+        "playerId": "381d4599-b190-42e3-9ff8-b2eda2f5a150",
+        "challengeId": "04c1d966-b341-45d1-b965-88a530013499",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-20T18:01:00.000Z"
+      },
+      {
+        "id": "338e6dc9-adbb-46d8-a91f-3c23027692aa",
+        "playerId": "381d4599-b190-42e3-9ff8-b2eda2f5a150",
+        "challengeId": "04c1d966-b341-45d1-b965-88a530013499",
+        "submittedFlag": "CTF{x0r_0bfusc4t10n_s1mpl3}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-20T18:04:00.000Z"
+      },
+      {
+        "id": "23d93cac-5331-4bf8-bf74-d8f089759741",
+        "playerId": "80df51e1-9ddf-4af0-9bb2-f1a19aded721",
+        "challengeId": "04c1d966-b341-45d1-b965-88a530013499",
+        "submittedFlag": "CTF{x0r_0bfusc4t10n_s1mpl3}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-20T19:02:00.000Z"
+      },
+      {
+        "id": "a83b820b-2895-4c47-ae32-eec464c285b3",
+        "playerId": "c750324d-872d-43c2-887d-a86e56dd4a95",
+        "challengeId": "04c1d966-b341-45d1-b965-88a530013499",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-20T20:00:00.000Z"
+      },
+      {
+        "id": "d8ca884e-ed78-4a2d-ba28-532a39d0374d",
+        "playerId": "c750324d-872d-43c2-887d-a86e56dd4a95",
+        "challengeId": "04c1d966-b341-45d1-b965-88a530013499",
+        "submittedFlag": "CTF{x0r_0bfusc4t10n_s1mpl3}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-20T20:03:00.000Z"
+      },
+      {
+        "id": "8726fd3d-9275-46cb-841c-9055ca77b102",
+        "playerId": "3ae2324b-9d9f-477a-8576-78258e5e2ea6",
+        "challengeId": "04c1d966-b341-45d1-b965-88a530013499",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-20T21:00:00.000Z"
+      },
+      {
+        "id": "1c52f248-0c3e-465d-95bb-7272817ad8dc",
+        "playerId": "3ae2324b-9d9f-477a-8576-78258e5e2ea6",
+        "challengeId": "04c1d966-b341-45d1-b965-88a530013499",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-20T21:01:00.000Z"
+      },
+      {
+        "id": "44823aee-edf3-49a9-a330-3c40dbae1172",
+        "playerId": "3ae2324b-9d9f-477a-8576-78258e5e2ea6",
+        "challengeId": "04c1d966-b341-45d1-b965-88a530013499",
+        "submittedFlag": "CTF{x0r_0bfusc4t10n_s1mpl3}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-20T21:04:00.000Z"
+      },
+      {
+        "id": "abd971dc-63ec-491d-b68c-f1210f36ed5b",
+        "playerId": "d75226db-6588-4549-8a19-ad666f74afaf",
+        "challengeId": "04c1d966-b341-45d1-b965-88a530013499",
+        "submittedFlag": "CTF{x0r_0bfusc4t10n_s1mpl3}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-20T22:02:00.000Z"
+      },
+      {
+        "id": "28168534-2448-4da5-ba23-338028279afc",
+        "playerId": "10c690d1-da26-4c11-b97c-03f69ee7b67c",
+        "challengeId": "04c1d966-b341-45d1-b965-88a530013499",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-20T23:00:00.000Z"
+      },
+      {
+        "id": "5a0e0aee-4ca8-4ed3-8120-afa470e688d7",
+        "playerId": "10c690d1-da26-4c11-b97c-03f69ee7b67c",
+        "challengeId": "04c1d966-b341-45d1-b965-88a530013499",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-20T23:01:00.000Z"
+      },
+      {
+        "id": "63167cce-4e31-43ca-9ed2-2910f75ee5fd",
+        "playerId": "10c690d1-da26-4c11-b97c-03f69ee7b67c",
+        "challengeId": "04c1d966-b341-45d1-b965-88a530013499",
+        "submittedFlag": "CTF{x0r_0bfusc4t10n_s1mpl3}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-20T23:04:00.000Z"
+      },
+      {
+        "id": "a004e5ba-ec0c-4cee-902f-28aa0ebe257c",
+        "playerId": "371cba28-539e-4410-aec8-f0de3ec9e110",
+        "challengeId": "04c1d966-b341-45d1-b965-88a530013499",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-21T00:00:00.000Z"
+      },
+      {
+        "id": "1efe6974-63ba-4a4f-b2e2-1dcef55f95a0",
+        "playerId": "371cba28-539e-4410-aec8-f0de3ec9e110",
+        "challengeId": "04c1d966-b341-45d1-b965-88a530013499",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-21T00:01:00.000Z"
+      },
+      {
+        "id": "ac137fa6-3c02-441d-bb1c-87397a9e3c2c",
+        "playerId": "371cba28-539e-4410-aec8-f0de3ec9e110",
+        "challengeId": "04c1d966-b341-45d1-b965-88a530013499",
+        "submittedFlag": "CTF{x0r_0bfusc4t10n_s1mpl3}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-21T00:04:00.000Z"
+      },
+      {
+        "id": "40b9f929-0abd-4e79-8a24-29e6b5871a4d",
+        "playerId": "402e58eb-df7d-4494-b554-58ff416017b5",
+        "challengeId": "04c1d966-b341-45d1-b965-88a530013499",
+        "submittedFlag": "CTF{x0r_0bfusc4t10n_s1mpl3}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-21T01:02:00.000Z"
+      },
+      {
+        "id": "b7f731d3-f0e3-4e74-9740-1a2789fd0edf",
+        "playerId": "1772eb85-3a88-4b82-bc26-4430c27a9221",
+        "challengeId": "04c1d966-b341-45d1-b965-88a530013499",
+        "submittedFlag": "CTF{x0r_0bfusc4t10n_s1mpl3}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-21T02:02:00.000Z"
+      },
+      {
+        "id": "7260fa20-48aa-456c-b149-3a90194b38dc",
+        "playerId": "1772eb85-3a88-4b82-bc26-4430c27a9221",
+        "challengeId": "6763ab8f-b173-4bd2-9c72-ad30c1ffe0ae",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-21T03:00:00.000Z"
+      },
+      {
+        "id": "45f570c2-c2a2-4291-a80b-acd89417c30e",
+        "playerId": "1772eb85-3a88-4b82-bc26-4430c27a9221",
+        "challengeId": "6763ab8f-b173-4bd2-9c72-ad30c1ffe0ae",
+        "submittedFlag": "CTF{4nt1_d3bugg1ng_byp4ss3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-21T03:03:00.000Z"
+      },
+      {
+        "id": "84105d27-4093-4f5e-826b-4648bb8f7b9d",
+        "playerId": "381d4599-b190-42e3-9ff8-b2eda2f5a150",
+        "challengeId": "6763ab8f-b173-4bd2-9c72-ad30c1ffe0ae",
+        "submittedFlag": "CTF{4nt1_d3bugg1ng_byp4ss3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-21T04:02:00.000Z"
+      },
+      {
+        "id": "0e56c9a1-fe40-4f07-afd0-b6aaa02a91d8",
+        "playerId": "3ae2324b-9d9f-477a-8576-78258e5e2ea6",
+        "challengeId": "6763ab8f-b173-4bd2-9c72-ad30c1ffe0ae",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-21T05:00:00.000Z"
+      },
+      {
+        "id": "8af4d015-5e62-40f8-b3b2-ba62e0d94b36",
+        "playerId": "3ae2324b-9d9f-477a-8576-78258e5e2ea6",
+        "challengeId": "6763ab8f-b173-4bd2-9c72-ad30c1ffe0ae",
+        "submittedFlag": "CTF{4nt1_d3bugg1ng_byp4ss3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-21T05:03:00.000Z"
+      },
+      {
+        "id": "fba56754-f5b6-48cb-95dc-640d36100663",
+        "playerId": "3592c268-71ba-47e4-934d-f5c69ee12e56",
+        "challengeId": "6763ab8f-b173-4bd2-9c72-ad30c1ffe0ae",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-21T06:00:00.000Z"
+      },
+      {
+        "id": "a53a10ec-48b2-4fee-8e48-3205989e9f9b",
+        "playerId": "3592c268-71ba-47e4-934d-f5c69ee12e56",
+        "challengeId": "6763ab8f-b173-4bd2-9c72-ad30c1ffe0ae",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-21T06:01:00.000Z"
+      },
+      {
+        "id": "a34cc84c-3252-4d97-b257-812f60440cab",
+        "playerId": "3592c268-71ba-47e4-934d-f5c69ee12e56",
+        "challengeId": "6763ab8f-b173-4bd2-9c72-ad30c1ffe0ae",
+        "submittedFlag": "CTF{4nt1_d3bugg1ng_byp4ss3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-21T06:04:00.000Z"
+      },
+      {
+        "id": "04110cdf-0d4b-447c-84da-c5bf568cea7d",
+        "playerId": "371cba28-539e-4410-aec8-f0de3ec9e110",
+        "challengeId": "6763ab8f-b173-4bd2-9c72-ad30c1ffe0ae",
+        "submittedFlag": "CTF{4nt1_d3bugg1ng_byp4ss3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-21T07:02:00.000Z"
+      },
+      {
+        "id": "5c523885-96b3-4932-80b3-5053ecf28e59",
+        "playerId": "7705d631-9df5-42f5-a086-bb55df54d8dc",
+        "challengeId": "6763ab8f-b173-4bd2-9c72-ad30c1ffe0ae",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-21T08:00:00.000Z"
+      },
+      {
+        "id": "0c70004d-9f7a-4aa2-a425-f978599c34b0",
+        "playerId": "7705d631-9df5-42f5-a086-bb55df54d8dc",
+        "challengeId": "6763ab8f-b173-4bd2-9c72-ad30c1ffe0ae",
+        "submittedFlag": "CTF{4nt1_d3bugg1ng_byp4ss3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-21T08:03:00.000Z"
+      },
+      {
+        "id": "9b630825-3ed5-4027-b565-c5f5e33ec83a",
+        "playerId": "d684bcaf-93df-45cc-a997-cf9969073309",
+        "challengeId": "6763ab8f-b173-4bd2-9c72-ad30c1ffe0ae",
+        "submittedFlag": "CTF{4nt1_d3bugg1ng_byp4ss3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-21T09:02:00.000Z"
+      },
+      {
+        "id": "c8a00fed-50a7-43e7-a235-3b579d26429a",
+        "playerId": "808f2d9f-38e0-4bd3-8379-719ad08adf5b",
+        "challengeId": "6763ab8f-b173-4bd2-9c72-ad30c1ffe0ae",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-21T10:00:00.000Z"
+      },
+      {
+        "id": "63addc92-3163-4388-b572-5870319216ad",
+        "playerId": "808f2d9f-38e0-4bd3-8379-719ad08adf5b",
+        "challengeId": "6763ab8f-b173-4bd2-9c72-ad30c1ffe0ae",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-21T10:01:00.000Z"
+      },
+      {
+        "id": "7d6de6ea-c60f-4403-b79a-264ff65553ea",
+        "playerId": "808f2d9f-38e0-4bd3-8379-719ad08adf5b",
+        "challengeId": "6763ab8f-b173-4bd2-9c72-ad30c1ffe0ae",
+        "submittedFlag": "CTF{4nt1_d3bugg1ng_byp4ss3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-21T10:04:00.000Z"
+      },
+      {
+        "id": "708a9363-3ea2-48e2-b062-9b423c941e53",
+        "playerId": "674f2f07-2e65-4e97-86e5-92fe223c5744",
+        "challengeId": "6763ab8f-b173-4bd2-9c72-ad30c1ffe0ae",
+        "submittedFlag": "CTF{4nt1_d3bugg1ng_byp4ss3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-21T11:02:00.000Z"
+      },
+      {
+        "id": "549c7e4b-c421-4714-848e-ad105dda5edb",
+        "playerId": "402e58eb-df7d-4494-b554-58ff416017b5",
+        "challengeId": "9859f49c-af6e-44bf-a68f-d8fbca592c38",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-21T12:00:00.000Z"
+      },
+      {
+        "id": "9346c63f-a9ae-4b1d-8673-fa2829960f2d",
+        "playerId": "402e58eb-df7d-4494-b554-58ff416017b5",
+        "challengeId": "9859f49c-af6e-44bf-a68f-d8fbca592c38",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-21T12:01:00.000Z"
+      },
+      {
+        "id": "9c4db89c-6af3-4a56-83b6-5c05a693b693",
+        "playerId": "402e58eb-df7d-4494-b554-58ff416017b5",
+        "challengeId": "9859f49c-af6e-44bf-a68f-d8fbca592c38",
+        "submittedFlag": "CTF{vm_0bfusc4t10n_cr4ck3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-21T12:04:00.000Z"
+      },
+      {
+        "id": "2ccc1584-cdfc-439b-b69d-f6dad2227382",
+        "playerId": "381d4599-b190-42e3-9ff8-b2eda2f5a150",
+        "challengeId": "9859f49c-af6e-44bf-a68f-d8fbca592c38",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-21T13:00:00.000Z"
+      },
+      {
+        "id": "f4331a4a-2244-491a-aaa5-fc25edf46f16",
+        "playerId": "381d4599-b190-42e3-9ff8-b2eda2f5a150",
+        "challengeId": "9859f49c-af6e-44bf-a68f-d8fbca592c38",
+        "submittedFlag": "CTF{vm_0bfusc4t10n_cr4ck3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-21T13:03:00.000Z"
+      },
+      {
+        "id": "4ca4fde5-3c87-4774-9cb0-14c099d86e91",
+        "playerId": "d75226db-6588-4549-8a19-ad666f74afaf",
+        "challengeId": "9859f49c-af6e-44bf-a68f-d8fbca592c38",
+        "submittedFlag": "CTF{vm_0bfusc4t10n_cr4ck3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-21T14:02:00.000Z"
+      },
+      {
+        "id": "6b342b8f-8857-4a17-a08b-b087fd0f865a",
+        "playerId": "c750324d-872d-43c2-887d-a86e56dd4a95",
+        "challengeId": "9859f49c-af6e-44bf-a68f-d8fbca592c38",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-21T15:00:00.000Z"
+      },
+      {
+        "id": "9c53793f-f2ce-48d3-abb6-85c89f93b06f",
+        "playerId": "c750324d-872d-43c2-887d-a86e56dd4a95",
+        "challengeId": "9859f49c-af6e-44bf-a68f-d8fbca592c38",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-21T15:01:00.000Z"
+      },
+      {
+        "id": "7d0a8ede-8dba-4688-b72f-e4a540c88233",
+        "playerId": "c750324d-872d-43c2-887d-a86e56dd4a95",
+        "challengeId": "9859f49c-af6e-44bf-a68f-d8fbca592c38",
+        "submittedFlag": "CTF{vm_0bfusc4t10n_cr4ck3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-21T15:04:00.000Z"
+      },
+      {
+        "id": "875d4796-4b8e-4893-908f-4477bd77d25a",
+        "playerId": "674f2f07-2e65-4e97-86e5-92fe223c5744",
+        "challengeId": "9859f49c-af6e-44bf-a68f-d8fbca592c38",
+        "submittedFlag": "CTF{vm_0bfusc4t10n_cr4ck3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-21T16:02:00.000Z"
+      },
+      {
+        "id": "a976c80d-a66c-4322-a509-31bb8b23d874",
+        "playerId": "6b7d41c9-29c1-4991-ab68-98251ee7c93d",
+        "challengeId": "9859f49c-af6e-44bf-a68f-d8fbca592c38",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-21T17:00:00.000Z"
+      },
+      {
+        "id": "36674907-b3a6-4340-9b6d-f0a6ccd8f451",
+        "playerId": "6b7d41c9-29c1-4991-ab68-98251ee7c93d",
+        "challengeId": "9859f49c-af6e-44bf-a68f-d8fbca592c38",
+        "submittedFlag": "CTF{vm_0bfusc4t10n_cr4ck3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-21T17:03:00.000Z"
+      },
+      {
+        "id": "728fae60-ffb0-4b30-b7ec-423de80c98c9",
+        "playerId": "3592c268-71ba-47e4-934d-f5c69ee12e56",
+        "challengeId": "9859f49c-af6e-44bf-a68f-d8fbca592c38",
+        "submittedFlag": "CTF{vm_0bfusc4t10n_cr4ck3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-21T18:02:00.000Z"
+      },
+      {
+        "id": "704fe77c-3f00-4fd9-a909-4eedcb6695b4",
+        "playerId": "80df51e1-9ddf-4af0-9bb2-f1a19aded721",
+        "challengeId": "9859f49c-af6e-44bf-a68f-d8fbca592c38",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-21T19:00:00.000Z"
+      },
+      {
+        "id": "3db76dfe-c33b-41a2-b162-31051d9f805b",
+        "playerId": "80df51e1-9ddf-4af0-9bb2-f1a19aded721",
+        "challengeId": "9859f49c-af6e-44bf-a68f-d8fbca592c38",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-21T19:01:00.000Z"
+      },
+      {
+        "id": "fb363ad8-ea5a-47df-8e3b-959cc4a8ff44",
+        "playerId": "80df51e1-9ddf-4af0-9bb2-f1a19aded721",
+        "challengeId": "9859f49c-af6e-44bf-a68f-d8fbca592c38",
+        "submittedFlag": "CTF{vm_0bfusc4t10n_cr4ck3d}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-21T19:04:00.000Z"
+      },
+      {
+        "id": "407c1a96-6c21-4d18-b342-ed31ac80224d",
+        "playerId": "371cba28-539e-4410-aec8-f0de3ec9e110",
+        "challengeId": "858f5f78-6d28-479e-90fe-0d650ba34d2b",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-21T20:00:00.000Z"
+      },
+      {
+        "id": "fdef12bb-b872-423e-a656-d72165366d7e",
+        "playerId": "371cba28-539e-4410-aec8-f0de3ec9e110",
+        "challengeId": "858f5f78-6d28-479e-90fe-0d650ba34d2b",
+        "submittedFlag": "CTF{m4lw4r3_4n4lys1s_c0mpl3t3}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-21T20:03:00.000Z"
+      },
+      {
+        "id": "6ed12f09-9df6-41f2-a52e-76ddbdec3a10",
+        "playerId": "402e58eb-df7d-4494-b554-58ff416017b5",
+        "challengeId": "858f5f78-6d28-479e-90fe-0d650ba34d2b",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-21T21:00:00.000Z"
+      },
+      {
+        "id": "decd337e-1e81-4f71-a423-200fd19d71a9",
+        "playerId": "402e58eb-df7d-4494-b554-58ff416017b5",
+        "challengeId": "858f5f78-6d28-479e-90fe-0d650ba34d2b",
+        "submittedFlag": "CTF{m4lw4r3_4n4lys1s_c0mpl3t3}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-21T21:03:00.000Z"
+      },
+      {
+        "id": "36782acb-390d-4bd9-875d-6ac8da744870",
+        "playerId": "3592c268-71ba-47e4-934d-f5c69ee12e56",
+        "challengeId": "858f5f78-6d28-479e-90fe-0d650ba34d2b",
+        "submittedFlag": "CTF{m4lw4r3_4n4lys1s_c0mpl3t3}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-21T22:02:00.000Z"
+      },
+      {
+        "id": "330f5874-578b-4f5e-b69f-5a51db8fcb2e",
+        "playerId": "6b7d41c9-29c1-4991-ab68-98251ee7c93d",
+        "challengeId": "858f5f78-6d28-479e-90fe-0d650ba34d2b",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-21T23:00:00.000Z"
+      },
+      {
+        "id": "b9dea6f6-d437-4f4a-b389-4735cf470b0f",
+        "playerId": "6b7d41c9-29c1-4991-ab68-98251ee7c93d",
+        "challengeId": "858f5f78-6d28-479e-90fe-0d650ba34d2b",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-21T23:01:00.000Z"
+      },
+      {
+        "id": "a4c8c916-461a-44a5-8b7a-b9eee4ce03e9",
+        "playerId": "6b7d41c9-29c1-4991-ab68-98251ee7c93d",
+        "challengeId": "858f5f78-6d28-479e-90fe-0d650ba34d2b",
+        "submittedFlag": "CTF{m4lw4r3_4n4lys1s_c0mpl3t3}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-21T23:04:00.000Z"
+      },
+      {
+        "id": "b31b317a-ae69-4a52-8001-67cc4288775b",
+        "playerId": "3ae2324b-9d9f-477a-8576-78258e5e2ea6",
+        "challengeId": "858f5f78-6d28-479e-90fe-0d650ba34d2b",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-22T00:00:00.000Z"
+      },
+      {
+        "id": "5c8a3fd0-d168-435d-99d5-31b54b671071",
+        "playerId": "3ae2324b-9d9f-477a-8576-78258e5e2ea6",
+        "challengeId": "858f5f78-6d28-479e-90fe-0d650ba34d2b",
+        "submittedFlag": "CTF{m4lw4r3_4n4lys1s_c0mpl3t3}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-22T00:03:00.000Z"
+      },
+      {
+        "id": "bf18ab30-be1b-45c6-8fa6-f9a431f72a3a",
+        "playerId": "808f2d9f-38e0-4bd3-8379-719ad08adf5b",
+        "challengeId": "858f5f78-6d28-479e-90fe-0d650ba34d2b",
+        "submittedFlag": "CTF{m4lw4r3_4n4lys1s_c0mpl3t3}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-22T01:02:00.000Z"
+      },
+      {
+        "id": "e67e5e25-eb3b-4c11-89f5-b8cef984e198",
+        "playerId": "80df51e1-9ddf-4af0-9bb2-f1a19aded721",
+        "challengeId": "858f5f78-6d28-479e-90fe-0d650ba34d2b",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-22T02:00:00.000Z"
+      },
+      {
+        "id": "f3c82097-6d4c-4b06-a000-7aa432664245",
+        "playerId": "80df51e1-9ddf-4af0-9bb2-f1a19aded721",
+        "challengeId": "858f5f78-6d28-479e-90fe-0d650ba34d2b",
+        "submittedFlag": "CTF{m4lw4r3_4n4lys1s_c0mpl3t3}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-22T02:03:00.000Z"
+      },
+      {
+        "id": "148de3fd-e9ce-442d-9a8a-9b83e24f7e20",
+        "playerId": "381d4599-b190-42e3-9ff8-b2eda2f5a150",
+        "challengeId": "858f5f78-6d28-479e-90fe-0d650ba34d2b",
+        "submittedFlag": "CTF{wr0ng_fl4g_0}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-22T03:00:00.000Z"
+      },
+      {
+        "id": "c4f249db-6aa2-4d25-814a-fda9d5296b50",
+        "playerId": "381d4599-b190-42e3-9ff8-b2eda2f5a150",
+        "challengeId": "858f5f78-6d28-479e-90fe-0d650ba34d2b",
+        "submittedFlag": "CTF{wr0ng_fl4g_1}",
+        "isCorrect": 0,
+        "timestamp": "2025-10-22T03:01:00.000Z"
+      },
+      {
+        "id": "55a42c8e-b0f6-41f0-bdb4-0ab19af2812c",
+        "playerId": "381d4599-b190-42e3-9ff8-b2eda2f5a150",
+        "challengeId": "858f5f78-6d28-479e-90fe-0d650ba34d2b",
+        "submittedFlag": "CTF{m4lw4r3_4n4lys1s_c0mpl3t3}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-22T03:04:00.000Z"
+      },
+      {
+        "id": "ccc60fd8-043f-42a9-814d-51bd487c7ca0",
+        "playerId": "1772eb85-3a88-4b82-bc26-4430c27a9221",
+        "challengeId": "858f5f78-6d28-479e-90fe-0d650ba34d2b",
+        "submittedFlag": "CTF{m4lw4r3_4n4lys1s_c0mpl3t3}",
+        "isCorrect": 1,
+        "timestamp": "2025-10-22T04:02:00.000Z"
+      }
+    ],
+    "announcements": [
+      {
+        "id": "0607ef95-d942-4a2d-8ca3-a8de45a67ce6",
+        "title": "🎉 Welcome to CTF Platform!",
+        "message": "Welcome to our Capture The Flag competition! Good luck and have fun hacking!",
+        "type": "info",
+        "isActive": 1,
+        "createdAt": "2025-10-01T00:00:00.000Z",
+        "createdBy": "ec843f3d-6282-4a56-a50e-d7b8cd5c63a1"
+      },
+      {
+        "id": "e219cb6a-0bc9-4fcc-9fb6-14e992d24897",
+        "title": "⚠️ Rules and Guidelines",
+        "message": "Please follow the rules: No DoS attacks, no sharing flags, and respect other players. Violation may result in disqualification.",
+        "type": "warning",
+        "isActive": 1,
+        "createdAt": "2025-10-01T01:00:00.000Z",
+        "createdBy": "ec843f3d-6282-4a56-a50e-d7b8cd5c63a1"
+      },
+      {
+        "id": "2fab90cd-0a76-4523-a413-011e7eb84222",
+        "title": "🚀 New Challenges Added!",
+        "message": "5 new web security challenges have been added! Check them out in the Web category.",
+        "type": "success",
+        "isActive": 1,
+        "createdAt": "2025-10-10T10:00:00.000Z",
+        "createdBy": "65ec7748-e9ec-4d2d-bfa0-fb264cfa9536"
+      },
+      {
+        "id": "02c6ce97-35e8-4481-b1d9-fb5cf776b725",
+        "title": "💡 Hint for Crypto Challenges",
+        "message": "If you're stuck on crypto challenges, remember that weak keys are your friend. Try common attacks first!",
+        "type": "info",
+        "isActive": 1,
+        "createdAt": "2025-10-12T14:00:00.000Z",
+        "createdBy": "ec843f3d-6282-4a56-a50e-d7b8cd5c63a1"
+      },
+      {
+        "id": "05f95e52-7f32-401e-9837-ef855541dda4",
+        "title": "🏆 Leaderboard Update",
+        "message": "Congratulations to our top 3 players! Keep up the great work everyone!",
+        "type": "success",
+        "isActive": 1,
+        "createdAt": "2025-10-15T18:00:00.000Z",
+        "createdBy": "65ec7748-e9ec-4d2d-bfa0-fb264cfa9536"
+      },
+      {
+        "id": "56d01fe2-9b50-4305-bc51-8ef81b03b969",
+        "title": "🔧 Scheduled Maintenance",
+        "message": "Server maintenance scheduled for tonight 2-3 AM UTC. Platform will be temporarily unavailable.",
+        "type": "warning",
+        "isActive": 1,
+        "createdAt": "2025-10-20T20:00:00.000Z",
+        "createdBy": "ec843f3d-6282-4a56-a50e-d7b8cd5c63a1"
+      },
+      {
+        "id": "0ac18fe3-3eca-4ba8-9fde-98881c0bb0b7",
+        "title": "🎯 Binary Exploitation Workshop",
+        "message": "Join our live workshop on binary exploitation basics tomorrow at 5 PM UTC. Link in Discord!",
+        "type": "info",
+        "isActive": 1,
+        "createdAt": "2025-10-18T12:00:00.000Z",
+        "createdBy": "65ec7748-e9ec-4d2d-bfa0-fb264cfa9536"
+      }
+    ],
+    "settings": [
+      {
+        "id": "7cbb45ae-4448-4b19-a09a-51da286e52e4",
+        "key": "platform_name",
+        "value": "CTF Platform Demo",
+        "updatedAt": "2025-10-23T06:22:43.010Z"
+      },
+      {
+        "id": "9055d3d0-dcc3-46e4-937d-a1e82987e44c",
+        "key": "platform_description",
+        "value": "Capture The Flag Competition",
+        "updatedAt": "2025-10-23T06:22:43.010Z"
+      },
+      {
+        "id": "78acadb8-773d-4c5e-99b6-e432608a0141",
+        "key": "registration_enabled",
+        "value": "true",
+        "updatedAt": "2025-10-23T06:22:43.010Z"
+      },
+      {
+        "id": "34fa73e1-1cca-4a5b-8a2f-ad97b0660ee7",
+        "key": "competition_start",
+        "value": "2025-10-01T00:00:00.000Z",
+        "updatedAt": "2025-10-23T06:22:43.010Z"
+      },
+      {
+        "id": "85edba17-6315-4eb4-b98e-6f6240fcde88",
+        "key": "competition_end",
+        "value": "2025-12-31T23:59:59.000Z",
+        "updatedAt": "2025-10-23T06:22:43.010Z"
+      },
+      {
+        "id": "df4ce676-c258-47c3-9986-4c6646affd7a",
+        "key": "max_flag_attempts",
+        "value": "10",
+        "updatedAt": "2025-10-23T06:22:43.010Z"
+      },
+      {
+        "id": "d6619eae-29d8-487d-b3c9-ce69bb0686d0",
+        "key": "show_leaderboard",
+        "value": "true",
+        "updatedAt": "2025-10-23T06:22:43.010Z"
+      }
+    ]
+  }
+}

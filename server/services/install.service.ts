@@ -1,6 +1,6 @@
 import { storage } from "../storage";
 import { AuthService } from "./auth.service";
-import { db, pool } from "../db";
+import { db} from "../db";
 import { challenges, submissions, announcements, players, adminUsers, sessions, settings, challengeCategories, challengeDifficulties } from "@shared/schema";
 import type { InsertChallenge, InsertAnnouncement } from "@shared/schema";
 import { exec } from "child_process";

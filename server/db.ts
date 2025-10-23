@@ -1,16 +1,14 @@
-import { drizzle } from 'drizzle-orm/node-postgres';
-import pkg from 'pg';
-const { Pool } = pkg;
+// server/db.ts - COMPLETE HARDCODE
+import { drizzle } from 'drizzle-orm/neon-http';
+import { neon } from '@neondatabase/serverless';
 import * as schema from "@shared/schema";
 
-if (!process.env.DATABASE_URL) {
-  throw new Error(
-    "DATABASE_URL must be set. Did you forget to provision a database?",
-  );
-}
+console.log('🚀 Using hardcoded DATABASE_URL');
 
-export const pool = new Pool({ 
-  connectionString: process.env.DATABASE_URL
-});
+// 🔥 COMPLETE HARDCODE
+const DATABASE_URL = "postgresql://neondb_owner:npg_U1ySBcv2eGqr@ep-square-silence-ad2mp4tq-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require";
 
-export const db = drizzle(pool, { schema });
+const sql = neon(DATABASE_URL);
+export const db = drizzle(sql, { schema });
+
+console.log('✅ Database connection initialized');
