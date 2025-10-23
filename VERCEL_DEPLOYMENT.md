@@ -2,21 +2,30 @@
 
 ## Bước 1: Chuẩn Bị Database Neon
 
-Bạn đã có database Neon với connection string:
+### 1. Tạo Database Neon
+
+1. Truy cập https://neon.tech và tạo database mới
+2. Copy connection string của bạn
+3. Connection string sẽ có dạng:
 ```
-postgresql://neondb_owner:npg_U1ySBcv2eGqr@ep-square-silence-ad2mp4tq-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+postgresql://[user]:[password]@[host]/[database]?sslmode=require
 ```
 
-### Chạy Migration Database
+### 2. Chạy Migration Database
 
 Trước khi deploy, cần push database schema lên Neon:
 
 1. Tạo file `.env` trong project với nội dung:
 ```env
-DATABASE_URL=postgresql://neondb_owner:npg_U1ySBcv2eGqr@ep-square-silence-ad2mp4tq-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+DATABASE_URL=your_neon_connection_string_here
 SESSION_SECRET=your-generated-secret-key-here
 NODE_ENV=development
 ```
+
+**⚠️ QUAN TRỌNG**: 
+- Thay `your_neon_connection_string_here` bằng connection string thật từ Neon
+- Thay `your-generated-secret-key-here` bằng secret key ngẫu nhiên
+- **KHÔNG BAO GIỜ** commit file `.env` lên Git!
 
 2. Push schema lên database:
 ```bash
@@ -65,9 +74,16 @@ Trong trang cấu hình Vercel, thêm các Environment Variables sau:
 
 | Variable | Value |
 |----------|-------|
-| `DATABASE_URL` | `postgresql://neondb_owner:npg_U1ySBcv2eGqr@ep-square-silence-ad2mp4tq-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require` |
-| `SESSION_SECRET` | Tạo một string ngẫu nhiên (dùng `openssl rand -base64 32` hoặc tạo random string dài) |
+| `DATABASE_URL` | Connection string từ Neon database của bạn |
+| `SESSION_SECRET` | String ngẫu nhiên 32+ ký tự (dùng `openssl rand -base64 32`) |
 | `NODE_ENV` | `production` |
+
+**Lấy DATABASE_URL từ Neon:**
+1. Đăng nhập vào Neon dashboard
+2. Chọn database project của bạn
+3. Vào "Connection Details"
+4. Copy "Connection string" (pooled connection recommended)
+5. Paste vào Vercel Environment Variables
 
 ### 3. Cấu Hình Build Settings
 
