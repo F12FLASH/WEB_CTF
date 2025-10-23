@@ -14,6 +14,18 @@
 - [x] Verified frontend loads correctly (install page accessible)
 - [x] All systems operational and ready for use
 
+## Vercel Deployment Preparation (Oct 23, 2025)
+- [ ] Fix Settings errors in admin panel
+- [ ] Fix import/export data errors
+- [ ] Fix duplicate data handling  
+- [ ] Add Neon database configuration for Vercel
+- [ ] Create vercel.json configuration
+- [ ] Create .env.example file
+- [ ] Update .gitignore for production
+- [ ] Secure code and remove sensitive information
+- [ ] Create Vercel deployment README
+- [ ] Test all functionality before deployment
+
 ## User Requirements - COMPLETED ✅
 - [x] 1. Fix install page access control (users cannot access)
 - [x] 2. Database schema unified with foreign keys
